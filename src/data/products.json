@@ -1,0 +1,1190 @@
+[
+  {
+    "id": "ruaan-dhanak-01",
+    "title": "Almond Taupe Allover Dhanak",
+    "subtitle": "2-Piece Allover Unstitched Printed Dhanak Shirt & Trouser",
+    "price": 2300,
+    "originalPrice": 2800,
+    "fabric": "Dhanak",
+    "collection": "Dhanak Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Almond Taupe",
+        "hex": "#9B8877",
+        "image": "/products/DH01.png"
+      }
+    ],
+    "mainImage": "/products/DH01.png",
+    "galleryImages": [
+      "/products/DH01.png"
+    ],
+    "description": "Warm winter Dhanak 2-piece unstitched suit featuring fine allover traditional patterns, soft textured weave, and matching printed trouser.",
+    "details": {
+      "shirt": "2.5m Printed Dhanak Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Dhanak Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water",
+      "Iron on low heat"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DH01"
+  },
+  {
+    "id": "ruaan-doria-3pc-02",
+    "title": "Smoky Charcoal 3-Piece Stitched Doria Linen",
+    "subtitle": "3-Piece Stitched Doria Linen Shirt, Printed Dupatta & Trouser (Large Size)",
+    "price": 2700,
+    "originalPrice": 3200,
+    "fabric": "Doria Linen",
+    "collection": "Doria Linen 3-Piece Stitched",
+    "stitchType": "Stitched 3-Piece",
+    "availableSizes": [
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Smoky Charcoal",
+        "hex": "#736D6A",
+        "image": "/products/DL05.jpg"
+      }
+    ],
+    "mainImage": "/products/DL05.jpg",
+    "galleryImages": [
+      "/products/DL05.jpg"
+    ],
+    "description": "Classy smoky charcoal 3-piece ready-to-wear stitched doria linen ensemble featuring high-definition printed dupatta and large size cut.",
+    "details": {
+      "shirt": "Stitched Doria Linen Shirt (Large Size)",
+      "dupatta": "2.5m Printed Dupatta",
+      "trouser": "Stitched Matching Trouser"
+    },
+    "careInstructions": [
+      "Gentle wash",
+      "Do not bleach"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DL05"
+  },
+  {
+    "id": "ruaan-karandi-01",
+    "title": "Mocha Mauve Allover Karandi",
+    "subtitle": "2-Piece Allover Unstitched Premium Karandi Shirt & Trouser",
+    "price": 2500,
+    "originalPrice": 3000,
+    "fabric": "Karandi",
+    "collection": "Karandi Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Mocha Mauve",
+        "hex": "#8D7474",
+        "image": "/products/KR01.png"
+      }
+    ],
+    "mainImage": "/products/KR01.png",
+    "galleryImages": [
+      "/products/KR01.png"
+    ],
+    "description": "Luxurious winter Karandi 2-piece unstitched suit with distinct textured weave, allover contemporary botanical motif, and matching trouser.",
+    "details": {
+      "shirt": "2.5m Printed Karandi Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Karandi Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or cold hand wash",
+      "Iron on low setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "KR01"
+  },
+  {
+    "id": "ruaan-viscose-linen-01",
+    "title": "Cocoa Slate Allover Viscose Linen",
+    "subtitle": "2-Piece Allover Unstitched Viscose Linen Shirt & Trouser",
+    "price": 2150,
+    "originalPrice": 2600,
+    "fabric": "Viscose Linen",
+    "collection": "Viscose Linen Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Cocoa Slate",
+        "hex": "#605351",
+        "image": "/products/VL01.png"
+      }
+    ],
+    "mainImage": "/products/VL01.png",
+    "galleryImages": [
+      "/products/VL01.png"
+    ],
+    "description": "Premium breathable viscose linen 2-piece unstitched suit with allover elegant design. Soft and fluid hand-feel suitable for all-season styling.",
+    "details": {
+      "shirt": "2.5m Printed Viscose Linen Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Viscose Linen Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Iron on reverse"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "VL01"
+  },
+  {
+    "id": "ruaan-doria-01",
+    "title": "Mustard Amber Allover Doria Linen",
+    "subtitle": "2-Piece Stitched Allover Printed Doria Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Doria Linen",
+    "collection": "Doria Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Mustard Amber",
+        "hex": "#B89059",
+        "image": "/products/DL01.jpg"
+      }
+    ],
+    "mainImage": "/products/DL01.jpg",
+    "galleryImages": [
+      "/products/DL01.jpg"
+    ],
+    "description": "Sophisticated 2-piece ready-to-wear stitched allover printed suit crafted from premium textured doria linen fabric. Perfect drape for all seasons.",
+    "details": {
+      "shirt": "Stitched Kurti Shirt with Fine Tailored Finishing (Large Size)",
+      "dupatta": "N/A (2-Piece Stitched Co-Ord Set)",
+      "trouser": "Stitched Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash or gentle machine wash in cold water",
+      "Iron on medium heat"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DL01"
+  },
+  {
+    "id": "ruaan-doria-02",
+    "title": "Rust Terracotta Allover Doria Linen",
+    "subtitle": "2-Piece Stitched Allover Printed Doria Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Doria Linen",
+    "collection": "Doria Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Rust Terracotta",
+        "hex": "#B46F3E",
+        "image": "/products/DL02.jpg"
+      }
+    ],
+    "mainImage": "/products/DL02.jpg",
+    "galleryImages": [
+      "/products/DL02.jpg"
+    ],
+    "description": "Vibrant rust terracotta 2-piece stitched doria linen ensemble featuring modern allover floral botanical print.",
+    "details": {
+      "shirt": "Stitched Doria Linen Shirt (Large Size)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Matching Trouser"
+    },
+    "careInstructions": [
+      "Gentle wash in cold water",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DL02"
+  },
+  {
+    "id": "ruaan-doria-03",
+    "title": "Olive Bronze Allover Doria Linen",
+    "subtitle": "2-Piece Stitched Allover Printed Doria Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Doria Linen",
+    "collection": "Doria Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Olive Bronze",
+        "hex": "#886B41",
+        "image": "/products/DL03.jpg"
+      }
+    ],
+    "mainImage": "/products/DL03.jpg",
+    "galleryImages": [
+      "/products/DL03.jpg"
+    ],
+    "description": "Timeless olive bronze allover doria linen 2-piece stitched ready-to-wear outfit with refined neck and cuff detailing.",
+    "details": {
+      "shirt": "Stitched Doria Linen Shirt (Large Size)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Matching Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash",
+      "Iron on low heat"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DL03"
+  },
+  {
+    "id": "ruaan-doria-04",
+    "title": "Pearl Almond Allover Doria Linen",
+    "subtitle": "2-Piece Stitched Allover Printed Doria Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Doria Linen",
+    "collection": "Doria Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Pearl Almond",
+        "hex": "#AAA18D",
+        "image": "/products/DL04.jpg"
+      }
+    ],
+    "mainImage": "/products/DL04.jpg",
+    "galleryImages": [
+      "/products/DL04.jpg"
+    ],
+    "description": "Graceful pearl almond doria linen stitched 2-piece suit with soft earth-toned allover pattern. High quality tailored cut in Large size.",
+    "details": {
+      "shirt": "Stitched Doria Linen Shirt (Large Size)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Matching Trouser"
+    },
+    "careInstructions": [
+      "Cold wash only",
+      "Dry flat"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DL04"
+  },
+  {
+    "id": "ruaan-stone-01",
+    "title": "Charcoal Slate Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Charcoal Slate",
+        "hex": "#625A53",
+        "image": "/products/SL01.jpg"
+      }
+    ],
+    "mainImage": "/products/SL01.jpg",
+    "galleryImages": [
+      "/products/SL01.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "SL01"
+  },
+  {
+    "id": "ruaan-stone-02",
+    "title": "Smoky Taupe Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Smoky Taupe",
+        "hex": "#6E6962",
+        "image": "/products/SL02.jpg"
+      }
+    ],
+    "mainImage": "/products/SL02.jpg",
+    "galleryImages": [
+      "/products/SL02.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "SL02"
+  },
+  {
+    "id": "ruaan-stone-03",
+    "title": "Dusty Plum Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Dusty Plum",
+        "hex": "#B68A9A",
+        "image": "/products/SL03.jpg"
+      }
+    ],
+    "mainImage": "/products/SL03.jpg",
+    "galleryImages": [
+      "/products/SL03.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "SL03"
+  },
+  {
+    "id": "ruaan-stone-04",
+    "title": "Silver Mist Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Silver Mist",
+        "hex": "#8B8986",
+        "image": "/products/SL04.jpg"
+      }
+    ],
+    "mainImage": "/products/SL04.jpg",
+    "galleryImages": [
+      "/products/SL04.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "SL04"
+  },
+  {
+    "id": "ruaan-stone-05",
+    "title": "Toffee Umber Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Toffee Umber",
+        "hex": "#8E7359",
+        "image": "/products/SL05.jpg"
+      }
+    ],
+    "mainImage": "/products/SL05.jpg",
+    "galleryImages": [
+      "/products/SL05.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": false,
+    "inStock": true,
+    "designCode": "SL05"
+  },
+  {
+    "id": "ruaan-stone-06",
+    "title": "Lilac Blush Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Lilac Blush",
+        "hex": "#A59398",
+        "image": "/products/SL06.jpg"
+      }
+    ],
+    "mainImage": "/products/SL06.jpg",
+    "galleryImages": [
+      "/products/SL06.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": false,
+    "inStock": true,
+    "designCode": "SL06"
+  },
+  {
+    "id": "ruaan-stone-07",
+    "title": "Denim Indigo Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Denim Indigo",
+        "hex": "#9FA6B8",
+        "image": "/products/SL07.jpg"
+      }
+    ],
+    "mainImage": "/products/SL07.jpg",
+    "galleryImages": [
+      "/products/SL07.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": false,
+    "inStock": true,
+    "designCode": "SL07"
+  },
+  {
+    "id": "ruaan-stone-08",
+    "title": "Graphite Noir Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Graphite Noir",
+        "hex": "#686664",
+        "image": "/products/SL08.jpg"
+      }
+    ],
+    "mainImage": "/products/SL08.jpg",
+    "galleryImages": [
+      "/products/SL08.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": false,
+    "inStock": true,
+    "designCode": "SL08"
+  },
+  {
+    "id": "ruaan-stone-09",
+    "title": "Golden Wheat Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Golden Wheat",
+        "hex": "#BCA37D",
+        "image": "/products/SL09.jpg"
+      }
+    ],
+    "mainImage": "/products/SL09.jpg",
+    "galleryImages": [
+      "/products/SL09.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": false,
+    "inStock": true,
+    "designCode": "SL09"
+  },
+  {
+    "id": "ruaan-stone-10",
+    "title": "Rose Blossom Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Rose Blossom",
+        "hex": "#DD8EA3",
+        "image": "/products/SL10.jpg"
+      }
+    ],
+    "mainImage": "/products/SL10.jpg",
+    "galleryImages": [
+      "/products/SL10.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": false,
+    "inStock": true,
+    "designCode": "SL10"
+  },
+  {
+    "id": "ruaan-stone-11",
+    "title": "Ruby Magenta Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Ruby Magenta",
+        "hex": "#AA4E70",
+        "image": "/products/SL11.jpg"
+      }
+    ],
+    "mainImage": "/products/SL11.jpg",
+    "galleryImages": [
+      "/products/SL11.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Stone Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": false,
+    "inStock": true,
+    "designCode": "SL11"
+  },
+  {
+    "id": "ruaan-viscose-06",
+    "title": "Charcoal Gold Digital Viscose",
+    "subtitle": "3-Piece Unstitched Digital Printed Viscose Shirt, Dupatta & Trouser",
+    "price": 2700,
+    "originalPrice": 3200,
+    "fabric": "Viscose",
+    "collection": "Digital Viscose Vol 1",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Charcoal Gold",
+        "hex": "#232323",
+        "image": "/products/DV06.jpg"
+      }
+    ],
+    "mainImage": "/products/DV06.jpg",
+    "galleryImages": [
+      "/products/DV06.jpg"
+    ],
+    "description": "Sophisticated black and gold 3-piece unstitched digital printed viscose outfit featuring intricate floral embroidery accents and geometric border dupatta.",
+    "details": {
+      "shirt": "3.0m Digital Printed Viscose Shirt with Embroidered Cuffs",
+      "dupatta": "2.5m Printed Viscose Dupatta",
+      "trouser": "2.5m Plain Black Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water",
+      "Iron on low heat"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DV06"
+  },
+  {
+    "id": "ruaan-viscose-01",
+    "title": "Emerald Gold Digital Viscose",
+    "subtitle": "3-Piece Unstitched Digital Printed Viscose Shirt, Dupatta & Trouser",
+    "price": 2700,
+    "originalPrice": 3200,
+    "fabric": "Viscose",
+    "collection": "Digital Viscose Vol 1",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Emerald Gold",
+        "hex": "#0F382C",
+        "image": "/products/DV01.jpg"
+      }
+    ],
+    "mainImage": "/products/DV01.jpg",
+    "galleryImages": [
+      "/products/DV01.jpg"
+    ],
+    "description": "Premium 3-piece unstitched digital printed viscose ensemble featuring intricate gold floral motifs with matching dupatta and dyed trousers.",
+    "details": {
+      "shirt": "3.0m Digital Printed Viscose Shirt",
+      "dupatta": "2.5m Printed Viscose Dupatta",
+      "trouser": "2.5m Dyed Cambric Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water",
+      "Do not bleach or tumble dry",
+      "Iron on low heat setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DV01"
+  },
+  {
+    "id": "ruaan-viscose-02",
+    "title": "Ivory Floral Digital Viscose",
+    "subtitle": "3-Piece Unstitched Digital Printed Viscose Shirt, Dupatta & Trouser",
+    "price": 2700,
+    "originalPrice": 3200,
+    "fabric": "Viscose",
+    "collection": "Digital Viscose Vol 1",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Ivory Beige",
+        "hex": "#F5EBE0",
+        "image": "/products/DV02.jpg"
+      }
+    ],
+    "mainImage": "/products/DV02.jpg",
+    "galleryImages": [
+      "/products/DV02.jpg"
+    ],
+    "description": "Graceful 3-piece unstitched viscose suit decorated with soft botanical floral prints and elegant border details.",
+    "details": {
+      "shirt": "3.0m Digital Printed Viscose Shirt",
+      "dupatta": "2.5m Printed Viscose Dupatta",
+      "trouser": "2.5m Plain Dyed Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DV02"
+  },
+  {
+    "id": "ruaan-viscose-03",
+    "title": "Indigo Teal Digital Viscose",
+    "subtitle": "3-Piece Unstitched Digital Printed Viscose Shirt, Dupatta & Trouser",
+    "price": 2700,
+    "originalPrice": 3200,
+    "fabric": "Viscose",
+    "collection": "Digital Viscose Vol 1",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Teal Indigo",
+        "hex": "#1F4E5B",
+        "image": "/products/DV03.jpg"
+      }
+    ],
+    "mainImage": "/products/DV03.jpg",
+    "galleryImages": [
+      "/products/DV03.jpg"
+    ],
+    "description": "Vibrant indigo blue and teal 3-piece viscose outfit with rich digital floral dupatta and neck accent.",
+    "details": {
+      "shirt": "3.0m Digital Printed Viscose Shirt",
+      "dupatta": "2.5m Printed Viscose Dupatta",
+      "trouser": "2.5m Plain Dyed Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DV03"
+  },
+  {
+    "id": "ruaan-viscose-04",
+    "title": "Deep Crimson Digital Viscose",
+    "subtitle": "3-Piece Unstitched Digital Printed Viscose Shirt, Dupatta & Trouser",
+    "price": 2700,
+    "originalPrice": 3200,
+    "fabric": "Viscose",
+    "collection": "Digital Viscose Vol 1",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Deep Crimson",
+        "hex": "#6B1D2F",
+        "image": "/products/DV04.jpg"
+      }
+    ],
+    "mainImage": "/products/DV04.jpg",
+    "galleryImages": [
+      "/products/DV04.jpg"
+    ],
+    "description": "Rich deep maroon 3-piece viscose suit adorned with embroidered cuff borders and floral printed dupatta.",
+    "details": {
+      "shirt": "3.0m Digital Printed Viscose Shirt",
+      "dupatta": "2.5m Printed Viscose Dupatta",
+      "trouser": "2.5m Plain Dyed Trouser"
+    },
+    "careInstructions": [
+      "Dry clean recommended"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DV04"
+  },
+  {
+    "id": "ruaan-viscose-05",
+    "title": "Royal Emerald & Nude Viscose",
+    "subtitle": "3-Piece Unstitched Digital Printed Viscose Shirt, Dupatta & Trouser",
+    "price": 2700,
+    "originalPrice": 3200,
+    "fabric": "Viscose",
+    "collection": "Digital Viscose Vol 1",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Emerald Nude",
+        "hex": "#1B4D3E",
+        "image": "/products/DV05.jpg"
+      }
+    ],
+    "mainImage": "/products/DV05.jpg",
+    "galleryImages": [
+      "/products/DV05.jpg"
+    ],
+    "description": "Elegant emerald green viscose suit with contrasting warm nude dupatta and lace border details.",
+    "details": {
+      "shirt": "3.0m Digital Printed Viscose Shirt",
+      "dupatta": "2.5m Printed Viscose Dupatta",
+      "trouser": "2.5m Plain Dyed Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "DV05"
+  },
+  {
+    "id": "ruaan-khaddar-01",
+    "title": "Midnight Grid Printed Khaddar",
+    "subtitle": "2-Piece Premium Unstitched Printed Khaddar Shirt & Trouser",
+    "price": 2250,
+    "originalPrice": 2700,
+    "fabric": "Khaddar",
+    "collection": "Khaddar Winter Vol 1",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Midnight Navy",
+        "hex": "#1B2430",
+        "image": "/products/KD01.png"
+      }
+    ],
+    "mainImage": "/products/KD01.png",
+    "galleryImages": [
+      "/products/KD01.png"
+    ],
+    "description": "Crafted from 100% pure warm winter khaddar, featuring intricate geometric grid prints on a deep navy base with matching printed khaddar trousers.",
+    "details": {
+      "shirt": "2.5m Premium Printed Khaddar Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Khaddar Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water",
+      "Do not bleach or tumble dry",
+      "Iron on low heat"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "KD01"
+  },
+  {
+    "id": "ruaan-khaddar-02",
+    "title": "Royal Magenta Paisley Khaddar",
+    "subtitle": "2-Piece Premium Unstitched Floral Paisley Printed Khaddar",
+    "price": 2250,
+    "originalPrice": 2700,
+    "fabric": "Khaddar",
+    "collection": "Khaddar Winter Vol 1",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Royal Magenta",
+        "hex": "#6B1D45",
+        "image": "/products/KD02.png"
+      }
+    ],
+    "mainImage": "/products/KD02.png",
+    "galleryImages": [
+      "/products/KD02.png"
+    ],
+    "description": "Sumptuous 2-piece winter khaddar suit with Mughal paisley damask motifs and contrasting neckline border.",
+    "details": {
+      "shirt": "2.5m Premium Printed Khaddar Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Khaddar Trouser"
+    },
+    "careInstructions": [
+      "Gentle hand wash in cold water",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "KD02"
+  },
+  {
+    "id": "ruaan-stone-12",
+    "title": "Onyx Chain Motif Stone Linen",
+    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Stone Linen",
+    "collection": "Stone Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Onyx Chain Ivory",
+        "hex": "#EFECE6",
+        "image": "/products/SL12.jpg"
+      }
+    ],
+    "mainImage": "/products/SL12.jpg",
+    "galleryImages": [
+      "/products/SL12.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring striking geometric onyx link motifs, delicate black crochet lace trims on sleeves and hemline, and relaxed matching trousers.",
+    "details": {
+      "shirt": "Stitched Stone Linen Shirt with Delicate Hem Lace Trims (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Matching Geometric Stone Linen Trouser with Lace Border"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "SL12"
+  },
+  {
+    "id": "ruaan-plain-linen-01",
+    "title": "Ivory Monochrome Polka Plain Linen",
+    "subtitle": "2-Piece Stitched Plain Linen Shirt & Trouser with Contrast Detailing",
+    "price": 2350,
+    "originalPrice": 2850,
+    "fabric": "Plain Linen",
+    "collection": "Plain Linen Stitched",
+    "stitchType": "Stitched Ready-to-Wear",
+    "availableSizes": [
+      "M",
+      "L"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Monochrome Polka Ivory",
+        "hex": "#F4F3EF",
+        "image": "/products/PL01.jpg"
+      }
+    ],
+    "mainImage": "/products/PL01.jpg",
+    "galleryImages": [
+      "/products/PL01.jpg"
+    ],
+    "description": "Premium ready-to-wear 2-piece stitched plain linen suit featuring an elegant ivory shirt with contrast black polka dot neckline and cuffs, paired with matching polka dot printed trousers for a crisp modern aesthetic.",
+    "details": {
+      "shirt": "Stitched Pure Linen Shirt with Polka Dot Contrast Accents (Medium & Large Available)",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "Stitched Polka Dot Linen Matching Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Do not bleach",
+      "Warm iron"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "PL01"
+  }
+]
