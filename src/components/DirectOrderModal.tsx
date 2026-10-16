@@ -41,7 +41,7 @@ export const DirectOrderModal: React.FC = () => {
   const articleCode = getProductArticleCode(product, selectedColor);
   const itemTotal = product.price * quantity;
   const isFreeShipping = itemTotal >= BRAND_CONFIG.shippingThresholdFree;
-  const shippingCost = isFreeShipping ? 0 : 250;
+  const shippingCost = isFreeShipping ? 0 : BRAND_CONFIG.standardDeliveryFee;
   const grandTotal = itemTotal + shippingCost;
   const photoUrl = selectedColor?.image || product.mainImage;
 

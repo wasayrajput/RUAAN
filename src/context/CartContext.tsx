@@ -202,7 +202,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     const isFreeShipping = subtotal >= BRAND_CONFIG.shippingThresholdFree;
-    const shippingCost = isFreeShipping ? 0 : 250;
+    const shippingCost = isFreeShipping ? 0 : BRAND_CONFIG.standardDeliveryFee;
 
     message += `━━━━━━━━━━━━━━━━━━━━━\n`;
     message += `Subtotal: ${formatPrice(subtotal)}\n`;
