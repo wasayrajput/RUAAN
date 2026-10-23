@@ -1723,22 +1723,32 @@ function AddOrderModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <div className="max-w-xl w-full bg-[#181b22] border border-[#2e3444] rounded-2xl p-6 shadow-2xl relative my-8">
+    <div 
+      className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-start sm:items-center justify-center p-2 sm:p-4 overflow-y-auto"
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div className="max-w-xl w-full bg-[#181b22] border border-[#2e3444] rounded-2xl shadow-2xl relative my-auto max-h-[92vh] flex flex-col overflow-hidden">
         
-        <div className="flex justify-between items-center mb-5 pb-3 border-b border-[#282d3b]">
+        {/* Sticky Header */}
+        <div className="flex justify-between items-center p-4 sm:p-5 pb-3 border-b border-[#282d3b] bg-[#181b22] shrink-0">
           <div>
-            <h3 className="font-serif font-bold text-lg text-white uppercase tracking-wider">
+            <h3 className="font-serif font-bold text-base sm:text-lg text-white uppercase tracking-wider">
               Book New Order
             </h3>
-            <p className="text-xs text-gray-400">Stock will automatically decrement upon saving</p>
+            <p className="text-[11px] text-gray-400">Stock will automatically decrement upon saving</p>
           </div>
-          <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-[#252a36]">
+          <button 
+            type="button"
+            onClick={onClose} 
+            className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-[#252a36] hover:bg-[#343b4c] transition"
+            title="Close"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Scrollable Form Body */}
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-3.5">
           
           {/* Order Source & Payment */}
           <div className="grid grid-cols-2 gap-3">
@@ -1932,8 +1942,11 @@ function AddOrderModal({
             </div>
           </div>
 
-          {/* Delivery & Grand Total */}
-          <div className="pt-2 border-t border-[#282d3b] flex justify-between items-center">
+        </form>
+
+        {/* Sticky Action Footer - Always 100% Visible */}
+        <div className="p-4 sm:p-5 pt-3 border-t border-[#282d3b] bg-[#181b22] shrink-0">
+          <div className="flex justify-between items-center mb-3">
             <div className="flex items-center gap-2">
               <label className="text-xs text-gray-400">Shipping (Rs):</label>
               <input
@@ -1944,22 +1957,28 @@ function AddOrderModal({
               />
             </div>
             <div className="text-right">
-              <span className="text-xs text-gray-400">Total Payable: </span>
+              <span className="text-xs text-gray-400">Total: </span>
               <span className="text-lg font-bold text-[#c5a059]">Rs. {total.toLocaleString()}</span>
             </div>
           </div>
 
-          {/* Submit */}
-          <div className="pt-3">
+          <div className="grid grid-cols-3 gap-2">
             <button
-              type="submit"
-              className="w-full py-3 bg-gradient-to-r from-[#d4af37] to-[#aa8222] hover:from-[#e5bf47] hover:to-[#b88d2a] text-black font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-lg shadow-[#c5a059]/20"
+              type="button"
+              onClick={onClose}
+              className="py-2.5 sm:py-3 bg-[#252b38] hover:bg-[#31394a] text-gray-300 font-bold text-xs uppercase rounded-xl transition border border-[#394254]"
             >
-              Confirm & Book Order (Auto Decrement Stock)
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit}
+              type="button"
+              className="col-span-2 py-2.5 sm:py-3 bg-gradient-to-r from-[#d4af37] to-[#aa8222] hover:from-[#e5bf47] hover:to-[#b88d2a] text-black font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow-lg shadow-[#c5a059]/20"
+            >
+              Confirm & Book Order &rarr;
             </button>
           </div>
-
-        </form>
+        </div>
 
       </div>
     </div>
