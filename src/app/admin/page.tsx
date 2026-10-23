@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { 
   Lock, 
+  ArrowLeft,
   Package, 
   TrendingUp, 
   DollarSign, 
@@ -609,6 +611,15 @@ export default function AdminPortalPage() {
 
         {/* Action Controls */}
         <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 px-3 py-2 bg-[#1c202b] hover:bg-[#282f40] text-gray-300 hover:text-white text-xs font-bold rounded-lg border border-[#303748] transition shadow-xs"
+            title="Go back to Customer Website"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="hidden sm:inline">Back to Store</span>
+          </Link>
+
           <button
             onClick={() => setIsAddOrderOpen(true)}
             className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#d4af37] to-[#aa8222] hover:from-[#e5bf47] hover:to-[#b88d2a] text-black font-bold text-xs uppercase tracking-wider rounded-lg transition shadow-md shadow-[#c5a059]/20"
@@ -1434,43 +1445,58 @@ export default function AdminPortalPage() {
           MODAL: LUXURY BRAND SLIP & RECEIPT VIEWER
          ========================================================================= */}
       {isSlipModalOpen && selectedOrderForSlip && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="max-w-lg w-full bg-[#181b22] border border-[#2e3444] rounded-2xl p-6 shadow-2xl relative my-8">
+        <div 
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={(e) => { if (e.target === e.currentTarget) setIsSlipModalOpen(false); }}
+        >
+          <div className="max-w-lg w-full bg-[#181b22] border border-[#2e3444] rounded-2xl p-5 sm:p-6 shadow-2xl relative my-8 max-h-[92vh] overflow-y-auto">
             
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-serif font-bold text-lg text-white uppercase tracking-wider">
-                Official Parcel Dispatch Slip
-              </h3>
+            <div className="sticky top-0 bg-[#181b22] z-20 pb-3 mb-3 border-b border-[#2e3444] flex justify-between items-center">
+              <div>
+                <h3 className="font-serif font-bold text-base sm:text-lg text-white uppercase tracking-wider">
+                  Official Parcel Dispatch Slip
+                </h3>
+                <p className="text-[11px] text-gray-400">Order: {selectedOrderForSlip.orderNumber}</p>
+              </div>
               <button
                 onClick={() => setIsSlipModalOpen(false)}
-                className="p-1.5 text-gray-400 hover:text-white rounded-lg bg-[#252a36]"
+                className="flex items-center gap-1 px-3 py-1.5 bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-700/60 rounded-lg text-xs font-bold transition"
+                title="Close Slip"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
+                <span>Close (Wapas)</span>
               </button>
             </div>
 
-            {/* Action Bar */}
-            <div className="grid grid-cols-3 gap-2 mb-4">
+            {/* Action Bar with 4 Buttons including CANCEL */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
               <button
                 onClick={handleDownloadSlipImage}
-                className="py-2.5 px-2 bg-gradient-to-r from-[#d4af37] to-[#aa8222] text-black font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5"
+                className="py-2.5 px-2 bg-gradient-to-r from-[#d4af37] to-[#aa8222] text-black font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5 transition shadow-xs"
               >
                 <Download className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Download JPG</span>
+                <span>Download</span>
               </button>
               <button
                 onClick={() => handleCopyWhatsAppSlip(selectedOrderForSlip)}
-                className="py-2.5 px-2 bg-[#25d366] text-black font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5"
+                className="py-2.5 px-2 bg-[#25d366] text-black font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5 transition shadow-xs"
               >
                 <Copy className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Copy WhatsApp</span>
+                <span>WhatsApp</span>
               </button>
               <button
                 onClick={() => window.print()}
-                className="py-2.5 px-2 bg-[#2a303f] hover:bg-[#384155] text-white font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5"
+                className="py-2.5 px-2 bg-[#2a303f] hover:bg-[#384155] text-white font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5 transition"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print</span>
+              </button>
+              <button
+                onClick={() => setIsSlipModalOpen(false)}
+                className="py-2.5 px-2 bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5 transition"
+              >
+                <X className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Cancel</span>
               </button>
             </div>
 
@@ -1559,6 +1585,17 @@ export default function AdminPortalPage() {
                 </div>
 
               </div>
+            </div>
+
+            {/* Bottom Close Button */}
+            <div className="mt-4 pt-3 border-t border-[#2e3444]">
+              <button
+                onClick={() => setIsSlipModalOpen(false)}
+                className="w-full py-2.5 bg-[#252b38] hover:bg-[#31394a] text-gray-300 hover:text-white font-bold text-xs uppercase tracking-wider rounded-xl transition border border-[#394254] flex items-center justify-center gap-2"
+              >
+                <X className="w-4 h-4 stroke-[2.5]" />
+                <span>Close Slip &bull; Wapas Dashboard</span>
+              </button>
             </div>
 
           </div>
