@@ -161,14 +161,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right 4 Utility Icons (Search, User, Wishlist, Cart) */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* 1. Search */}
+          {/* 1. Search (Toggles to Cross X when open) */}
           <button
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
+            onClick={() => {
+              if (isSearchOpen && onSearchChange) {
+                onSearchChange('');
+              }
+              setIsSearchOpen(!isSearchOpen);
+            }}
             className="p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
-            aria-label="Search"
-            title="Search suits"
+            aria-label={isSearchOpen ? 'Close Search' : 'Search'}
+            title={isSearchOpen ? 'Close search' : 'Search suits'}
           >
-            <Search className="w-5 h-5 stroke-[1.75]" />
+            {isSearchOpen ? (
+              <X className="w-5 h-5 stroke-[1.75]" />
+            ) : (
+              <Search className="w-5 h-5 stroke-[1.75]" />
+            )}
           </button>
 
           {/* 2. User / WhatsApp Concierge */}
@@ -222,18 +231,44 @@ export const Navbar: React.FC<NavbarProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="p-4 bg-brand-cream border-t border-stone-200 overflow-hidden"
+            className="p-3 sm:p-4 bg-brand-cream border-t border-stone-200 overflow-hidden"
           >
-            <div className="max-w-2xl mx-auto relative">
-              <input
-                type="text"
-                placeholder="Search by fabric (linen, khaddar, viscose) or design..."
-                value={searchQuery}
-                onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 text-sm bg-white border border-brand-nude/40 rounded-full focus:outline-none focus:border-brand-charcoal shadow-xs"
-                autoFocus
-              />
-              <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-brand-gray" />
+            <div className="max-w-2xl mx-auto flex items-center gap-2">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  placeholder="Search by fabric (linen, khaddar, viscose) or design..."
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+                  className="w-full pl-10 pr-10 py-2.5 sm:py-3 text-sm bg-white border border-brand-nude/40 rounded-full focus:outline-none focus:border-brand-charcoal shadow-xs"
+                  autoFocus
+                />
+                <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-gray" />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => onSearchChange && onSearchChange('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-stone-400 hover:text-brand-charcoal hover:bg-stone-100 rounded-full transition cursor-pointer"
+                    aria-label="Clear search text"
+                    title="Clear search"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {/* Close search button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSearchOpen(false);
+                  if (onSearchChange) onSearchChange('');
+                }}
+                className="p-2 sm:p-2.5 text-stone-500 hover:text-[#9B1C3C] hover:bg-white rounded-full transition cursor-pointer flex-shrink-0"
+                aria-label="Close search"
+                title="Close search"
+              >
+                <X className="w-5 h-5 stroke-[1.75]" />
+              </button>
             </div>
           </motion.div>
         )}
