@@ -120,12 +120,17 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCareGuide, onOpenSizeChart
 
         </div>
 
-        {/* Bottom Copyright */}
+        {/* Bottom Copyright & Payment Methods (Reference Style) */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-cream/60 gap-4">
           <p>© {new Date().getFullYear()} {BRAND_CONFIG.name} Official. All rights reserved.</p>
-          <p className="flex items-center gap-1">
-            Crafted with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> for Ladies Suit Couture
-          </p>
+          
+          {/* Payment Badges */}
+          <div className="flex items-center gap-2 text-[10px] text-brand-cream/80 font-medium">
+            <span className="px-2 py-1 bg-white/10 rounded border border-white/15">Cash on Delivery</span>
+            <span className="px-2 py-1 bg-white/10 rounded border border-white/15">JazzCash</span>
+            <span className="px-2 py-1 bg-white/10 rounded border border-white/15">EasyPaisa</span>
+            <span className="px-2 py-1 bg-white/10 rounded border border-white/15">Visa / Mastercard</span>
+          </div>
         </div>
 
       </div>

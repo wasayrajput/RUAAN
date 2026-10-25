@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Heart, ShoppingBag, Eye, MessageCircle, Check } from 'lucide-react';
+import { Heart, ShoppingBag, Eye, MessageCircle, Check, Star } from 'lucide-react';
 import { Product } from '@/types/product';
 import { useCart } from '@/context/CartContext';
 
@@ -127,9 +127,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           </p>
         </div>
 
-        {/* Price & Action Buttons */}
-        <div className="pt-2 border-t border-brand-nude/20 space-y-2 sm:space-y-3">
-          <div className="flex items-baseline justify-between">
+        {/* Price, Star Rating & Action Buttons (Reference Style) */}
+        <div className="pt-2 border-t border-brand-nude/20 space-y-2 sm:space-y-2.5">
+          <div className="flex items-center justify-between">
             <div className="flex items-baseline gap-1.5 sm:gap-2">
               <span className="text-sm sm:text-base font-serif font-bold text-brand-charcoal">
                 {formatPrice(product.price)}
@@ -139,6 +139,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
                   {formatPrice(product.originalPrice)}
                 </span>
               )}
+            </div>
+
+            {/* Star Rating Badge (Reference Style: ★ 4.9) */}
+            <div className="flex items-center gap-1 text-[10px] sm:text-[11px] text-amber-600 font-semibold bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/60">
+              <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-amber-400 text-amber-400" />
+              <span>4.9</span>
             </div>
           </div>
 

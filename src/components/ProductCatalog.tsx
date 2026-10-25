@@ -9,13 +9,25 @@ import { Filter, RotateCcw, SlidersHorizontal, ChevronLeft, ChevronRight } from 
 interface ProductCatalogProps {
   onQuickView: (product: Product) => void;
   searchQuery: string;
+  selectedFabric?: string;
+  onSelectFabric?: (fabric: string) => void;
 }
 
 export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   onQuickView,
   searchQuery,
+  selectedFabric: externalFabric,
+  onSelectFabric,
 }) => {
-  const [selectedFabric, setSelectedFabric] = useState<string>('All');
+  const [internalFabric, setInternalFabric] = useState<string>('All');
+  const selectedFabric = externalFabric !== undefined ? externalFabric : internalFabric;
+  const setSelectedFabric = (f: string) => {
+    if (onSelectFabric) {
+      onSelectFabric(f);
+    } else {
+      setInternalFabric(f);
+    }
+  };
   const [selectedStitch, setSelectedStitch] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'newest'>('featured');
 
@@ -89,15 +101,14 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     <section id="catalog" className="py-16 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="text-center space-y-3 mb-12">
-          <span className="text-xs font-semibold text-brand-nude uppercase tracking-widest">
-            Handcrafted Ladies Suits
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-serif font-medium text-brand-charcoal">
-            The Suit Collection
+        {/* Section Header (Reference Style) */}
+        <div className="text-center space-y-1 mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-medium text-brand-charcoal">
+            Featured Collection
           </h2>
-          <div className="w-16 h-0.5 bg-brand-nude mx-auto"></div>
+          <p className="text-xs sm:text-sm text-brand-gray font-light">
+            Handpicked styles, just for you
+          </p>
         </div>
 
         {/* Filters Top Bar */}
