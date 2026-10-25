@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface CategoryItem {
   id: string;
@@ -12,37 +12,38 @@ interface CategoryItem {
   bgColor: string;
 }
 
+// 10 distinct luxury suits & fabric categories with reference-style pastel backgrounds
 const CATEGORIES: CategoryItem[] = [
   {
-    id: 'dresses',
-    name: 'Festive Pret',
+    id: 'dl05',
+    name: 'Festive Pret 3-Pc',
     fabric: 'Doria Linen',
     image: '/products/DL05.jpg',
-    bgColor: 'bg-[#FCECEE]', // Soft Rose / Pink
+    bgColor: 'bg-[#FCECEE]', // Soft Rose Pink
   },
   {
-    id: 'stone-linen',
-    name: 'Everyday Pret',
+    id: 'sl03',
+    name: 'Everyday Stone Linen',
     fabric: 'Stone Linen',
     image: '/products/SL03.jpg',
     bgColor: 'bg-[#E3F2FD]', // Soft Powder Blue
   },
   {
-    id: 'viscose',
-    name: 'Digital Viscose',
+    id: 'dv01',
+    name: 'Digital Viscose Floral',
     fabric: 'Viscose',
     image: '/products/DV01.jpg',
-    bgColor: 'bg-[#EDE7F6]', // Soft Lavender / Lilac
+    bgColor: 'bg-[#EDE7F6]', // Soft Lavender
   },
   {
-    id: 'dhanak',
-    name: 'Warm Dhanak',
+    id: 'dh01',
+    name: 'Warm Dhanak Allover',
     fabric: 'Dhanak',
     image: '/products/DH01.png',
-    bgColor: 'bg-[#FFF3E0]', // Soft Warm Sand / Peach
+    bgColor: 'bg-[#FFF3E0]', // Soft Warm Sand
   },
   {
-    id: 'karandi',
+    id: 'kd01',
     name: 'Karandi & Khaddar',
     fabric: 'Karandi',
     image: '/products/KD01.jpg',
@@ -57,15 +58,36 @@ const CATEGORIES: CategoryItem[] = [
   },
   {
     id: 'sl04',
-    name: 'Chic Embroidered',
+    name: 'Embroidered Chic',
     fabric: 'Stone Linen',
     image: '/products/SL04.jpg',
     bgColor: 'bg-[#E8F5E9]', // Soft Mint Sage
   },
+  {
+    id: 'dl01',
+    name: 'Royal Doria Festive',
+    fabric: 'Doria Linen',
+    image: '/products/DL01.jpg',
+    bgColor: 'bg-[#FFF9C4]/40', // Soft Buttercream
+  },
+  {
+    id: 'dv02',
+    name: 'Classic Viscose 3-Pc',
+    fabric: 'Viscose',
+    image: '/products/DV02.jpg',
+    bgColor: 'bg-[#E0F2F1]', // Soft Sky Mist
+  },
+  {
+    id: 'kd02',
+    name: 'Winter Karandi Edit',
+    fabric: 'Karandi',
+    image: '/products/KD02.jpg',
+    bgColor: 'bg-[#EFEBE9]', // Soft Taupe Stone
+  },
 ];
 
-// Double list for seamless continuous infinite slide
-const SLIDER_ITEMS = [...CATEGORIES, ...CATEGORIES, ...CATEGORIES];
+// Double list for seamless, unbroken infinite loop
+const SLIDER_ITEMS = [...CATEGORIES, ...CATEGORIES];
 
 interface CategoryCardsProps {
   onSelectCategory?: (fabric: string) => void;
@@ -73,7 +95,55 @@ interface CategoryCardsProps {
 
 export const CategoryCards: React.FC<CategoryCardsProps> = ({ onSelectCategory }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const isHoveredRef = useRef(false);
+
+  // Delta-time based smooth drift: Never resets on hover! Freezes in place wherever mouse is!
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let animId: number;
+    let lastTime = performance.now();
+
+    const animate = (time: number) => {
+      const delta = time - lastTime;
+      lastTime = time;
+
+      if (!isHoveredRef.current && container) {
+        // Smooth 40px per second drift
+        container.scrollLeft += (delta / 1000) * 42;
+
+        // Seamless wrap around when reaching half of duplicated list
+        const halfWidth = container.scrollWidth / 2;
+        if (container.scrollLeft >= halfWidth) {
+          container.scrollLeft -= halfWidth;
+        }
+      }
+      animId = requestAnimationFrame(animate);
+    };
+
+    animId = requestAnimationFrame(animate);
+
+    const onEnter = () => {
+      isHoveredRef.current = true;
+    };
+    const onLeave = () => {
+      isHoveredRef.current = false;
+    };
+
+    container.addEventListener('mouseenter', onEnter);
+    container.addEventListener('mouseleave', onLeave);
+    container.addEventListener('touchstart', onEnter, { passive: true });
+    container.addEventListener('touchend', onLeave, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(animId);
+      container.removeEventListener('mouseenter', onEnter);
+      container.removeEventListener('mouseleave', onLeave);
+      container.removeEventListener('touchstart', onEnter);
+      container.removeEventListener('touchend', onLeave);
+    };
+  }, []);
 
   const handleCategoryClick = (fabric: string) => {
     if (onSelectCategory) {
@@ -85,13 +155,15 @@ export const CategoryCards: React.FC<CategoryCardsProps> = ({ onSelectCategory }
     }
   };
 
-  const scroll = (direction: 'left' | 'right') => {
+  const handlePrev = () => {
     if (scrollRef.current) {
-      const scrollAmount = 300;
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      });
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
     }
   };
 
@@ -99,32 +171,34 @@ export const CategoryCards: React.FC<CategoryCardsProps> = ({ onSelectCategory }
     <section id="categories" className="py-12 sm:py-16 bg-white border-b border-stone-200/80 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
         
-        {/* Section Header with Left/Right Arrow Controls (Reference Style + Slider Controls) */}
+        {/* Section Header with Functional Left/Right Arrow Controls */}
         <div className="flex items-end justify-between">
           <div className="space-y-1">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-brand-charcoal">
               Shop by Category
             </h2>
             <p className="text-xs sm:text-sm text-stone-500 font-light">
-              Find your perfect style • Auto-sliding collection
+              Find your perfect style • Handcrafted suits &amp; fine fabrics
             </p>
           </div>
 
-          {/* Slider Prev / Next Controls */}
+          {/* Interactive Prev / Next Navigation Arrows */}
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => scroll('left')}
-              className="p-2 sm:p-2.5 rounded-full border border-stone-300 hover:border-stone-900 text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-50 transition active:scale-95 shadow-xs"
+              onClick={handlePrev}
+              className="p-2 sm:p-2.5 rounded-full border border-stone-300 hover:border-stone-900 text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-50 transition active:scale-95 shadow-xs cursor-pointer"
               aria-label="Previous Slide"
+              title="Previous"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               type="button"
-              onClick={() => scroll('right')}
-              className="p-2 sm:p-2.5 rounded-full border border-stone-300 hover:border-stone-900 text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-50 transition active:scale-95 shadow-xs"
+              onClick={handleNext}
+              className="p-2 sm:p-2.5 rounded-full border border-stone-300 hover:border-stone-900 text-stone-700 hover:text-stone-900 bg-white hover:bg-stone-50 transition active:scale-95 shadow-xs cursor-pointer"
               aria-label="Next Slide"
+              title="Next"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -133,21 +207,12 @@ export const CategoryCards: React.FC<CategoryCardsProps> = ({ onSelectCategory }
 
       </div>
 
-      {/* Auto-Moving Infinite Slider Ribbon ("Jaise pehle chalte the") */}
+      {/* Smooth Continuous Gliding Track: NEVER resets on hover, stays in place, supports arrows & swipe */}
       <div
         ref={scrollRef}
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onTouchStart={() => setIsPaused(true)}
-        onTouchEnd={() => setIsPaused(false)}
-        className="relative w-full overflow-x-auto no-scrollbar py-2"
+        className="relative w-full overflow-x-auto no-scrollbar py-2 cursor-grab active:cursor-grabbing"
       >
-        <div
-          className={`flex gap-4 sm:gap-6 px-4 sm:px-8 w-max ${
-            isPaused ? '' : 'animate-infinite-scroll'
-          }`}
-          style={{ animationDuration: '45s' }}
-        >
+        <div className="flex gap-4 sm:gap-6 px-4 sm:px-8 w-max">
           {SLIDER_ITEMS.map((cat, idx) => (
             <div
               key={`${cat.id}-${idx}`}
