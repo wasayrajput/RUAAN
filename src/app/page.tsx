@@ -48,9 +48,6 @@ export default function Home() {
         onOpenWishlist={() => setIsWishlistOpen(true)}
       />
 
-      {/* Luxury Marquee Ticker */}
-      <MarqueeBanner />
-
       {/* 2. Hero Section (Reference: Left Headline & Badges, Right Model Cutout with Script Tag) */}
       <HeroBanner />
 

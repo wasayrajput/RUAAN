@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Mail, Check, Sparkles } from 'lucide-react';
+import { Mail, Check } from 'lucide-react';
 
 export const NewsletterBanner: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -19,70 +19,65 @@ export const NewsletterBanner: React.FC = () => {
   };
 
   return (
-    <section className="py-10 sm:py-16 bg-white">
+    <section className="py-10 sm:py-16 bg-white border-b border-stone-200/80">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Split Card (Reference Style) */}
-        <div className="grid grid-cols-1 md:grid-cols-12 rounded-3xl overflow-hidden border border-brand-nude/30 shadow-lg bg-[#FAF5EE]">
+        {/* Split Card (Reference Exact Style) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 rounded-3xl overflow-hidden border border-stone-200 shadow-lg bg-[#FAF0F2]">
           
-          {/* Left Arched Model Photo */}
-          <div className="md:col-span-5 relative min-h-[260px] sm:min-h-[320px] bg-stone-200 overflow-hidden flex items-center justify-center p-4">
-            <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-md">
-              <Image
-                src="/products/SL04.jpg"
-                alt="RUAAN Club Newsletter"
-                fill
-                sizes="(max-width: 768px) 100vw, 40vw"
-                className="object-cover object-top hover:scale-105 transition-transform duration-700"
-              />
-            </div>
+          {/* Left Model Photo (Portrait with flowers & hat) */}
+          <div className="md:col-span-5 relative min-h-[260px] sm:min-h-[320px] bg-stone-100 overflow-hidden">
+            <Image
+              src="/products/SL04.jpg"
+              alt="Be the First to Know"
+              fill
+              sizes="(max-width: 768px) 100vw, 40vw"
+              className="object-cover object-top hover:scale-105 transition-transform duration-700"
+            />
           </div>
 
-          {/* Right Newsletter Signup Box */}
-          <div className="md:col-span-7 p-8 sm:p-12 flex flex-col justify-center text-center md:text-left space-y-4">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-cream border border-brand-nude/40 text-brand-charcoal text-xs font-semibold uppercase tracking-wider self-center md:self-start">
-              <Sparkles className="w-3.5 h-3.5 text-brand-nude" />
-              <span>Join The Circle</span>
+          {/* Right Newsletter Signup Box (Reference Exact Style) */}
+          <div className="md:col-span-7 p-8 sm:p-12 flex flex-col justify-center text-center md:text-left space-y-3 sm:space-y-4">
+            
+            {/* Small Pink Circle with Mail Icon */}
+            <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center self-center md:self-start">
+              <Mail className="w-5 h-5 text-[#9B1C3C]" />
             </div>
 
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-medium text-brand-charcoal">
+            {/* Headline (Reference Exact: "Be the First to Know") */}
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-stone-900">
               Be the First to Know
             </h2>
 
-            <p className="text-xs sm:text-sm text-brand-gray font-light max-w-md">
-              Receive early access to seasonal festive drops, private sales, and styling guides delivered right to your inbox.
+            {/* Subtext */}
+            <p className="text-xs sm:text-sm text-stone-600 font-light max-w-md">
+              Get the latest trends, exclusive offers, and style inspiration.
             </p>
 
+            {/* Input Form */}
             {isSubmitted ? (
-              <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs sm:text-sm font-medium flex items-center justify-center md:justify-start gap-2">
+              <div className="p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs sm:text-sm font-medium flex items-center justify-center md:justify-start gap-2">
                 <Check className="w-4 h-4 text-emerald-600" />
-                <span>Thank you! You are now subscribed to RUAAN updates.</span>
+                <span>Thank you for subscribing!</span>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 pt-2">
-                <div className="relative flex-1">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email address"
-                    required
-                    className="w-full pl-10 pr-4 py-3 bg-white text-xs sm:text-sm text-brand-charcoal border border-brand-nude/40 rounded-full focus:outline-none focus:border-brand-charcoal transition"
-                  />
-                  <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-brand-gray" />
-                </div>
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 pt-1">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  required
+                  className="flex-1 px-4 py-3 bg-white text-xs sm:text-sm text-stone-800 border border-stone-300 rounded-full focus:outline-none focus:border-[#9B1C3C] transition shadow-2xs"
+                />
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-brand-charcoal hover:bg-brand-nude text-white text-xs sm:text-sm font-semibold rounded-full transition shadow-sm uppercase tracking-wider active:scale-95 whitespace-nowrap"
+                  className="px-6 py-3 bg-[#9B1C3C] hover:bg-[#801430] text-white text-xs sm:text-sm font-semibold rounded-full transition shadow-sm active:scale-95 whitespace-nowrap"
                 >
                   Subscribe
                 </button>
               </form>
             )}
-
-            <p className="text-[10px] text-brand-gray/60 font-light">
-              By subscribing, you agree to receive RUAAN promotional emails. Unsubscribe anytime.
-            </p>
           </div>
 
         </div>
