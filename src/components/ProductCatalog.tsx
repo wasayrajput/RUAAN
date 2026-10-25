@@ -101,12 +101,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         </div>
 
         {/* Filters Top Bar */}
-        <div className="bg-brand-cream/60 border border-brand-nude/30 rounded-2xl p-3.5 sm:p-4 mb-8">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="bg-brand-cream/70 border border-brand-nude/30 rounded-2xl p-3 sm:p-4 mb-6 sm:mb-8 backdrop-blur-xs">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 sm:gap-4">
             
-            {/* Left Fabric Filter Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full no-scrollbar">
-              <span className="text-xs font-bold text-brand-charcoal uppercase tracking-wider flex items-center gap-1.5 mr-2">
+            {/* Left Fabric Filter Pills (Smooth Mobile Horizontal Scroll) */}
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0 max-w-full no-scrollbar">
+              <span className="text-[11px] sm:text-xs font-bold text-brand-charcoal uppercase tracking-wider flex items-center gap-1 mr-1 shrink-0">
                 <Filter className="w-3.5 h-3.5 text-brand-nude" />
                 Fabric:
               </span>
@@ -114,10 +114,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
                 <button
                   key={fabric}
                   onClick={() => setSelectedFabric(fabric)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition whitespace-nowrap ${
+                  className={`px-3 py-1.5 text-[11px] sm:text-xs font-medium rounded-full transition whitespace-nowrap active:scale-95 shrink-0 ${
                     selectedFabric === fabric
-                      ? 'bg-brand-charcoal text-white shadow-sm'
-                      : 'bg-white text-brand-charcoal border border-brand-nude/30 hover:border-brand-nude'
+                      ? 'bg-brand-charcoal text-brand-cream shadow-sm ring-1 ring-brand-charcoal'
+                      : 'bg-white text-brand-charcoal border border-brand-nude/40 hover:border-brand-nude hover:bg-brand-cream/40'
                   }`}
                 >
                   {fabric}
@@ -125,15 +125,15 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               ))}
             </div>
 
-            {/* Right Controls */}
-            <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            {/* Right Controls (Sort & Reset) */}
+            <div className="flex items-center justify-between md:justify-end gap-2.5 pt-2 md:pt-0 border-t md:border-t-0 border-brand-nude/20">
               {/* Sort By Dropdown */}
-              <div className="flex items-center gap-2 text-xs">
-                <SlidersHorizontal className="w-3.5 h-3.5 text-brand-gray" />
+              <div className="flex items-center gap-1.5 text-xs">
+                <SlidersHorizontal className="w-3.5 h-3.5 text-brand-gray shrink-0" />
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-white border border-brand-nude/40 rounded-lg px-3 py-1.5 text-xs font-medium text-brand-charcoal focus:outline-none"
+                  className="bg-white border border-brand-nude/40 rounded-lg px-2.5 py-1.5 text-[11px] sm:text-xs font-medium text-brand-charcoal focus:outline-none focus:ring-1 focus:ring-brand-nude"
                 >
                   <option value="featured">Sort: Featured</option>
                   <option value="price-low">Price: Low to High</option>
@@ -146,7 +146,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
               {(selectedFabric !== 'All' || selectedStitch !== 'All') && (
                 <button
                   onClick={handleResetFilters}
-                  className="text-xs text-rose-600 hover:underline flex items-center gap-1 font-medium"
+                  className="text-xs text-rose-600 hover:text-rose-700 flex items-center gap-1 font-medium bg-white px-2.5 py-1.5 rounded-lg border border-rose-200 shadow-xs"
                 >
                   <RotateCcw className="w-3 h-3" />
                   Reset
@@ -157,7 +157,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         </div>
 
         {/* Catalog Count Indicator */}
-        <div className="flex items-center justify-between text-xs text-brand-gray mb-6">
+        <div className="flex items-center justify-between text-[11px] sm:text-xs text-brand-gray mb-4 sm:mb-6">
           <p>
             Showing <strong className="text-brand-charcoal">{filteredProducts.length > 0 ? startIndex + 1 : 0}–{Math.min(endIndex, filteredProducts.length)}</strong> of <strong className="text-brand-charcoal">{filteredProducts.length}</strong> suits
           </p>
@@ -168,10 +168,10 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
           )}
         </div>
 
-        {/* Product Grid */}
+        {/* Product Grid (2-Column on Mobile, 4-Column on Desktop) */}
         {filteredProducts.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6 lg:gap-8">
               {paginatedProducts.map((product) => (
                 <ProductCard
                   key={product.id}

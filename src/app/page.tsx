@@ -17,6 +17,7 @@ import { DirectOrderModal } from '@/components/DirectOrderModal';
 import { WishlistDrawer } from '@/components/WishlistDrawer';
 import { SocialProofToast } from '@/components/SocialProofToast';
 import { OrdersModal } from '@/components/OrdersModal';
+import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { Product } from '@/types/product';
 
 export default function Home() {
@@ -28,7 +29,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <main className="min-h-screen bg-white flex flex-col font-sans selection:bg-brand-nude selection:text-white relative">
+    <main className="min-h-screen bg-white flex flex-col font-sans selection:bg-brand-nude selection:text-white relative pb-16 md:pb-0">
       {/* Navbar with Sticky Announcement & Search */}
       <Navbar
         searchQuery={searchQuery}
@@ -100,6 +101,9 @@ export default function Home() {
         isOpen={isOrdersLogOpen}
         onClose={() => setIsOrdersLogOpen(false)}
       />
+
+      {/* Modern App-Like Sticky Mobile Bottom Navigation */}
+      <MobileBottomNav onOpenWishlist={() => setIsWishlistOpen(true)} />
     </main>
   );
 }
