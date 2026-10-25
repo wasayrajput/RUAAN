@@ -88,8 +88,13 @@ export const BestSellers: React.FC<BestSellersProps> = ({ onQuickView }) => {
                   </div>
                 </div>
 
-                {/* Product Info (Reference Exact Minimal: Title -> Price -> Rating) */}
+                {/* Product Info (Reference Style + Fabric Tag) */}
                 <div className="p-3 sm:p-3.5 flex flex-col space-y-1">
+                  {/* Fabric Tag */}
+                  <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#B57C53]">
+                    {product.fabric}
+                  </span>
+
                   <h3 className="text-xs sm:text-sm font-semibold text-stone-900 group-hover:text-[#9B1C3C] transition line-clamp-1">
                     {product.title}
                   </h3>

@@ -79,8 +79,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
         </div>
       </div>
 
-      {/* Product Details (Reference Exact Minimal Layout: Title -> Price -> Rating) */}
+      {/* Product Details (Reference Style + Fabric Tag) */}
       <div className="p-3 sm:p-3.5 flex flex-col space-y-1">
+        {/* Fabric Tag */}
+        <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#B57C53]">
+          {product.fabric}
+        </span>
+
         {/* Title (Reference Exact: 1 Line Clean Heading) */}
         <h3 className="text-xs sm:text-sm font-semibold text-stone-900 group-hover:text-[#9B1C3C] transition line-clamp-1 leading-snug">
           {product.title}
