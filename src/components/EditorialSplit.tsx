@@ -41,13 +41,15 @@ export const EditorialSplit: React.FC<EditorialSplitProps> = ({ onShopCasual }) 
           {/* Right Soft Blush Pink Panel (Reference Exact: bg-[#FAF0F2] / #FDF0F3) */}
           <div className="lg:col-span-6 bg-[#FAF0F2] p-8 sm:p-12 lg:p-16 flex flex-col justify-center space-y-4 text-center lg:text-left relative overflow-hidden">
             
-            {/* Subtle Line-Art Botanical Leaf on Right Edge (Reference Style) */}
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-rose-200/60 select-none pointer-events-none hidden sm:block">
-              <svg width="70" height="130" viewBox="0 0 70 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 120C30 90 60 70 30 30C20 15 40 5 60 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                <path d="M30 75C45 65 55 70 58 80C45 85 35 82 30 75Z" stroke="currentColor" strokeWidth="1.5" />
-                <path d="M25 45C15 35 20 20 30 20C35 32 30 40 25 45Z" stroke="currentColor" strokeWidth="1.5" />
-              </svg>
+            {/* Official RUAAN Logo Botanical Leaf on Right Edge */}
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 select-none pointer-events-none hidden sm:block opacity-20">
+              <Image
+                src="/ruaan-leaf.png"
+                alt=""
+                width={85}
+                height={130}
+                className="object-contain"
+              />
             </div>
 
             {/* Handwritten Cursive Script Tag (Reference Exact: "Effortless Style" in rose/plum) */}

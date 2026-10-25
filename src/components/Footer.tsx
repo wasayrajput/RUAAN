@@ -15,12 +15,15 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCareGuide, onOpenSizeChart
   return (
     <footer className="bg-[#21171D] text-white pt-16 pb-8 relative overflow-hidden">
       
-      {/* Subtle Decorative Botanical Leaf Background (Reference Style) */}
-      <div className="absolute right-0 bottom-0 text-white/5 select-none pointer-events-none">
-        <svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M40 220C80 180 160 140 100 40C80 20 120 10 180 10" stroke="currentColor" strokeWidth="2" />
-          <path d="M110 130C150 110 180 120 190 140C150 150 120 145 110 130Z" stroke="currentColor" strokeWidth="2" />
-        </svg>
+      {/* Official RUAAN Logo Leaf Botanical Watermark (Exact Match to Brand Logo) */}
+      <div className="absolute right-4 bottom-2 select-none pointer-events-none opacity-20">
+        <Image
+          src="/ruaan-leaf-white.png"
+          alt=""
+          width={160}
+          height={250}
+          className="object-contain"
+        />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
@@ -48,7 +51,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCareGuide, onOpenSizeChart
               Fashion for every chapter of your life. Handcrafted ladies luxury suits, fine linens &amp; festive couture.
             </p>
 
-            {/* Social Icons in Small Circular Outlines (Reference Exact Style) */}
+            {/* Social Icons in Small Circular Outlines */}
             <div className="pt-1 flex items-center gap-2.5">
               <a
                 href={BRAND_CONFIG.socials.facebook}
