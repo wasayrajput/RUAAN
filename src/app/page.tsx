@@ -91,7 +91,6 @@ export default function Home() {
       <Footer
         onOpenCareGuide={() => setIsCareGuideOpen(true)}
         onOpenSizeChart={() => setIsSizeChartOpen(true)}
-        onOpenOrders={() => setIsOrdersLogOpen(true)}
       />
 
       {/* Modals & Slide-Over Drawers */}

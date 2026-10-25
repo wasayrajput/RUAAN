@@ -8,10 +8,9 @@ import { BRAND_CONFIG } from '@/config/brand';
 interface FooterProps {
   onOpenCareGuide: () => void;
   onOpenSizeChart: () => void;
-  onOpenOrders?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenCareGuide, onOpenSizeChart, onOpenOrders }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenCareGuide, onOpenSizeChart }) => {
   return (
     <footer className="bg-[#21171D] text-white pt-16 pb-8 relative overflow-hidden">
       
@@ -115,16 +114,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCareGuide, onOpenSizeChart
             <ul className="space-y-2 text-xs text-white/70 font-light">
               <li><a href="#catalog" className="hover:text-white transition">Shipping Policy</a></li>
               <li><a href="#catalog" className="hover:text-white transition">Return &amp; Exchange</a></li>
-              <li><button onClick={onOpenSizeChart} className="hover:text-white transition">Size Guide</button></li>
-              <li><button onClick={onOpenCareGuide} className="hover:text-white transition">Fabric Care FAQs</button></li>
+              <li><button onClick={onOpenSizeChart} className="hover:text-white transition cursor-pointer">Size Guide</button></li>
+              <li><button onClick={onOpenCareGuide} className="hover:text-white transition cursor-pointer">Fabric Care FAQs</button></li>
               <li><a href={BRAND_CONFIG.socials.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:text-white transition">Track Order</a></li>
-              {onOpenOrders && (
-                <li>
-                  <button onClick={onOpenOrders} className="text-amber-300 hover:underline">
-                    Store Owner Portal
-                  </button>
-                </li>
-              )}
             </ul>
           </div>
 
