@@ -8,7 +8,7 @@ import { BRAND_CONFIG } from '@/config/brand';
 
 export const HeroBanner: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-[#FAF7F2] py-10 sm:py-16 lg:py-20 border-b border-stone-200/80">
+    <section className="relative overflow-hidden bg-[#FAF7F2] py-6 sm:py-10 lg:py-12 border-b border-stone-200/80">
       
       {/* Background Soft Pastel Blobs (Reference Style) */}
       <div className="absolute top-1/2 -right-12 -translate-y-1/2 w-[520px] h-[520px] bg-[#F7E7E2]/60 rounded-full blur-2xl pointer-events-none" />

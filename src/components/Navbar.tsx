@@ -36,107 +36,99 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-stone-200/80 shadow-xs transition-all">
-      {/* Top Announcement Bar (Reference Clean Ticker) */}
-      <div className="bg-brand-charcoal text-brand-cream text-[11px] py-1.5 px-4 flex items-center justify-between">
-        <div className="hidden md:block text-[10px] text-brand-cream/70 font-light">
+    <header className="sticky top-0 z-40 bg-white border-b border-stone-200 shadow-xs transition-all">
+      {/* Top Announcement Bar (Clean Luxury Ticker) */}
+      <div className="bg-brand-charcoal text-brand-cream text-xs py-2 px-4 sm:px-6 flex items-center justify-between">
+        <div className="hidden md:block text-[11px] text-brand-cream/80 font-light tracking-wide">
           Official Store • 100% Original Fabrics
         </div>
 
         <div className="text-center flex-1">
-          <p className="tracking-wide">
+          <p className="text-[11px] sm:text-xs font-light tracking-wider">
             ✨ Free Nationwide Shipping on Orders Over Rs 5,000 | Cash on Delivery
           </p>
         </div>
 
-        <div className="hidden md:flex items-center gap-3 text-[10px]">
+        <div className="hidden md:flex items-center gap-3 text-xs">
           <a
             href={BRAND_CONFIG.socials.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            className="hover:text-brand-nude flex items-center gap-1 transition text-emerald-400 font-medium"
+            className="hover:text-emerald-300 flex items-center gap-1.5 transition text-emerald-400 font-medium"
           >
-            <MessageCircle className="w-3 h-3" />
-            <span>WhatsApp Support</span>
+            <MessageCircle className="w-3.5 h-3.5" />
+            <span>WhatsApp Concierge</span>
           </a>
         </div>
       </div>
 
-      {/* Main Navbar Bar (Reference Exact Layout: Left Logo, Center Links with Underline, Right 4 Icons) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      {/* Main Navbar Bar (Spacious Luxury Height: h-24 / 96px with Original Non-Round Logo) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-22 sm:h-24 flex items-center justify-between">
         
-        {/* Left Brand Logo (Reference Style: Icon + Brand Name) */}
+        {/* Left: Original Rectangular RUAAN Brand Logo (NOT Round, Fully Uncropped) */}
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-1.5 -ml-1 text-brand-charcoal hover:text-brand-nude md:hidden focus:outline-none"
+            className="p-2 -ml-2 text-brand-charcoal hover:text-rose-600 md:hidden focus:outline-none"
             aria-label="Toggle Navigation"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
 
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative w-9 h-9 rounded-full overflow-hidden border border-brand-nude/40 shadow-xs bg-brand-cream flex items-center justify-center">
-              <Image
-                src={BRAND_CONFIG.logoPng}
-                alt={BRAND_CONFIG.name}
-                fill
-                className="object-contain p-0.5"
-              />
-            </div>
-            <div className="flex flex-col text-left">
-              <span className="font-serif font-bold text-base sm:text-lg tracking-wider text-brand-charcoal leading-none">
-                {BRAND_CONFIG.name}
-              </span>
-              <span className="text-[9px] uppercase tracking-widest text-brand-nude font-semibold">
-                Luxury Pret
-              </span>
-            </div>
+          <Link href="/" className="inline-block relative group py-1">
+            <Image
+              src={BRAND_CONFIG.logoPng}
+              alt={BRAND_CONFIG.name}
+              width={160}
+              height={56}
+              priority
+              className="h-12 sm:h-14 w-auto object-contain transition transform group-hover:scale-105"
+            />
           </Link>
         </div>
 
-        {/* Center Desktop Navigation (Reference Style with Active Underline Indicator) */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-xs font-semibold tracking-wide text-brand-charcoal">
+        {/* Center Desktop Navigation (Clean, Spacious, Elegant) */}
+        <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-sm font-medium tracking-wide text-brand-charcoal">
           <button
             onClick={() => {
               setActiveTab('Home');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="relative py-2 hover:text-brand-nude transition"
+            className="relative py-2 hover:text-[#9B1C3C] transition cursor-pointer"
           >
             <span>Home</span>
             {activeTab === 'Home' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-600 rounded-full" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#9B1C3C] rounded-full" />
             )}
           </button>
 
           <button
             onClick={() => scrollToSection('catalog', 'Shop')}
-            className="relative py-2 hover:text-brand-nude transition"
+            className="relative py-2 hover:text-[#9B1C3C] transition cursor-pointer"
           >
             <span>Shop</span>
             {activeTab === 'Shop' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-600 rounded-full" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#9B1C3C] rounded-full" />
             )}
           </button>
 
           <button
             onClick={() => scrollToSection('catalog', 'New Arrivals')}
-            className="relative py-2 hover:text-brand-nude transition"
+            className="relative py-2 hover:text-[#9B1C3C] transition cursor-pointer"
           >
             <span>New Arrivals</span>
             {activeTab === 'New Arrivals' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-600 rounded-full" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#9B1C3C] rounded-full" />
             )}
           </button>
 
           <button
             onClick={() => scrollToSection('categories', 'Categories')}
-            className="relative py-2 hover:text-brand-nude transition"
+            className="relative py-2 hover:text-[#9B1C3C] transition cursor-pointer"
           >
             <span>Categories</span>
             {activeTab === 'Categories' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-600 rounded-full" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#9B1C3C] rounded-full" />
             )}
           </button>
 
@@ -145,11 +137,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               setActiveTab('About');
               onOpenCareGuide();
             }}
-            className="relative py-2 hover:text-brand-nude transition"
+            className="relative py-2 hover:text-[#9B1C3C] transition cursor-pointer"
           >
             <span>About</span>
             {activeTab === 'About' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-600 rounded-full" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#9B1C3C] rounded-full" />
             )}
           </button>
 
@@ -158,34 +150,34 @@ export const Navbar: React.FC<NavbarProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setActiveTab('Contact')}
-            className="relative py-2 hover:text-brand-nude transition"
+            className="relative py-2 hover:text-[#9B1C3C] transition cursor-pointer"
           >
             <span>Contact</span>
             {activeTab === 'Contact' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-600 rounded-full" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#9B1C3C] rounded-full" />
             )}
           </a>
         </nav>
 
-        {/* Right 4 Icons (Reference Exact Style: Search, User, Wishlist, Cart) */}
-        <div className="flex items-center gap-1 sm:gap-2">
+        {/* Right 4 Utility Icons (Search, User, Wishlist, Cart) */}
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* 1. Search */}
           <button
             onClick={() => setIsSearchOpen(!isSearchOpen)}
-            className="p-2 text-brand-charcoal hover:text-rose-700 transition"
+            className="p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
             aria-label="Search"
             title="Search suits"
           >
             <Search className="w-5 h-5 stroke-[1.75]" />
           </button>
 
-          {/* 2. User / Profile / WhatsApp Concierge */}
+          {/* 2. User / WhatsApp Concierge */}
           <a
             href={BRAND_CONFIG.socials.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex p-2 text-brand-charcoal hover:text-rose-700 transition"
-            aria-label="Account / Support"
+            className="hidden sm:inline-flex p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50"
+            aria-label="Concierge Support"
             title="Customer Concierge"
           >
             <User className="w-5 h-5 stroke-[1.75]" />
@@ -194,13 +186,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* 3. Wishlist Heart */}
           <button
             onClick={onOpenWishlist}
-            className="relative p-2 text-brand-charcoal hover:text-rose-700 transition"
+            className="relative p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
             aria-label="Wishlist"
             title="Saved Favorites"
           >
             <Heart className="w-5 h-5 stroke-[1.75]" />
             {wishlist.length > 0 && (
-              <span className="absolute top-1 right-1 min-w-4 h-4 px-1 bg-rose-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute top-1 right-1 min-w-4 h-4 px-1 bg-[#9B1C3C] text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
@@ -209,13 +201,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* 4. Cart Bag */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className="relative p-2 text-brand-charcoal hover:text-rose-700 transition"
+            className="relative p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
             aria-label="Cart Bag"
             title="Shopping Bag"
           >
             <ShoppingBag className="w-5 h-5 stroke-[1.75]" />
             {totalItems > 0 && (
-              <span className="absolute top-1 right-1 min-w-4 h-4 px-1 bg-brand-charcoal text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+              <span className="absolute top-1 right-1 min-w-4 h-4 px-1 bg-stone-900 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                 {totalItems}
               </span>
             )}
@@ -230,7 +222,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="p-3 sm:p-4 bg-brand-cream border-t border-stone-200 overflow-hidden"
+            className="p-4 bg-brand-cream border-t border-stone-200 overflow-hidden"
           >
             <div className="max-w-2xl mx-auto relative">
               <input
@@ -238,7 +230,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 placeholder="Search by fabric (linen, khaddar, viscose) or design..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-white border border-brand-nude/40 rounded-full focus:outline-none focus:border-brand-charcoal shadow-xs"
+                className="w-full pl-10 pr-4 py-3 text-sm bg-white border border-brand-nude/40 rounded-full focus:outline-none focus:border-brand-charcoal shadow-xs"
                 autoFocus
               />
               <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-brand-gray" />
@@ -247,7 +239,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -262,25 +254,25 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setIsMobileMenuOpen(false);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="block text-xs font-semibold text-brand-charcoal uppercase hover:text-rose-600 text-left w-full"
+              className="block text-sm font-semibold text-brand-charcoal uppercase hover:text-[#9B1C3C] text-left w-full"
             >
               Home
             </button>
             <button
               onClick={() => scrollToSection('catalog', 'Shop')}
-              className="block text-xs font-semibold text-brand-charcoal uppercase hover:text-rose-600 text-left w-full"
+              className="block text-sm font-semibold text-brand-charcoal uppercase hover:text-[#9B1C3C] text-left w-full"
             >
               Shop All Suits
             </button>
             <button
               onClick={() => scrollToSection('catalog', 'New Arrivals')}
-              className="block text-xs font-semibold text-brand-charcoal uppercase hover:text-rose-600 text-left w-full"
+              className="block text-sm font-semibold text-brand-charcoal uppercase hover:text-[#9B1C3C] text-left w-full"
             >
               New Arrivals
             </button>
             <button
               onClick={() => scrollToSection('categories', 'Categories')}
-              className="block text-xs font-semibold text-brand-charcoal uppercase hover:text-rose-600 text-left w-full"
+              className="block text-sm font-semibold text-brand-charcoal uppercase hover:text-[#9B1C3C] text-left w-full"
             >
               Shop by Category
             </button>
@@ -289,7 +281,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setIsMobileMenuOpen(false);
                 onOpenCareGuide();
               }}
-              className="block text-xs font-semibold text-brand-charcoal uppercase hover:text-rose-600 text-left w-full"
+              className="block text-sm font-semibold text-brand-charcoal uppercase hover:text-[#9B1C3C] text-left w-full"
             >
               About / Fabric Care
             </button>
@@ -297,7 +289,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               href={BRAND_CONFIG.socials.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-xs font-semibold text-emerald-700 uppercase hover:underline text-left w-full"
+              className="block text-sm font-semibold text-emerald-700 uppercase hover:underline text-left w-full"
             >
               WhatsApp Support
             </a>
