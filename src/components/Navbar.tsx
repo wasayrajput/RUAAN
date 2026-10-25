@@ -183,10 +183,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <User className="w-5 h-5 stroke-[1.75]" />
           </a>
 
-          {/* 3. Wishlist Heart */}
+          {/* 3. Wishlist Heart (Desktop only; on mobile it is in MobileBottomNav) */}
           <button
             onClick={onOpenWishlist}
-            className="relative p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
+            className="hidden md:inline-flex relative p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
             aria-label="Wishlist"
             title="Saved Favorites"
           >
@@ -198,10 +198,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
-          {/* 4. Cart Bag */}
+          {/* 4. Cart Bag (Desktop only; on mobile it is in MobileBottomNav) */}
           <button
             onClick={() => setIsCartOpen(true)}
-            className="relative p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
+            className="hidden md:inline-flex relative p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer"
             aria-label="Cart Bag"
             title="Shopping Bag"
           >
