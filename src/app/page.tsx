@@ -8,6 +8,7 @@ import { CategoryCards } from '@/components/CategoryCards';
 import { MidPromoBanner } from '@/components/MidPromoBanner';
 import { ProductCatalog } from '@/components/ProductCatalog';
 import { WhyChooseUs } from '@/components/WhyChooseUs';
+import { StyleCommunityBanner } from '@/components/StyleCommunityBanner';
 import { EditorialSplit } from '@/components/EditorialSplit';
 import { BestSellers } from '@/components/BestSellers';
 import { DiscountSplitBanner } from '@/components/DiscountSplitBanner';
@@ -68,7 +69,10 @@ export default function Home() {
       {/* 6. Why Choose Us? (Reference: 4 Icon Feature Columns with Botanical Motifs) */}
       <WhyChooseUs />
 
-      {/* 7. Editorial Split Feature (Reference: Casual Looks For Everyday / Effortless Style) */}
+      {/* 7. Join Our Style Community (Reference: Model on Left + Email Signup on Right) */}
+      <StyleCommunityBanner />
+
+      {/* 8. Editorial Split Feature (Reference: Casual Looks For Everyday / Effortless Style) */}
       <EditorialSplit />
 
       {/* 8. Best Sellers (Reference: 4-Suit Row Loved by Thousands of Women) */}
