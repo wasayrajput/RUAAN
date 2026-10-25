@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Heart, ShoppingBag, Eye, MessageCircle, Check, Star } from 'lucide-react';
+import { Heart, Eye, Star } from 'lucide-react';
 import { Product } from '@/types/product';
 import { useCart } from '@/context/CartContext';
 
@@ -13,24 +13,11 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
-  const { addToCart, openDirectOrder, toggleWishlist, isInWishlist, formatPrice } = useCart();
+  const { toggleWishlist, isInWishlist, formatPrice } = useCart();
   const [isHovered, setIsHovered] = useState(false);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
 
   const isFavorite = isInWishlist(product.id);
   const activeImage = isHovered && product.galleryImages[1] ? product.galleryImages[1] : product.mainImage;
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    addToCart(product, undefined, undefined, 1);
-    setIsAddedToCart(true);
-    setTimeout(() => setIsAddedToCart(false), 2000);
-  };
-
-  const handleWhatsAppBuy = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    openDirectOrder(product);
-  };
 
   const discountPercent = product.originalPrice && product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -42,38 +29,39 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.35 }}
-      className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden border border-stone-200/90 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col h-full relative"
+      onClick={() => onQuickView(product)}
+      className="group bg-white rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col h-full relative cursor-pointer border border-stone-100"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Top Left Discount Badge (Reference Style: Rose Pill Badge e.g. -20%) */}
-      <div className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-10 flex flex-col gap-1 pointer-events-none">
+      {/* Top Left Discount Badge (Reference Exact Style: Small Rounded Rose Pill) */}
+      <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1 pointer-events-none">
         {discountPercent ? (
-          <span className="px-2 py-0.5 bg-[#9B1C3C] text-white text-[9px] sm:text-[10px] font-bold rounded-md shadow-xs">
+          <span className="px-2 py-0.5 bg-[#9B1C3C] text-white text-[10px] font-bold rounded-full shadow-xs">
             -{discountPercent}%
           </span>
         ) : product.isNewArrival ? (
-          <span className="px-2 py-0.5 bg-stone-900 text-white text-[9px] sm:text-[10px] font-bold uppercase tracking-wider rounded-md shadow-xs">
+          <span className="px-2 py-0.5 bg-stone-900 text-white text-[10px] font-bold uppercase tracking-wider rounded-full shadow-xs">
             New
           </span>
         ) : null}
       </div>
 
-      {/* Top Right Wishlist Heart Button (Reference Style) */}
+      {/* Top Right Wishlist Heart Button (Reference Exact Style: Delicate Outline Heart) */}
       <button
         type="button"
-        onClick={() => toggleWishlist(product.id)}
-        className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 p-1.5 bg-white/90 backdrop-blur-md rounded-full shadow-xs hover:bg-white text-stone-700 hover:text-rose-600 transition active:scale-90"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleWishlist(product.id);
+        }}
+        className="absolute top-2.5 right-2.5 z-10 p-1.5 bg-white/80 backdrop-blur-md rounded-full text-stone-700 hover:text-rose-600 transition active:scale-90 shadow-2xs"
         aria-label="Wishlist"
       >
-        <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
+        <Heart className={`w-4 h-4 stroke-[1.75] ${isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
       </button>
 
-      {/* Product Image Container (3:4 Ratio) */}
-      <div
-        className="relative w-full aspect-[3/4] bg-stone-50 overflow-hidden cursor-pointer"
-        onClick={() => onQuickView(product)}
-      >
+      {/* Product Image Container (Reference Exact 3:4 Aspect Ratio) */}
+      <div className="relative w-full aspect-[3/4] bg-stone-50 overflow-hidden">
         <Image
           src={activeImage}
           alt={product.title}
@@ -82,97 +70,40 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }
           className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
         />
 
-        {/* Desktop Quick View Overlay */}
-        <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:flex items-center justify-center">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onQuickView(product);
-            }}
-            className="px-3.5 py-1.5 bg-white text-stone-900 text-xs font-semibold rounded-lg hover:bg-stone-900 hover:text-white transition flex items-center gap-1.5 shadow-md"
-          >
-            <Eye className="w-3.5 h-3.5" />
-            Quick View
-          </button>
-        </div>
-
-        {/* Mobile Quick Tap Indicator */}
-        <div className="sm:hidden absolute bottom-1.5 right-1.5 bg-black/40 backdrop-blur-xs text-white rounded-md p-1 pointer-events-none">
-          <Eye className="w-3 h-3 text-white/90" />
+        {/* Desktop Quick View Overlay on Hover */}
+        <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:flex items-center justify-center">
+          <div className="px-4 py-2 bg-white/95 text-stone-900 text-xs font-semibold rounded-full shadow-lg flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition-transform">
+            <Eye className="w-3.5 h-3.5 text-stone-700" />
+            <span>Quick View</span>
+          </div>
         </div>
       </div>
 
-      {/* Product Details (Reference Exact Hierarchy: Title -> Price -> Rating -> Quick Actions) */}
-      <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between space-y-2">
-        <div>
-          {/* Fabric Tag */}
-          <div className="flex items-center justify-between text-[10px] text-stone-500 uppercase tracking-wider mb-1">
-            <span className="font-semibold text-brand-nude">{product.fabric}</span>
-            <span>{product.stitchType.includes('Unstitched') ? 'Unstitched' : 'Stitched'}</span>
-          </div>
+      {/* Product Details (Reference Exact Minimal Layout: Title -> Price -> Rating) */}
+      <div className="p-3 sm:p-3.5 flex flex-col space-y-1">
+        {/* Title (Reference Exact: 1 Line Clean Heading) */}
+        <h3 className="text-xs sm:text-sm font-semibold text-stone-900 group-hover:text-[#9B1C3C] transition line-clamp-1 leading-snug">
+          {product.title}
+        </h3>
 
-          {/* Title */}
-          <h3
-            onClick={() => onQuickView(product)}
-            className="text-xs sm:text-sm font-semibold text-stone-900 hover:text-[#9B1C3C] transition line-clamp-1 cursor-pointer leading-snug"
-          >
-            {product.title}
-          </h3>
-
-          {/* Price (Reference Exact: Bold Price + Strikethrough Original) */}
-          <div className="flex items-baseline gap-1.5 mt-1">
-            <span className="text-xs sm:text-sm font-bold text-stone-900">
-              {formatPrice(product.price)}
+        {/* Price (Reference Exact: Bold Price + Strikethrough Original) */}
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-xs sm:text-sm font-bold text-stone-900">
+            {formatPrice(product.price)}
+          </span>
+          {product.originalPrice && product.originalPrice > product.price && (
+            <span className="text-[10px] sm:text-xs text-stone-400 line-through">
+              {formatPrice(product.originalPrice)}
             </span>
-            {product.originalPrice && product.originalPrice > product.price && (
-              <span className="text-[10px] sm:text-xs text-stone-400 line-through">
-                {formatPrice(product.originalPrice)}
-              </span>
-            )}
-          </div>
-
-          {/* Star Rating (Reference Exact: ★ 4.8 (120)) */}
-          <div className="flex items-center gap-1 mt-1 text-[11px] text-amber-500 font-medium">
-            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-            <span className="font-semibold text-stone-800">4.8</span>
-            <span className="text-stone-400 text-[10px]">(120)</span>
-          </div>
+          )}
         </div>
 
-        {/* Quick Buy Actions */}
-        <div className="pt-2 border-t border-stone-100 grid grid-cols-2 gap-1.5">
-          <button
-            onClick={handleAddToCart}
-            className={`py-1.5 px-1 text-[11px] font-semibold rounded-lg transition flex items-center justify-center gap-1 active:scale-95 ${
-              isAddedToCart
-                ? 'bg-emerald-600 text-white'
-                : 'bg-stone-900 text-white hover:bg-[#9B1C3C]'
-            }`}
-            title="Add to Cart"
-          >
-            {isAddedToCart ? (
-              <>
-                <Check className="w-3 h-3" />
-                <span>Added</span>
-              </>
-            ) : (
-              <>
-                <ShoppingBag className="w-3 h-3" />
-                <span>Add</span>
-              </>
-            )}
-          </button>
-
-          <button
-            onClick={handleWhatsAppBuy}
-            className="py-1.5 px-1 bg-emerald-700 hover:bg-emerald-800 text-white text-[11px] font-semibold rounded-lg transition flex items-center justify-center gap-1 shadow-xs active:scale-95"
-            title="Order on WhatsApp"
-          >
-            <MessageCircle className="w-3 h-3" />
-            <span>WhatsApp</span>
-          </button>
+        {/* Star Rating (Reference Exact: ★ 4.8 (120)) */}
+        <div className="flex items-center gap-1 text-[11px] text-amber-500 font-medium pt-0.5">
+          <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+          <span className="font-semibold text-stone-800">4.8</span>
+          <span className="text-stone-400 text-[10px]">(120)</span>
         </div>
-
       </div>
     </motion.div>
   );
