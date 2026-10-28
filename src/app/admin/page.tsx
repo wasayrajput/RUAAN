@@ -1901,9 +1901,11 @@ function AddOrderModal({
                         }}
                         className="w-full bg-[#181b22] border border-[#2e333d] rounded px-2 py-1 text-xs text-white"
                       >
-                        <option value="Large">Large</option>
-                        <option value="Medium">Medium</option>
+                        <option value="Standard Size">Standard Size</option>
+                        <option value="Standard">Standard</option>
                         <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
                         <option value="XL">XL</option>
                         <option value="Standard Unstitched">Standard Unstitched</option>
                       </select>
