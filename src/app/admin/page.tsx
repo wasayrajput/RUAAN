@@ -222,7 +222,10 @@ export default function AdminPortalPage() {
   const fetchOrdersFromApi = async () => {
     try {
       setIsSyncing(true);
-      const res = await fetch('/api/orders', { cache: 'no-store' });
+      const res = await fetch(`/api/orders?t=${Date.now()}`, { 
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
       if (res.ok) {
         const data = await res.json();
         if (data.orders && Array.isArray(data.orders)) {
