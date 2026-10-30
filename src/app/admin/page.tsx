@@ -87,17 +87,6 @@ export interface InventoryItem {
   isStitched: boolean;
 }
 
-export interface AdCampaign {
-  id: string;
-  date: string;
-  name: string;
-  platform: 'Meta / Instagram' | 'TikTok' | 'Google';
-  spend: number;
-  leads: number;
-  orders: number;
-  notes?: string;
-}
-
 export default function AdminPortalPage() {
   // --- AUTHENTICATION STATE ---
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -106,12 +95,11 @@ export default function AdminPortalPage() {
   const [savedPin, setSavedPin] = useState<string>('2026');
 
   // --- NAVIGATION STATE ---
-  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'inventory' | 'marketing' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'inventory' | 'settings'>('overview');
 
   // --- CORE DATA STATES ---
   const [orders, setOrders] = useState<Order[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
-  const [adCampaigns, setAdCampaigns] = useState<AdCampaign[]>([]);
 
   // --- UI & MODAL STATES ---
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -218,31 +206,6 @@ export default function AdminPortalPage() {
       setOrders(initialOrders);
       localStorage.setItem('ruaan_admin_orders', JSON.stringify(initialOrders));
     }
-
-    // 4. Load Ad Spend Logs (Seed sample campaign)
-    const storedAds = localStorage.getItem('ruaan_admin_ads');
-    if (storedAds) {
-      try {
-        setAdCampaigns(JSON.parse(storedAds));
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      const initialAds: AdCampaign[] = [
-        {
-          id: 'ad-1',
-          date: '2026-10-19',
-          name: 'DV03 Meta Video Ad (Launch)',
-          platform: 'Meta / Instagram',
-          spend: 1800,
-          leads: 28,
-          orders: 2,
-          notes: 'High engagement on WhatsApp click ad'
-        }
-      ];
-      setAdCampaigns(initialAds);
-      localStorage.setItem('ruaan_admin_ads', JSON.stringify(initialAds));
-    }
   }, []);
 
   // Sync to local storage
@@ -254,11 +217,6 @@ export default function AdminPortalPage() {
   const saveInventory = (updated: InventoryItem[]) => {
     setInventory(updated);
     localStorage.setItem('ruaan_admin_inventory', JSON.stringify(updated));
-  };
-
-  const saveAds = (updated: AdCampaign[]) => {
-    setAdCampaigns(updated);
-    localStorage.setItem('ruaan_admin_ads', JSON.stringify(updated));
   };
 
   // --- PIN AUTHENTICATION HANDLERS ---
@@ -397,14 +355,11 @@ export default function AdminPortalPage() {
       }
     });
 
-    const totalAdSpend = adCampaigns.reduce((sum, ad) => sum + ad.spend, 0);
-    const totalLeads = adCampaigns.reduce((sum, ad) => sum + ad.leads, 0);
-
-    // Pure Pocket Profit: (Realized Cash - Delivered COGS - Ad Spend)
-    const netPureProfit = realizedCash - cogsDelivered - totalAdSpend;
+    // Pure Pocket Profit: (Realized Cash - Delivered COGS)
+    const netPureProfit = realizedCash - cogsDelivered;
 
     // Projected Profit (if all pending orders deliver)
-    const projectedNetProfit = totalGrossRevenue - cogsAllActive - totalAdSpend;
+    const projectedNetProfit = totalGrossRevenue - cogsAllActive;
 
     // Return Rate
     const totalCount = orders.length;
@@ -415,8 +370,6 @@ export default function AdminPortalPage() {
       totalGrossRevenue,
       realizedCash,
       pendingCOD,
-      totalAdSpend,
-      totalLeads,
       netPureProfit,
       projectedNetProfit,
       returnRate,
@@ -426,7 +379,7 @@ export default function AdminPortalPage() {
       dispatchedCount: orders.filter(o => o.status === 'dispatched').length,
       returnedCount,
     };
-  }, [orders, inventory, adCampaigns]);
+  }, [orders, inventory]);
 
   // --- LOW STOCK ITEMS ---
   const lowStockItems = useMemo(() => {
@@ -703,18 +656,6 @@ export default function AdminPortalPage() {
           </button>
 
           <button
-            onClick={() => setActiveTab('marketing')}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition shrink-0 ${
-              activeTab === 'marketing'
-                ? 'bg-[#c5a059]/15 text-[#c5a059] border border-[#c5a059]/30'
-                : 'text-gray-400 hover:text-white hover:bg-[#1a1e28]'
-            }`}
-          >
-            <TrendingUp className="w-4 h-4" />
-            <span>Ad Spend & ROI</span>
-          </button>
-
-          <button
             onClick={() => setActiveTab('settings')}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition shrink-0 ${
               activeTab === 'settings'
@@ -784,7 +725,7 @@ export default function AdminPortalPage() {
                   Rs. {financials.netPureProfit.toLocaleString()}
                 </div>
                 <p className="text-[11px] text-gray-400">
-                  After wholesale cost & Rs. {financials.totalAdSpend.toLocaleString()} Ad spend
+                  Net pocket profit after wholesale product cost
                 </p>
               </div>
 
@@ -1245,90 +1186,7 @@ export default function AdminPortalPage() {
         )}
 
         {/* =========================================================================
-            TAB 4: AD SPEND & MARKETING ROI TRACKER
-           ========================================================================= */}
-        {activeTab === 'marketing' && (
-          <div className="space-y-6">
-            
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-xl font-serif font-bold text-white uppercase tracking-wider">
-                  Marketing & Ad Spend Tracker
-                </h2>
-                <p className="text-xs text-gray-400">
-                  Track Facebook/Meta & TikTok ad expenditures, cost per inquiry & customer acquisition
-                </p>
-              </div>
-            </div>
-
-            {/* Ad Metrics Summary */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-[#171a22] border border-[#2a2f3d] rounded-xl p-5">
-                <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Total Ad Spend</span>
-                <div className="text-2xl font-bold text-white mt-1">Rs. {financials.totalAdSpend.toLocaleString()}</div>
-                <span className="text-[11px] text-gray-400">Across {adCampaigns.length} campaigns</span>
-              </div>
-
-              <div className="bg-[#171a22] border border-[#2a2f3d] rounded-xl p-5">
-                <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Cost Per Message (CPL)</span>
-                <div className="text-2xl font-bold text-blue-400 mt-1">
-                  Rs. {financials.totalLeads > 0 ? (financials.totalAdSpend / financials.totalLeads).toFixed(0) : '0'}
-                </div>
-                <span className="text-[11px] text-gray-400">Average cost per WhatsApp inquiry</span>
-              </div>
-
-              <div className="bg-[#171a22] border border-[#2a2f3d] rounded-xl p-5">
-                <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Return on Ad Spend (ROAS)</span>
-                <div className="text-2xl font-bold text-emerald-400 mt-1">
-                  {financials.totalAdSpend > 0 ? ((financials.totalGrossRevenue / financials.totalAdSpend)).toFixed(1) : '0'}x
-                </div>
-                <span className="text-[11px] text-gray-400">Generated Rs. {financials.totalGrossRevenue.toLocaleString()} sales</span>
-              </div>
-            </div>
-
-            {/* Campaign Logs */}
-            <div className="bg-[#151821] border border-[#262b38] rounded-xl p-6 shadow-md">
-              <h3 className="font-serif font-bold text-base text-white uppercase tracking-wider mb-4">
-                Recorded Ad Campaigns
-              </h3>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs">
-                  <thead className="bg-[#10131a] text-gray-400 uppercase tracking-wider text-[10px]">
-                    <tr>
-                      <th className="py-3 px-4">Date</th>
-                      <th className="py-3 px-4">Campaign Name</th>
-                      <th className="py-3 px-4">Platform</th>
-                      <th className="py-3 px-4">Spend (PKR)</th>
-                      <th className="py-3 px-4">Inquiries</th>
-                      <th className="py-3 px-4">Orders</th>
-                      <th className="py-3 px-4">Cost / Order</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#242936]">
-                    {adCampaigns.map(ad => (
-                      <tr key={ad.id} className="hover:bg-[#1a1e2b] transition">
-                        <td className="py-3 px-4 text-gray-400">{ad.date}</td>
-                        <td className="py-3 px-4 font-bold text-white">{ad.name}</td>
-                        <td className="py-3 px-4 text-gray-300">{ad.platform}</td>
-                        <td className="py-3 px-4 font-bold text-white">Rs. {ad.spend.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-blue-400 font-bold">{ad.leads} Leads</td>
-                        <td className="py-3 px-4 text-emerald-400 font-bold">{ad.orders} Orders</td>
-                        <td className="py-3 px-4 text-gray-300">
-                          Rs. {ad.orders > 0 ? (ad.spend / ad.orders).toFixed(0) : '-'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-          </div>
-        )}
-
-        {/* =========================================================================
-            TAB 5: SETTINGS
+            TAB 4: SETTINGS
            ========================================================================= */}
         {activeTab === 'settings' && (
           <div className="max-w-xl mx-auto space-y-6">
@@ -1375,7 +1233,7 @@ export default function AdminPortalPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => {
-                    const data = { orders, inventory, adCampaigns, savedPin };
+                    const data = { orders, inventory, savedPin };
                     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
