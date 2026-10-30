@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MessageCircle, Truck, ShieldCheck } from 'lucide-react';
+import { X, MessageCircle, Truck, ShieldCheck, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { BRAND_CONFIG } from '@/config/brand';
 import { CustomerDetails, SizeOption, getProductArticleCode } from '@/types/product';
@@ -20,6 +20,10 @@ export const DirectOrderModal: React.FC = () => {
     city: '',
     notes: '',
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [placedOrderNumber, setPlacedOrderNumber] = useState('');
 
   // Sync state whenever directOrder opens
   useEffect(() => {
@@ -45,7 +49,7 @@ export const DirectOrderModal: React.FC = () => {
   const grandTotal = itemTotal + shippingCost;
   const photoUrl = selectedColor?.image || product.mainImage;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerDetails.fullName || !customerDetails.phone || !customerDetails.address) {
       alert('Please fill in your Name, Phone Number, and Address to proceed.');
@@ -53,74 +57,52 @@ export const DirectOrderModal: React.FC = () => {
     }
 
     try {
+      setIsSubmitting(true);
       localStorage.setItem('ruaan_customer_details', JSON.stringify(customerDetails));
-    } catch (e) {}
 
-    const orderId = `RU-${Math.floor(1000 + Math.random() * 9000)}`;
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://ruaan.pk';
-    const fullPhotoUrl = `${origin}${photoUrl}`;
-    const colorStr = selectedColor ? ` | Color: ${selectedColor.name}` : '';
+      const payload = {
+        customerName: customerDetails.fullName,
+        phone1: customerDetails.phone,
+        city: customerDetails.city || 'Pakistan',
+        address: customerDetails.address,
+        notes: customerDetails.notes,
+        paymentType: 'COD',
+        subtotal: itemTotal,
+        deliveryFee: shippingCost,
+        total: grandTotal,
+        items: [
+          {
+            id: product.id,
+            code: articleCode,
+            name: product.title,
+            fabric: product.fabric,
+            stitch: product.stitchType,
+            size: selectedSize,
+            price: product.price,
+            qty: quantity,
+          },
+        ],
+      };
 
-    let message = `✦ NEW ORDER - ${BRAND_CONFIG.name}\n`;
-    message += `Order ID: *#${orderId}*\n\n`;
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    message += `Customer Details:\n`;
-    message += `✦ Name: ${customerDetails.fullName}\n`;
-    message += `✦ Phone: ${customerDetails.phone}\n`;
-    message += `✦ Address: ${customerDetails.address}${customerDetails.city ? ', ' + customerDetails.city : ''}\n`;
-    if (customerDetails.notes) {
-      message += `✦ Notes: ${customerDetails.notes}\n`;
-    }
-
-    message += `\nSuits Ordered (1 items):\n`;
-    message += `━━━━━━━━━━━━━━━━━━━━━\n`;
-    message += `1. *${product.title}*\n`;
-    message += `   • Design Code: *${articleCode}*\n`;
-    message += `   • Fabric: ${product.fabric} (${product.stitchType})\n`;
-    message += `   • Available Sizes: *${selectedSize}*${colorStr}\n`;
-    message += `   • Quantity: ${quantity} x ${formatPrice(product.price)}\n`;
-    message += `   • Suit Photo: ${fullPhotoUrl}\n\n`;
-
-    message += `━━━━━━━━━━━━━━━━━━━━━\n`;
-    message += `Subtotal: ${formatPrice(itemTotal)}\n`;
-    message += `Delivery: ${isFreeShipping ? 'FREE Delivery' : formatPrice(shippingCost)}\n`;
-    message += `*Grand Total: ${formatPrice(grandTotal)}*\n\n`;
-    message += `Please confirm my order and share delivery timeline. Thank you!`;
-
-    // Persist into merchant orders log
-    try {
-      if (typeof window !== 'undefined') {
-        const newOrder = {
-          orderId,
-          date: new Date().toISOString(),
-          customer: customerDetails,
-          items: [
-            {
-              id: product.id,
-              designCode: articleCode,
-              title: product.title,
-              fabric: product.fabric,
-              stitchType: product.stitchType,
-              size: selectedSize,
-              color: selectedColor?.name,
-              quantity,
-              price: product.price,
-              image: photoUrl,
-            },
-          ],
-          total: grandTotal,
-          isFreeShipping,
-        };
-        const existingOrders = JSON.parse(localStorage.getItem('ruaan_placed_orders') || '[]');
-        localStorage.setItem('ruaan_placed_orders', JSON.stringify([newOrder, ...existingOrders]));
+      const data = await res.json();
+      if (data.success && data.order) {
+        setPlacedOrderNumber(data.order.orderNumber);
+        setIsSubmitted(true);
+      } else {
+        alert(data.error || 'Failed to place order. Please try again.');
       }
-    } catch (e) {
-      console.error('Could not save order log:', e);
+    } catch (err) {
+      console.error('Direct order submission error:', err);
+      alert('Order could not be sent. Please check your internet connection.');
+    } finally {
+      setIsSubmitting(false);
     }
-
-    const cleanedPhone = BRAND_CONFIG.whatsappNumber.replace(/[^0-9]/g, '');
-    window.open(`https://wa.me/${cleanedPhone}?text=${encodeURIComponent(message)}`, '_blank');
-    closeDirectOrder();
   };
 
   return (
@@ -139,12 +121,12 @@ export const DirectOrderModal: React.FC = () => {
           {/* Header */}
           <div className="p-4 sm:p-5 bg-brand-cream border-b border-brand-nude/30 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 bg-emerald-600 text-white rounded-xl shadow-xs">
-                <MessageCircle className="w-5 h-5" />
+              <div className="p-2 bg-brand-charcoal text-white rounded-xl shadow-xs">
+                <ShoppingBag className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-base sm:text-lg font-serif font-semibold text-brand-charcoal">
-                  Direct WhatsApp Order
+                  Direct Suit Order
                 </h3>
                 <p className="text-[11px] text-brand-gray">Fast Dispatch &bull; Cash on Delivery</p>
               </div>
@@ -160,6 +142,32 @@ export const DirectOrderModal: React.FC = () => {
 
           {/* Body */}
           <div className="p-4 sm:p-6 overflow-y-auto space-y-4 no-scrollbar">
+            {isSubmitted ? (
+              <div className="py-8 text-center space-y-4">
+                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-10 h-10" />
+                </div>
+                <h4 className="text-xl font-serif font-bold text-brand-charcoal">
+                  Order Booked Successfully!
+                </h4>
+                {placedOrderNumber && (
+                  <div className="inline-block bg-brand-cream border border-brand-nude/40 rounded-full px-4 py-1.5 text-xs font-mono font-bold text-brand-charcoal">
+                    Order ID: {placedOrderNumber}
+                  </div>
+                )}
+                <p className="text-xs text-brand-gray leading-relaxed max-w-xs mx-auto">
+                  Thank you {customerDetails.fullName}! Your order has been placed directly. Our customer care team will call you to confirm your address before dispatch.
+                </p>
+                <button
+                  type="button"
+                  onClick={closeDirectOrder}
+                  className="px-6 py-3 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-brand-nude transition cursor-pointer uppercase tracking-wider"
+                >
+                  Done & Continue Shopping
+                </button>
+              </div>
+            ) : (
+              <>
             {/* Suit Summary Box */}
             <div className="flex gap-3 bg-brand-cream/60 p-3 rounded-2xl border border-brand-nude/30 items-center">
               <div className="relative w-16 h-20 rounded-xl overflow-hidden bg-brand-cream flex-shrink-0 border border-brand-nude/20">
@@ -319,44 +327,55 @@ export const DirectOrderModal: React.FC = () => {
                 />
               </div>
             </form>
+            </>
+            )}
           </div>
 
           {/* Footer & Pricing Breakdown */}
-          <div className="p-4 sm:p-5 bg-brand-cream border-t border-brand-nude/30 space-y-3">
-            <div className="space-y-1 text-xs text-brand-charcoal">
-              <div className="flex justify-between">
-                <span className="text-brand-gray">Subtotal</span>
-                <span>{formatPrice(itemTotal)}</span>
+          {!isSubmitted && (
+            <div className="p-4 sm:p-5 bg-brand-cream border-t border-brand-nude/30 space-y-3">
+              <div className="space-y-1 text-xs text-brand-charcoal">
+                <div className="flex justify-between">
+                  <span className="text-brand-gray">Subtotal</span>
+                  <span>{formatPrice(itemTotal)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-brand-gray flex items-center gap-1">
+                    <Truck className="w-3.5 h-3.5 text-brand-nude" />
+                    Delivery Charges
+                  </span>
+                  <span className={isFreeShipping ? 'text-emerald-700 font-semibold' : ''}>
+                    {isFreeShipping ? 'FREE Delivery' : formatPrice(shippingCost)}
+                  </span>
+                </div>
+                <div className="flex justify-between pt-1.5 border-t border-brand-nude/30 font-serif font-bold text-sm sm:text-base">
+                  <span>Grand Total</span>
+                  <span className="text-brand-charcoal">{formatPrice(grandTotal)}</span>
+                </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-brand-gray flex items-center gap-1">
-                  <Truck className="w-3.5 h-3.5 text-brand-nude" />
-                  Delivery Charges
-                </span>
-                <span className={isFreeShipping ? 'text-emerald-700 font-semibold' : ''}>
-                  {isFreeShipping ? 'FREE Delivery' : formatPrice(shippingCost)}
-                </span>
-              </div>
-              <div className="flex justify-between pt-1.5 border-t border-brand-nude/30 font-serif font-bold text-sm sm:text-base">
-                <span>Grand Total</span>
-                <span className="text-brand-charcoal">{formatPrice(grandTotal)}</span>
-              </div>
+
+              <button
+                type="submit"
+                form="direct-order-form"
+                disabled={isSubmitting}
+                className="w-full py-3.5 bg-brand-charcoal hover:bg-[#2b2b2d] text-white font-semibold text-xs sm:text-sm rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50 uppercase tracking-wider"
+              >
+                {isSubmitting ? (
+                  <span>Placing Order...</span>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 text-[#c5a059]" />
+                    <span>Confirm Order (Cash on Delivery)</span>
+                  </>
+                )}
+              </button>
+
+              <p className="text-[10px] text-center text-brand-gray flex items-center justify-center gap-1">
+                <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                <span>Verified 100% Original Brand Suits &bull; Official RUAAN Store</span>
+              </p>
             </div>
-
-            <button
-              type="submit"
-              form="direct-order-form"
-              className="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs sm:text-sm rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>Place Order via WhatsApp</span>
-            </button>
-
-            <p className="text-[10px] text-center text-brand-gray flex items-center justify-center gap-1">
-              <ShieldCheck className="w-3 h-3 text-emerald-600" />
-              <span>Official WhatsApp: {BRAND_CONFIG.whatsappNumber} &bull; 100% Genuine Suits</span>
-            </p>
-          </div>
+          )}
         </motion.div>
       </div>
     </AnimatePresence>

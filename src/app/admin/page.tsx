@@ -34,13 +34,15 @@ import {
   Sparkles,
   BarChart3,
   Settings,
-  X
+  X,
+  Bell,
+  RefreshCw
 } from 'lucide-react';
 import productsData from '@/data/products.json';
 import { BRAND_CONFIG } from '@/config/brand';
 
 // --- TYPES ---
-export type OrderStatus = 'pending' | 'dispatched' | 'delivered' | 'returned' | 'cancelled';
+export type OrderStatus = 'new' | 'pending' | 'dispatched' | 'delivered' | 'returned' | 'cancelled';
 export type PaymentType = 'COD' | 'PAID' | 'PARTIAL' | 'DUAL';
 export type OrderSource = 'WhatsApp' | 'Instagram' | 'Website' | 'Phone Call';
 
@@ -95,11 +97,14 @@ export default function AdminPortalPage() {
   const [savedPin, setSavedPin] = useState<string>('2026');
 
   // --- NAVIGATION STATE ---
-  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'inventory' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'new-orders' | 'overview' | 'orders' | 'inventory' | 'settings'>('new-orders');
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   // --- CORE DATA STATES ---
   const [orders, setOrders] = useState<Order[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
+
+  const newOrdersCount = orders.filter(o => o.status === 'new').length;
 
   // --- UI & MODAL STATES ---
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -206,12 +211,92 @@ export default function AdminPortalPage() {
       setOrders(initialOrders);
       localStorage.setItem('ruaan_admin_orders', JSON.stringify(initialOrders));
     }
+
+    // 3. Fetch latest live orders from Central Server API
+    fetchOrdersFromApi();
+    const interval = setInterval(fetchOrdersFromApi, 15000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Sync to local storage
+  // Fetch from API
+  const fetchOrdersFromApi = async () => {
+    try {
+      setIsSyncing(true);
+      const res = await fetch('/api/orders', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.orders && Array.isArray(data.orders)) {
+          setOrders(data.orders);
+          localStorage.setItem('ruaan_admin_orders', JSON.stringify(data.orders));
+        }
+      }
+    } catch (e) {
+      console.error('Failed to sync orders from API:', e);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  // Sync to local storage & server
   const saveOrders = (updated: Order[]) => {
     setOrders(updated);
     localStorage.setItem('ruaan_admin_orders', JSON.stringify(updated));
+  };
+
+  const handleConfirmNewOrder = async (orderId: string) => {
+    const orderToConfirm = orders.find(o => o.id === orderId);
+    if (!orderToConfirm) return;
+
+    // 1. Deduct stock for each item in the order
+    let invCopy = [...inventory];
+    orderToConfirm.items.forEach(it => {
+      invCopy = invCopy.map(inv => {
+        if (inv.code === it.code) {
+          return {
+            ...inv,
+            stock: Math.max(0, inv.stock - it.qty),
+            soldCount: inv.soldCount + it.qty,
+          };
+        }
+        return inv;
+      });
+    });
+    saveInventory(invCopy);
+
+    // 2. Update status to 'pending'
+    const updatedOrders = orders.map(o => o.id === orderId ? { ...o, status: 'pending' as OrderStatus } : o);
+    saveOrders(updatedOrders);
+
+    // 3. Persist to API
+    try {
+      await fetch('/api/orders', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId, status: 'pending' }),
+      });
+    } catch (e) {
+      console.error('Failed to sync status with API:', e);
+    }
+
+    showToast(`✅ Order ${orderToConfirm.orderNumber} Confirmed! Moved to Pending Packing.`);
+  };
+
+  const handleCancelNewOrder = async (orderId: string) => {
+    if (!confirm('Are you sure you want to cancel / reject this order?')) return;
+    const updatedOrders = orders.map(o => o.id === orderId ? { ...o, status: 'cancelled' as OrderStatus } : o);
+    saveOrders(updatedOrders);
+
+    try {
+      await fetch('/api/orders', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId, status: 'cancelled' }),
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
+    showToast('Order marked as cancelled.');
   };
 
   const saveInventory = (updated: InventoryItem[]) => {
@@ -615,6 +700,25 @@ export default function AdminPortalPage() {
       <div className="border-b border-[#242936] bg-[#11131a] px-4 sm:px-8">
         <nav className="flex space-x-1 sm:space-x-8 overflow-x-auto py-2.5">
           <button
+            onClick={() => setActiveTab('new-orders')}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition shrink-0 relative ${
+              activeTab === 'new-orders'
+                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                : 'text-gray-400 hover:text-white hover:bg-[#1a1e28]'
+            }`}
+          >
+            <Bell className={`w-4 h-4 ${newOrdersCount > 0 ? 'text-rose-400 animate-bounce' : 'text-gray-400'}`} />
+            <span>New Orders</span>
+            {newOrdersCount > 0 ? (
+              <span className="bg-rose-600 text-white text-[10px] px-2 py-0.5 rounded-full font-extrabold animate-pulse shadow-sm">
+                {newOrdersCount} NEW
+              </span>
+            ) : (
+              <span className="text-[10px] text-gray-500 font-mono">0</span>
+            )}
+          </button>
+
+          <button
             onClick={() => setActiveTab('overview')}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition shrink-0 ${
               activeTab === 'overview'
@@ -671,6 +775,194 @@ export default function AdminPortalPage() {
 
       {/* --- TAB CONTENT AREA --- */}
       <main className="max-w-7xl mx-auto p-4 sm:p-8">
+        
+        {/* =========================================================================
+            TAB 0: INCOMING NEW WEB ORDERS (Awaiting Confirmation)
+           ========================================================================= */}
+        {activeTab === 'new-orders' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#151821] border border-[#262b38] rounded-xl p-5 shadow-md">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <h2 className="text-xl font-serif font-bold text-white uppercase tracking-wider">
+                    New Web Orders
+                  </h2>
+                  {newOrdersCount > 0 ? (
+                    <span className="bg-rose-600 text-white text-xs px-2.5 py-0.5 rounded-full font-bold">
+                      {newOrdersCount} Awaiting Confirmation
+                    </span>
+                  ) : (
+                    <span className="bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded-full font-semibold">
+                      All Caught Up
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-gray-400 mt-1">
+                  Orders placed directly by customers on the website land here first. Click &quot;Confirm &amp; Move to Pending&quot; to accept and send to packing pipeline.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={fetchOrdersFromApi}
+                  disabled={isSyncing}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#1f2430] hover:bg-[#2b3345] text-gray-300 hover:text-white rounded-lg text-xs font-semibold border border-[#353d52] transition cursor-pointer disabled:opacity-50"
+                  title="Check for new orders now"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-[#c5a059]' : ''}`} />
+                  <span>{isSyncing ? 'Syncing...' : 'Refresh Orders'}</span>
+                </button>
+
+                <button
+                  onClick={() => setIsAddOrderOpen(true)}
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-[#c5a059] hover:bg-[#b08d4b] text-black font-bold text-xs rounded-lg transition shadow-md cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Book Manual Order</span>
+                </button>
+              </div>
+            </div>
+
+            {/* List of New Orders */}
+            {newOrdersCount === 0 ? (
+              <div className="bg-[#151821] border border-[#262b38] rounded-xl p-12 text-center space-y-3">
+                <div className="w-14 h-14 bg-stone-800/80 rounded-full flex items-center justify-center mx-auto text-gray-400">
+                  <Bell className="w-6 h-6" />
+                </div>
+                <h3 className="font-serif font-bold text-lg text-white">No New Orders Right Now</h3>
+                <p className="text-xs text-gray-400 max-w-md mx-auto leading-relaxed">
+                  Whenever a customer places an order on your website, it will automatically pop up here in real-time. You can review the address, call or WhatsApp the customer, and approve it directly to the Pending Packing pipeline.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {orders.filter(o => o.status === 'new').map((order) => (
+                  <div
+                    key={order.id}
+                    className="bg-[#171a22] border-2 border-rose-500/40 rounded-xl p-5 shadow-xl relative overflow-hidden transition hover:border-rose-500/70"
+                  >
+                    {/* Top Status Bar */}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-3 border-b border-[#292f3d] mb-4">
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <span className="font-mono text-sm font-extrabold text-[#c5a059] bg-[#c5a059]/10 px-2 py-0.5 rounded border border-[#c5a059]/30">
+                          {order.orderNumber}
+                        </span>
+                        <span className="text-xs text-gray-400">{order.date}</span>
+                        <span className="bg-sky-500/10 text-sky-400 text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-sky-500/20">
+                          🌐 {order.source}
+                        </span>
+                        <span className="bg-amber-500/10 text-amber-300 text-[10px] uppercase font-bold px-2 py-0.5 rounded border border-amber-500/20">
+                          {order.paymentType}
+                        </span>
+                        <span className="bg-rose-500/20 text-rose-300 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded border border-rose-500/40 animate-pulse">
+                          ⚡ Needs Confirmation
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {/* Quick Contact buttons */}
+                        <a
+                          href={`tel:${order.phone1}`}
+                          className="px-2.5 py-1 bg-[#232938] hover:bg-[#313a4f] text-emerald-400 rounded-md text-[11px] font-semibold flex items-center gap-1 border border-[#374158] transition"
+                          title="Call Customer"
+                        >
+                          <Phone className="w-3 h-3" />
+                          <span>Call</span>
+                        </a>
+
+                        <a
+                          href={`https://wa.me/${order.phone1.replace(/[^0-9]/g, '').replace(/^0/, '92')}?text=${encodeURIComponent(`Assalam-o-Alaikum ${order.customerName}! Thank you for choosing RUAAN. We have received your order ${order.orderNumber}. Confirming your address: ${order.address}, ${order.city}. Total Bill: Rs. ${order.total.toLocaleString()}.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-2.5 py-1 bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 rounded-md text-[11px] font-semibold flex items-center gap-1 border border-emerald-700/50 transition"
+                          title="WhatsApp Customer"
+                        >
+                          <MessageSquare className="w-3 h-3" />
+                          <span>WhatsApp</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Customer & Address Details */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+                      <div className="md:col-span-4 space-y-1.5 bg-[#12141a] p-3.5 rounded-lg border border-[#232836]">
+                        <div className="text-[10px] uppercase tracking-wider font-bold text-gray-400">Customer &amp; Delivery Address</div>
+                        <div className="text-sm font-bold text-white">{order.customerName}</div>
+                        <div className="text-xs text-stone-300 flex items-center gap-1.5 font-mono">
+                          <Phone className="w-3 h-3 text-emerald-400" />
+                          <span>{order.phone1}</span>
+                          {order.phone2 && <span className="text-gray-500">/ {order.phone2}</span>}
+                        </div>
+                        <div className="text-xs text-stone-300 flex items-start gap-1.5 pt-1">
+                          <MapPin className="w-3.5 h-3.5 text-rose-400 shrink-0 mt-0.5" />
+                          <div>
+                            <strong className="text-white">{order.city}</strong> &bull; {order.address}
+                          </div>
+                        </div>
+                        {order.notes && (
+                          <div className="text-[11px] text-amber-300 bg-amber-500/10 p-2 rounded border border-amber-500/20 mt-2">
+                            <strong>Note:</strong> {order.notes}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Items Ordered */}
+                      <div className="md:col-span-5 space-y-2">
+                        <div className="text-[10px] uppercase tracking-wider font-bold text-gray-400">Suits in Order</div>
+                        <div className="space-y-1.5">
+                          {order.items.map((it, idx) => (
+                            <div key={idx} className="bg-[#12141a] p-2.5 rounded-lg border border-[#232836] flex justify-between items-center text-xs">
+                              <div>
+                                <div className="font-bold text-white flex items-center gap-1.5">
+                                  <span className="font-mono text-[#c5a059] bg-[#c5a059]/15 px-1.5 py-0.2 rounded text-[11px]">
+                                    {it.code}
+                                  </span>
+                                  <span>{it.name}</span>
+                                </div>
+                                <div className="text-[11px] text-gray-400 mt-0.5">
+                                  Size: <strong className="text-stone-300">{it.size}</strong> &bull; Qty: <strong className="text-stone-300">{it.qty}</strong>
+                                </div>
+                              </div>
+                              <div className="text-right font-bold text-white">
+                                Rs. {(it.price * it.qty).toLocaleString()}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex justify-between items-center pt-2 text-xs text-gray-400 border-t border-[#232836]">
+                          <span>Subtotal: Rs. {order.subtotal.toLocaleString()} + Shipping: Rs. {order.deliveryFee}</span>
+                          <span className="text-sm font-extrabold text-white">
+                            Total: <span className="text-[#c5a059]">Rs. {order.total.toLocaleString()}</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Approval Actions */}
+                      <div className="md:col-span-3 flex flex-col gap-2 pt-2 md:pt-0">
+                        <button
+                          onClick={() => handleConfirmNewOrder(order.id)}
+                          className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+                        >
+                          <Check className="w-4 h-4 stroke-[2.5]" />
+                          <span>Confirm &amp; Move to Pending</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleCancelNewOrder(order.id)}
+                          className="w-full py-2 bg-[#202532] hover:bg-rose-950/60 text-gray-400 hover:text-rose-400 font-semibold text-xs rounded-xl border border-[#31394c] hover:border-rose-700/50 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                          <span>Reject / Cancel Order</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         
         {/* =========================================================================
             TAB 1: EXECUTIVE OVERVIEW & P&L
@@ -833,9 +1125,11 @@ export default function AdminPortalPage() {
                               o.status === 'delivered' ? 'bg-emerald-950/80 text-emerald-300 border-emerald-700' :
                               o.status === 'dispatched' ? 'bg-blue-950/80 text-blue-300 border-blue-700' :
                               o.status === 'returned' ? 'bg-rose-950/80 text-rose-300 border-rose-700' :
+                              o.status === 'new' ? 'bg-rose-900/80 text-rose-200 border-rose-500' :
                               'bg-amber-950/80 text-amber-300 border-amber-700'
                             }`}
                           >
+                            <option value="new">🔔 New (Unconfirmed)</option>
                             <option value="pending">🟡 Pending</option>
                             <option value="dispatched">🔵 Dispatched</option>
                             <option value="delivered">🟢 Delivered</option>
@@ -1023,10 +1317,12 @@ export default function AdminPortalPage() {
                                 o.status === 'delivered' ? 'bg-emerald-950 text-emerald-300 border-emerald-600' :
                                 o.status === 'dispatched' ? 'bg-blue-950 text-blue-300 border-blue-600' :
                                 o.status === 'returned' ? 'bg-rose-950 text-rose-300 border-rose-600' :
+                                o.status === 'new' ? 'bg-rose-900 text-rose-200 border-rose-500' :
                                 o.status === 'cancelled' ? 'bg-gray-900 text-gray-400 border-gray-700' :
                                 'bg-amber-950 text-amber-300 border-amber-600'
                               }`}
                             >
+                              <option value="new">🔔 New (Unconfirmed)</option>
                               <option value="pending">🟡 Pending Packing</option>
                               <option value="dispatched">🔵 Dispatched (In Transit)</option>
                               <option value="delivered">🟢 Delivered & Paid</option>

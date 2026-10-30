@@ -1,0 +1,31 @@
+[
+  {
+    "id": "ord-1048",
+    "orderNumber": "#RN-1048",
+    "date": "2026-10-20",
+    "customerName": "Luqman Akram",
+    "phone1": "0347-4275521",
+    "phone2": "0308-4358336",
+    "address": "Gali no 6, House no 6, Mughal Bazar, Daok Rahmanpura",
+    "city": "Muridke",
+    "source": "WhatsApp",
+    "paymentType": "COD",
+    "items": [
+      {
+        "id": "it-1",
+        "code": "DV03",
+        "name": "Digital Viscose 3-Piece (Forest Teal / Emerald)",
+        "fabric": "Premium Digital Viscose",
+        "stitch": "Stitched Ready-to-Wear",
+        "size": "Large",
+        "price": 3350,
+        "qty": 1
+      }
+    ],
+    "subtotal": 3350,
+    "deliveryFee": 150,
+    "total": 3500,
+    "status": "dispatched",
+    "notes": "Customer said: Agr ye pasand agya to 2 suit or b select kiy hian"
+  }
+]

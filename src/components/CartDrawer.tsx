@@ -33,6 +33,8 @@ export const CartDrawer: React.FC = () => {
   });
 
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [placedOrderNumber, setPlacedOrderNumber] = useState('');
 
   React.useEffect(() => {
     try {
@@ -50,18 +52,59 @@ export const CartDrawer: React.FC = () => {
   const grandTotal = subtotal + shippingCost;
   const freeShippingProgress = Math.min(100, (subtotal / BRAND_CONFIG.shippingThresholdFree) * 100);
 
-  const handleWhatsAppCheckout = (e: React.FormEvent) => {
+  const handleDirectOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!customerDetails.fullName || !customerDetails.phone || !customerDetails.address) {
-      alert('Please fill in your Name, Phone Number, and Address to proceed.');
+    if (!customerDetails.fullName || !customerDetails.phone || !customerDetails.address || !customerDetails.city) {
+      alert('Please fill in your Name, Phone Number, City, and Address to proceed.');
       return;
     }
+
     try {
+      setIsSubmitting(true);
       localStorage.setItem('ruaan_customer_details', JSON.stringify(customerDetails));
-    } catch (e) {}
-    const whatsappUrl = generateWhatsAppOrderUrl(customerDetails);
-    window.open(whatsappUrl, '_blank');
-    setIsOrderPlaced(true);
+
+      const payload = {
+        customerName: customerDetails.fullName,
+        phone1: customerDetails.phone,
+        city: customerDetails.city,
+        address: customerDetails.address,
+        notes: customerDetails.notes,
+        paymentType: 'COD',
+        subtotal,
+        deliveryFee: shippingCost,
+        total: grandTotal,
+        items: cart.map(item => ({
+          id: item.product.id,
+          code: getProductArticleCode(item.product, item.selectedColor),
+          name: item.product.title,
+          fabric: item.product.fabric,
+          stitch: item.product.stitchType,
+          size: item.selectedSize,
+          price: item.product.price,
+          qty: item.quantity,
+        })),
+      };
+
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (data.success && data.order) {
+        setPlacedOrderNumber(data.order.orderNumber);
+        clearCart();
+        setIsOrderPlaced(true);
+      } else {
+        alert(data.error || 'Failed to submit order. Please try again.');
+      }
+    } catch (err) {
+      console.error('Order submission error:', err);
+      alert('Order could not be sent. Please check your internet connection.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClose = () => {
@@ -132,17 +175,22 @@ export const CartDrawer: React.FC = () => {
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
                   <h4 className="text-xl font-serif font-bold text-brand-charcoal">
-                    WhatsApp Order Initiated!
+                    Order Placed Successfully!
                   </h4>
+                  {placedOrderNumber && (
+                    <div className="inline-block bg-brand-cream border border-brand-nude/40 rounded-full px-4 py-1.5 text-xs font-mono font-bold text-brand-charcoal">
+                      Order ID: {placedOrderNumber}
+                    </div>
+                  )}
                   <p className="text-xs text-brand-gray leading-relaxed max-w-xs mx-auto">
-                    Your formatted order message has been dispatched to our WhatsApp team. Please send the message on WhatsApp to complete your order dispatch!
+                    Thank you {customerDetails.fullName}! Your order has been placed directly. Our customer care team will call you to confirm before dispatch.
                   </p>
                   <button
                     onClick={() => {
                       clearCart();
                       handleClose();
                     }}
-                    className="px-6 py-3 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-brand-nude transition"
+                    className="px-6 py-3 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-brand-nude transition cursor-pointer"
                   >
                     Continue Shopping
                   </button>
@@ -276,7 +324,7 @@ export const CartDrawer: React.FC = () => {
                     </div>
                   </div>
 
-                  <form onSubmit={handleWhatsAppCheckout} id="checkout-form" className="space-y-4 text-xs">
+                  <form onSubmit={handleDirectOrderSubmit} id="checkout-form" className="space-y-4 text-xs">
                   <div className="space-y-1">
                     <label className="font-semibold text-brand-charcoal uppercase tracking-wider">
                       Full Name *
@@ -383,10 +431,17 @@ export const CartDrawer: React.FC = () => {
                     <button
                       type="submit"
                       form="checkout-form"
-                      className="w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg"
+                      disabled={isSubmitting}
+                      className="w-full py-3.5 bg-brand-charcoal hover:bg-[#2b2b2d] text-white font-semibold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-lg cursor-pointer uppercase tracking-wider disabled:opacity-50"
                     >
-                      <MessageCircle className="w-4 h-4" />
-                      <span>Place Order via WhatsApp</span>
+                      {isSubmitting ? (
+                        <span>Placing Order...</span>
+                      ) : (
+                        <>
+                          <CheckCircle2 className="w-4 h-4 text-[#c5a059]" />
+                          <span>Confirm Order (Cash on Delivery)</span>
+                        </>
+                      )}
                     </button>
 
                     <button
