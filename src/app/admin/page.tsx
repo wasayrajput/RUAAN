@@ -41,7 +41,7 @@ import { BRAND_CONFIG } from '@/config/brand';
 
 // --- TYPES ---
 export type OrderStatus = 'pending' | 'dispatched' | 'delivered' | 'returned' | 'cancelled';
-export type PaymentType = 'COD' | 'PAID' | 'PARTIAL';
+export type PaymentType = 'COD' | 'PAID' | 'PARTIAL' | 'DUAL';
 export type OrderSource = 'WhatsApp' | 'Instagram' | 'Website' | 'Phone Call';
 
 export interface OrderItem {
@@ -482,6 +482,8 @@ export default function AdminPortalPage() {
       payLine = `💰 Payment Status: PAID ONLINE (Total: Rs. ${order.total.toLocaleString()} - Rs. 0 Collectible)`;
     } else if (order.paymentType === 'PARTIAL') {
       payLine = `💰 Balance Collectible on Delivery: Rs. ${order.total.toLocaleString()}`;
+    } else if (order.paymentType === 'DUAL') {
+      payLine = `💰 Payment Method: DUAL PAY (Collect COD Balance: Rs. ${order.total.toLocaleString()})`;
     }
 
     const text = `Assalam-o-Alaikum ${order.customerName}! ✨\nThank you for choosing RUAAN.\n\nAapka order successfully confirm ho chuka hai:\n\n📋 Order Details (${order.items.length} Suits):\n${itemsText}\nItems Subtotal: Rs. ${order.subtotal.toLocaleString()}\nDelivery Charges: Rs. ${order.deliveryFee.toLocaleString()}\n----------------------------------------\n${payLine}\n\n📍 Delivery Address:\n${order.customerName}\n${order.address}\nCity: ${order.city}\nContact: ${order.phone1}${order.phone2 ? ' / ' + order.phone2 : ''}\n\nParcel 2-3 working days mein deliver ho jayega. Rider aane se pehle call karega. 🚚📦`;
@@ -736,7 +738,7 @@ export default function AdminPortalPage() {
           <div className="space-y-8">
             
             {/* Top Stat Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               
               {/* 1. Realized Cash / In Hand */}
               <div className="bg-[#171a22] border border-[#2a2f3d] rounded-xl p-5 shadow-lg relative overflow-hidden">
@@ -783,22 +785,6 @@ export default function AdminPortalPage() {
                 </div>
                 <p className="text-[11px] text-gray-400">
                   After wholesale cost & Rs. {financials.totalAdSpend.toLocaleString()} Ad spend
-                </p>
-              </div>
-
-              {/* 4. Total Ad Spend & ROAS */}
-              <div className="bg-[#171a22] border border-[#2a2f3d] rounded-xl p-5 shadow-lg">
-                <div className="flex justify-between items-start mb-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Ad Spend & Leads</span>
-                  <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg">
-                    <MessageSquare className="w-4 h-4" />
-                  </div>
-                </div>
-                <div className="text-2xl font-bold text-white mb-1">
-                  Rs. {financials.totalAdSpend.toLocaleString()}
-                </div>
-                <p className="text-[11px] text-blue-400">
-                  {financials.totalLeads} Total WhatsApp Inquiries
                 </p>
               </div>
 
@@ -896,7 +882,7 @@ export default function AdminPortalPage() {
                         </td>
                         <td className="py-3 px-4 font-bold text-white">
                           Rs. {o.total.toLocaleString()}
-                          <span className="block text-[10px] text-gray-400 font-normal">{o.paymentType}</span>
+                          <span className="block text-[10px] text-gray-400 font-normal">{o.paymentType === 'DUAL' ? 'Dual Pay' : o.paymentType}</span>
                         </td>
                         <td className="py-3 px-4">
                           <select
@@ -1081,9 +1067,9 @@ export default function AdminPortalPage() {
                           <td className="py-3.5 px-4 font-bold text-white">
                             Rs. {o.total.toLocaleString()}
                             <span className={`block text-[10px] uppercase font-bold ${
-                              o.paymentType === 'PAID' ? 'text-emerald-400' : 'text-amber-400'
+                              o.paymentType === 'PAID' ? 'text-emerald-400' : o.paymentType === 'DUAL' ? 'text-sky-400' : 'text-amber-400'
                             }`}>
-                              {o.paymentType === 'PAID' ? '✓ Paid Online' : 'Cash on Delivery'}
+                              {o.paymentType === 'PAID' ? '✓ Paid Online' : o.paymentType === 'DUAL' ? '⚡ Dual Pay' : 'Cash on Delivery'}
                             </span>
                           </td>
 
@@ -1516,9 +1502,15 @@ export default function AdminPortalPage() {
                     <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
                       selectedOrderForSlip.paymentType === 'PAID'
                         ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                        : selectedOrderForSlip.paymentType === 'DUAL'
+                        ? 'bg-sky-100 text-sky-800 border border-sky-300'
                         : 'bg-[#2a2415] text-[#ffd700] border border-[#d4af37]'
                     }`}>
-                      {selectedOrderForSlip.paymentType === 'PAID' ? 'PAID ONLINE (DO NOT COLLECT CASH)' : 'CASH ON DELIVERY (COD)'}
+                      {selectedOrderForSlip.paymentType === 'PAID' 
+                        ? 'PAID ONLINE (DO NOT COLLECT CASH)' 
+                        : selectedOrderForSlip.paymentType === 'DUAL'
+                        ? 'DUAL PAY (COLLECT COD BALANCE ONLY)'
+                        : 'CASH ON DELIVERY (COD)'}
                     </span>
                   </div>
                 </div>
@@ -1776,6 +1768,7 @@ function AddOrderModal({
                 <option value="COD">Cash on Delivery (COD)</option>
                 <option value="PAID">Paid Online / Prepaid</option>
                 <option value="PARTIAL">Partial Advance Paid</option>
+                <option value="DUAL">Dual Pay</option>
               </select>
             </div>
           </div>
@@ -1885,7 +1878,7 @@ function AddOrderModal({
                       >
                         {inventory.map(inv => (
                           <option key={inv.code} value={inv.code}>
-                            {inv.code} — {inv.title.slice(0, 20)} (Stock: {inv.stock})
+                            {inv.code} — {inv.title}
                           </option>
                         ))}
                       </select>
@@ -1902,7 +1895,6 @@ function AddOrderModal({
                         className="w-full bg-[#181b22] border border-[#2e333d] rounded px-2 py-1 text-xs text-white"
                       >
                         <option value="Standard Size">Standard Size</option>
-                        <option value="Standard">Standard</option>
                         <option value="Small">Small</option>
                         <option value="Medium">Medium</option>
                         <option value="Large">Large</option>
