@@ -62,7 +62,7 @@ export const SocialProofToast: React.FC = () => {
           <div className="min-w-0 flex-1 space-y-0.5">
             <div className="flex items-center gap-1 text-[11px] text-emerald-700 font-semibold">
               <CheckCircle2 className="w-3 h-3" />
-              <span>Verified Direct WhatsApp Order</span>
+              <span>Verified Direct Online Order</span>
             </div>
             <p className="text-xs font-serif font-bold text-brand-charcoal truncate">
               {currentNotification.product.title}

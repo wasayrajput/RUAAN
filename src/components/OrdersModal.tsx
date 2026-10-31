@@ -84,7 +84,7 @@ export const OrdersModal: React.FC<OrdersModalProps> = ({ isOpen, onClose }) => 
                 Store Orders Log ({orders.length})
               </h2>
               <p className="text-xs text-brand-gray">
-                Orders placed via WhatsApp checkout on this device
+                Orders placed via website checkout on this device
               </p>
             </div>
           </div>

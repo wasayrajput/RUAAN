@@ -53,13 +53,11 @@ export const HeroBanner: React.FC = () => {
               </a>
 
               <a
-                href={BRAND_CONFIG.socials.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-7 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs sm:text-sm font-semibold rounded-full transition duration-300 shadow-sm flex items-center justify-center gap-2 active:scale-95 uppercase tracking-wider"
+                href="#catalog"
+                className="w-full sm:w-auto px-7 py-3.5 bg-[#B57C53] hover:bg-[#9B1C3C] text-white text-xs sm:text-sm font-semibold rounded-full transition duration-300 shadow-sm flex items-center justify-center gap-2 active:scale-95 uppercase tracking-wider"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>WhatsApp Order</span>
+                <ShieldCheck className="w-4 h-4" />
+                <span>Direct Order Suits</span>
               </a>
             </div>
 
