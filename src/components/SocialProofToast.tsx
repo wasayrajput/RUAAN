@@ -21,6 +21,11 @@ export const SocialProofToast: React.FC = () => {
   } | null>(null);
 
   useEffect(() => {
+    // Only run on desktop/laptop screens to keep mobile clean & battery-friendly
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      return;
+    }
+
     const showRandomOrder = () => {
       const randomOrder = FAKE_ORDERS[Math.floor(Math.random() * FAKE_ORDERS.length)];
       const randomProduct = productsData[Math.floor(Math.random() * productsData.length)];
@@ -49,7 +54,7 @@ export const SocialProofToast: React.FC = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.9 }}
           transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-          className="fixed bottom-6 left-6 z-40 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl border border-brand-nude/40 flex items-center gap-3.5 max-w-xs sm:max-w-sm pointer-events-none"
+          className="hidden md:flex fixed bottom-6 left-6 z-40 bg-white/95 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl border border-brand-nude/40 items-center gap-3.5 max-w-xs sm:max-w-sm pointer-events-none"
         >
           <div className="relative w-12 h-14 rounded-xl overflow-hidden bg-brand-cream flex-shrink-0 border border-brand-nude/30">
             <Image
