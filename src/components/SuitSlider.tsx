@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ShoppingBag, MessageCircle, Sparkles, Play, Pause } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ShoppingBag, MessageCircle, Sparkles, Play, Pause, CheckCircle2 } from 'lucide-react';
 import productsData from '@/data/products.json';
 import { Product, getProductArticleCode } from '@/types/product';
 import { BRAND_CONFIG } from '@/config/brand';
@@ -227,10 +227,10 @@ export const SuitSlider: React.FC<SuitSliderProps> = ({ onQuickView }) => {
 
                   <button
                     onClick={() => openDirectOrder(currentSuit)}
-                    className="px-6 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs rounded-xl transition shadow-sm flex items-center gap-2 cursor-pointer"
+                    className="px-6 py-3 bg-[#B57C53] hover:bg-[#9B1C3C] text-white font-semibold text-xs rounded-xl transition shadow-sm flex items-center gap-2 cursor-pointer uppercase tracking-wider"
                   >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>WhatsApp Order</span>
+                    <CheckCircle2 className="w-4 h-4 text-white" />
+                    <span>Direct Order</span>
                   </button>
                 </div>
               </div>

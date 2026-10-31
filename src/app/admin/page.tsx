@@ -420,7 +420,9 @@ export default function AdminPortalPage() {
     let totalShippingCost = 0;
 
     orders.forEach(o => {
-      if (o.status !== 'cancelled' && o.status !== 'returned') {
+      // ONLY confirmed orders (pending, dispatched, delivered) are counted in financials.
+      // Unconfirmed incoming web orders ('new') do not inflate revenue or pending COD until approved!
+      if (o.status === 'pending' || o.status === 'dispatched' || o.status === 'delivered') {
         totalGrossRevenue += o.total;
 
         // Calculate Cost of Goods Sold (COGS)
@@ -484,7 +486,9 @@ export default function AdminPortalPage() {
         order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
         order.items.some(i => i.code.toLowerCase().includes(searchQuery.toLowerCase()));
 
-      const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
+      const matchesStatus = statusFilter === 'all' 
+        ? order.status !== 'new'
+        : order.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
   }, [orders, searchQuery, statusFilter]);
@@ -1099,7 +1103,7 @@ export default function AdminPortalPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#242936]">
-                    {orders.slice(0, 5).map(o => (
+                    {orders.filter(o => o.status !== 'new').slice(0, 5).map(o => (
                       <tr key={o.id} className="hover:bg-[#1c202d] transition">
                         <td className="py-3 px-4 font-mono font-bold text-[#c5a059]">
                           {o.orderNumber}
@@ -1175,24 +1179,17 @@ export default function AdminPortalPage() {
                   Orders Management Pipeline
                 </h2>
                 <p className="text-xs text-gray-400">
-                  Total {orders.length} orders recorded across WhatsApp, Instagram, and Website
+                  Total {orders.filter(o => o.status !== 'new').length} orders recorded across WhatsApp, Instagram, and Website
                 </p>
               </div>
 
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleExportCSV}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-[#202534] hover:bg-[#2c3448] text-gray-200 text-xs font-bold rounded-lg border border-[#343c50] transition"
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-[#202534] hover:bg-[#2c3448] text-gray-200 text-xs font-bold rounded-lg border border-[#343c50] transition shadow-xs cursor-pointer"
                 >
-                  <Download className="w-3.5 h-3.5" />
+                  <Download className="w-3.5 h-3.5 text-[#c5a059]" />
                   <span>Export CSV</span>
-                </button>
-                <button
-                  onClick={() => setIsAddOrderOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-[#d4af37] to-[#aa8222] text-black text-xs font-bold uppercase rounded-lg transition"
-                >
-                  <Plus className="w-4 h-4 stroke-[3]" />
-                  <span>New Order</span>
                 </button>
               </div>
             </div>

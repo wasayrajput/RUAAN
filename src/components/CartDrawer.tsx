@@ -439,7 +439,7 @@ export const CartDrawer: React.FC = () => {
                       ) : (
                         <>
                           <CheckCircle2 className="w-4 h-4 text-[#c5a059]" />
-                          <span>Confirm Order (Cash on Delivery)</span>
+                          <span>Confirm Order</span>
                         </>
                       )}
                     </button>

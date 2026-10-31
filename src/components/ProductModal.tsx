@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, ShoppingBag, MessageCircle, Ruler, ShieldCheck, ZoomIn } from 'lucide-react';
+import { X, Heart, ShoppingBag, MessageCircle, Ruler, ShieldCheck, ZoomIn, CheckCircle2 } from 'lucide-react';
 import { Product, SizeOption, ColorSwatch, getProductArticleCode } from '@/types/product';
 import { BRAND_CONFIG } from '@/config/brand';
 import { useCart } from '@/context/CartContext';
@@ -69,7 +69,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
     onClose();
   };
 
-  const handleWhatsAppOrder = () => {
+  const handleDirectOrder = () => {
     openDirectOrder(product, selectedSize, selectedColor, quantity);
     onClose();
   };
@@ -303,11 +303,11 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                   </button>
 
                   <button
-                    onClick={handleWhatsAppOrder}
-                    className="py-3.5 px-4 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-xs"
+                    onClick={handleDirectOrder}
+                    className="py-3.5 px-4 bg-[#B57C53] hover:bg-[#9B1C3C] text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-xs cursor-pointer uppercase tracking-wider"
                   >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Order via WhatsApp</span>
+                    <CheckCircle2 className="w-4 h-4 text-white" />
+                    <span>Direct Order</span>
                   </button>
                 </div>
 
