@@ -98,7 +98,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
   };
 
   return (
-    <section id="catalog" className="py-16 bg-white min-h-screen">
+    <section id="catalog" className="py-16 bg-white min-h-screen overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header (Reference Style) */}
@@ -182,7 +182,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         {/* Product Grid (2-Column on Mobile, 4-Column on Desktop) */}
         {filteredProducts.length > 0 ? (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 lg:gap-8 overflow-hidden py-1">
               {paginatedProducts.map((product, idx) => (
                 <ProductCard
                   key={product.id}

@@ -16,7 +16,7 @@ export const BestSellers: React.FC<BestSellersProps> = ({ onQuickView }) => {
     .slice(0, 4);
 
   return (
-    <section className="py-10 sm:py-16 bg-white border-b border-stone-200/80">
+    <section className="py-10 sm:py-16 bg-white border-b border-stone-200/80 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
@@ -30,7 +30,7 @@ export const BestSellers: React.FC<BestSellersProps> = ({ onQuickView }) => {
         </div>
 
         {/* 4 Product Cards Grid Animated (2 from left, 2 from right on laptop; 1 from left, 1 from right on mobile) */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 overflow-hidden py-1">
           {bestsellers.map((product, idx) => (
             <ProductCard
               key={product.id}

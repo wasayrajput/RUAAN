@@ -18,33 +18,34 @@ const cardVariants = {
     let initialX = 0;
     if (isDesktop) {
       // 4-column layout on laptop/desktop:
-      // Cards 0 and 1 slide in from LEFT (-60px, -35px)
-      // Cards 2 and 3 slide in from RIGHT (+35px, +60px)
+      // Cards 0 and 1 slide in from LEFT (-40px, -20px)
+      // Cards 2 and 3 slide in from RIGHT (+20px, +40px)
       const pos = index % 4;
-      initialX = pos < 2 ? (pos === 0 ? -60 : -35) : (pos === 2 ? 35 : 60);
+      initialX = pos < 2 ? (pos === 0 ? -40 : -20) : (pos === 2 ? 20 : 40);
     } else {
       // 2-column layout on mobile:
-      // Left card (0) from LEFT (-45px), Right card (1) from RIGHT (+45px)
+      // Left card (0) from LEFT (-20px), Right card (1) from RIGHT (+20px)
+      // Clean, visible slide that never triggers mobile horizontal scroll
       const pos = index % 2;
-      initialX = pos === 0 ? -45 : 45;
+      initialX = pos === 0 ? -20 : 20;
     }
     return {
       opacity: 0,
       x: initialX,
-      y: 18,
-      scale: 0.95,
+      y: 10,
+      scale: 0.96,
     };
   },
   visible: ({ index, isDesktop }: { index: number; isDesktop: boolean }) => {
     // Soft staggered delay based on position in row
-    const stagger = isDesktop ? (index % 4) * 0.08 : (index % 2) * 0.08;
+    const stagger = isDesktop ? (index % 4) * 0.07 : (index % 2) * 0.07;
     return {
       opacity: 1,
       x: 0,
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.65,
+        duration: 0.55,
         delay: stagger,
         ease: [0.22, 1, 0.36, 1], // Luxury buttery-smooth momentum ease-out
       },

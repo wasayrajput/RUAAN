@@ -40,7 +40,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white flex flex-col font-sans selection:bg-brand-nude selection:text-white relative pb-16 md:pb-0">
+    <main className="min-h-screen bg-white flex flex-col font-sans selection:bg-brand-nude selection:text-white relative pb-16 md:pb-0 overflow-x-hidden w-full max-w-full">
       {/* 1. Header / Navbar with Sticky Announcement & Search */}
       <Navbar
         searchQuery={searchQuery}
