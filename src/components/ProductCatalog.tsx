@@ -182,11 +182,12 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
         {/* Product Grid (2-Column on Mobile, 4-Column on Desktop) */}
         {filteredProducts.length > 0 ? (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6 lg:gap-8">
-              {paginatedProducts.map((product) => (
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 lg:gap-8">
+              {paginatedProducts.map((product, idx) => (
                 <ProductCard
                   key={product.id}
                   product={product}
+                  index={idx}
                   onQuickView={onQuickView}
                 />
               ))}
