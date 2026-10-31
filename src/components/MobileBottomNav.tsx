@@ -52,19 +52,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenWishlist
           <span className="text-[10px] font-medium tracking-tight">Suits</span>
         </button>
 
-        {/* 3. WhatsApp Center Action (Prominent Luxury Green Pill) */}
-        <a
-          href={BRAND_CONFIG.socials.whatsapp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-col items-center justify-center -mt-4 group active:scale-95 transition"
-          aria-label="Chat on WhatsApp"
+        {/* 3. Center Action: Quick Order / Shop */}
+        <button
+          onClick={scrollToCatalog}
+          type="button"
+          className="flex flex-col items-center justify-center -mt-3.5 group active:scale-95 transition"
+          aria-label="Shop Suits"
         >
-          <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-600/30 group-hover:bg-emerald-700 transition ring-4 ring-white">
-            <MessageCircle className="w-6 h-6 fill-white text-white" />
+          <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#9B1C3C] to-[#B57C53] text-white flex items-center justify-center shadow-md shadow-[#9B1C3C]/30 group-hover:scale-105 transition ring-3 ring-white">
+            <ShoppingBag className="w-5 h-5 text-white" />
           </div>
-          <span className="text-[10px] font-semibold text-emerald-700 tracking-tight mt-0.5">Order</span>
-        </a>
+          <span className="text-[10px] font-semibold text-[#9B1C3C] tracking-tight mt-0.5">Order</span>
+        </button>
 
         {/* 4. Wishlist */}
         <button

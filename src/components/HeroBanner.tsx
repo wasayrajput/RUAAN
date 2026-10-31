@@ -29,8 +29,8 @@ export const HeroBanner: React.FC = () => {
               Style That Feels Like You
             </p>
 
-            {/* Headline (Logo Charcoal #4B4B4D + Logo Warm Peach Accent) */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#4B4B4D] leading-[1.1] tracking-tight">
+            {/* Headline */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#4B4B4D] leading-[1.15] tracking-tight">
               Trendy Outfits <br />
               <span className="font-normal italic text-[#C98A61]">
                 for Every You
@@ -38,66 +38,68 @@ export const HeroBanner: React.FC = () => {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-sm lg:text-base text-[#68676B] font-light max-w-lg mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-xs sm:text-sm lg:text-base text-[#68676B] font-light max-w-md mx-auto lg:mx-0 leading-relaxed">
               Discover <strong className="text-[#4B4B4D] font-medium">RUAAN</strong>&apos;s exclusive collection of luxury ladies suits — from everyday breathable linen to regal festive 3-piece sets.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
-              <a
-                href="#catalog"
-                className="w-full sm:w-auto px-8 py-3.5 bg-[#4B4B4D] hover:bg-[#F2CBAC] text-white hover:text-[#4B4B4D] text-xs sm:text-sm font-semibold rounded-full transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 group active:scale-95 cursor-pointer uppercase tracking-wider"
-              >
-                <span>Shop Now</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </a>
+            {/* CTA Buttons: Symmetrical 2 Columns on Mobile */}
+            <div className="pt-2 flex items-center justify-center lg:justify-start">
+              <div className="grid grid-cols-2 gap-2.5 w-full max-w-sm sm:max-w-none sm:w-auto sm:flex sm:flex-row sm:gap-3">
+                <a
+                  href="#catalog"
+                  className="px-4 sm:px-8 py-2.5 sm:py-3.5 bg-[#4B4B4D] hover:bg-[#F2CBAC] text-white hover:text-[#4B4B4D] text-xs sm:text-sm font-semibold rounded-full transition-all duration-300 shadow-md flex items-center justify-center gap-1.5 group active:scale-95 cursor-pointer uppercase tracking-wider text-center"
+                >
+                  <span>Shop Now</span>
+                  <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-1" />
+                </a>
 
-              <a
-                href="#catalog"
-                className="w-full sm:w-auto px-7 py-3.5 bg-[#B57C53] hover:bg-[#9B1C3C] text-white text-xs sm:text-sm font-semibold rounded-full transition duration-300 shadow-sm flex items-center justify-center gap-2 active:scale-95 uppercase tracking-wider"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Direct Order Suits</span>
-              </a>
+                <a
+                  href="#catalog"
+                  className="px-4 sm:px-7 py-2.5 sm:py-3.5 bg-[#B57C53] hover:bg-[#9B1C3C] text-white text-xs sm:text-sm font-semibold rounded-full transition duration-300 shadow-sm flex items-center justify-center gap-1.5 active:scale-95 uppercase tracking-wider text-center"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <span>Direct Order</span>
+                </a>
+              </div>
             </div>
 
             {/* 3 Inline Trust Items */}
-            <div className="pt-8 border-t border-[#E8C2A5]/60 grid grid-cols-3 divide-x divide-[#E8C2A5]/60 text-left">
-              <div className="pr-3 flex items-center gap-2.5">
-                <Truck className="w-5 h-5 text-[#B57C53] shrink-0 stroke-[1.75]" />
+            <div className="pt-5 sm:pt-8 border-t border-[#E8C2A5]/60 grid grid-cols-3 divide-x divide-[#E8C2A5]/60 text-center sm:text-left">
+              <div className="px-1 sm:pr-3 flex flex-col sm:flex-row items-center sm:items-start gap-1 sm:gap-2.5">
+                <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-[#B57C53] shrink-0" />
                 <div>
-                  <h4 className="text-[11px] sm:text-xs font-semibold text-[#4B4B4D] leading-tight">Free Shipping</h4>
-                  <p className="text-[10px] text-[#7A787D] font-light">On orders over Rs 5,000</p>
+                  <h4 className="text-[10px] sm:text-xs font-semibold text-[#4B4B4D] leading-tight">Free Shipping</h4>
+                  <p className="text-[9px] sm:text-[10px] text-[#7A787D] font-light hidden sm:block">Over Rs 5,000</p>
                 </div>
               </div>
 
-              <div className="px-3 flex items-center gap-2.5">
-                <RotateCcw className="w-5 h-5 text-[#B57C53] shrink-0 stroke-[1.75]" />
+              <div className="px-1 sm:px-3 flex flex-col sm:flex-row items-center sm:items-start gap-1 sm:gap-2.5">
+                <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 text-[#B57C53] shrink-0" />
                 <div>
-                  <h4 className="text-[11px] sm:text-xs font-semibold text-[#4B4B4D] leading-tight">Easy Returns</h4>
-                  <p className="text-[10px] text-[#7A787D] font-light">Within 7 days hassle-free</p>
+                  <h4 className="text-[10px] sm:text-xs font-semibold text-[#4B4B4D] leading-tight">Easy Returns</h4>
+                  <p className="text-[9px] sm:text-[10px] text-[#7A787D] font-light hidden sm:block">Within 7 days</p>
                 </div>
               </div>
 
-              <div className="pl-3 flex items-center gap-2.5">
-                <ShieldCheck className="w-5 h-5 text-[#B57C53] shrink-0 stroke-[1.75]" />
+              <div className="px-1 sm:pl-3 flex flex-col sm:flex-row items-center sm:items-start gap-1 sm:gap-2.5">
+                <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-[#B57C53] shrink-0" />
                 <div>
-                  <h4 className="text-[11px] sm:text-xs font-semibold text-[#4B4B4D] leading-tight">Secure Payment</h4>
-                  <p className="text-[10px] text-[#7A787D] font-light">100% safe &amp; COD</p>
+                  <h4 className="text-[10px] sm:text-xs font-semibold text-[#4B4B4D] leading-tight">COD Available</h4>
+                  <p className="text-[9px] sm:text-[10px] text-[#7A787D] font-light hidden sm:block">100% Safe</p>
                 </div>
               </div>
             </div>
 
           </motion.div>
 
-          {/* Right Editorial Model Photo (Exact Logo Background Arch #F2CBAC) */}
+          {/* Right Editorial Model Photo */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-5 relative flex justify-center"
+            className="lg:col-span-5 relative flex justify-center pt-2 sm:pt-0"
           >
-            <div className="relative w-full max-w-sm sm:max-w-md aspect-[3/4]">
+            <div className="relative w-full max-w-[240px] sm:max-w-md aspect-[3/4]">
               
               {/* Exact Logo Peach Nude Arch Container (#F2CBAC) */}
               <div className="absolute inset-0 bg-[#F2CBAC] rounded-t-full rounded-b-3xl -z-10 transform scale-95 translate-y-2 shadow-sm border border-[#E8C2A5]" />

@@ -76,35 +76,35 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
+      <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-2.5 sm:p-6">
         
         {/* Backdrop click to close */}
         <div className="absolute inset-0" onClick={onClose} />
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-          className="relative bg-white rounded-3xl max-w-4xl w-full shadow-2xl border border-brand-nude/40 my-auto z-10 max-h-[90vh] flex flex-col overflow-hidden"
+          className="relative bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full shadow-2xl border border-brand-nude/40 my-auto z-10 max-h-[92vh] flex flex-col overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Always Visible Sticky Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-30 p-2.5 bg-white/90 backdrop-blur-md border border-brand-nude/30 text-brand-charcoal hover:bg-brand-charcoal hover:text-white rounded-full shadow-md transition"
+            className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-30 p-1.5 sm:p-2 bg-white/95 backdrop-blur-md border border-brand-nude/30 text-brand-charcoal hover:bg-brand-charcoal hover:text-white rounded-full shadow-md transition"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
 
           {/* Scrollable Container Body */}
-          <div className="overflow-y-auto grid grid-cols-1 md:grid-cols-2 p-6 sm:p-8 gap-6 sm:gap-8 max-h-[90vh] no-scrollbar">
+          <div className="overflow-y-auto grid grid-cols-1 md:grid-cols-2 p-4 sm:p-8 gap-4 sm:gap-8 max-h-[92vh] no-scrollbar">
             
             {/* Left Column: Interactive Fabric Zoom Lens Gallery */}
-            <div className="space-y-4 flex flex-col justify-between">
+            <div className="space-y-3 sm:space-y-4 flex flex-col justify-between">
               <div
-                className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden shadow-md bg-brand-cream cursor-crosshair group border border-brand-nude/20"
+                className="relative aspect-[4/3] sm:aspect-[3/4] max-h-[250px] sm:max-h-none w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-sm bg-brand-cream cursor-crosshair group border border-brand-nude/20"
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
               >
@@ -119,7 +119,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 {/* Fabric Zoom Lens Overlay */}
                 {zoomPos && (
                   <div
-                    className="absolute inset-0 pointer-events-none z-10 border-2 border-brand-nude shadow-2xl rounded-2xl overflow-hidden"
+                    className="absolute inset-0 pointer-events-none z-10 border-2 border-brand-nude shadow-2xl rounded-xl sm:rounded-2xl overflow-hidden"
                     style={{
                       backgroundImage: `url(${activeImage})`,
                       backgroundPosition: `${zoomPos.x}% ${zoomPos.y}%`,
@@ -129,16 +129,16 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 )}
 
                 {!zoomPos && (
-                  <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-md text-white text-[10px] px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <div className="absolute bottom-2.5 left-2.5 bg-black/60 backdrop-blur-md text-white text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1">
                     <ZoomIn className="w-3 h-3" />
-                    <span>Hover to inspect fabric texture</span>
+                    <span>Hover to inspect texture</span>
                   </div>
                 )}
               </div>
 
               {/* Thumbnails */}
               {product.galleryImages.length > 1 && (
-                <div className="flex items-center gap-3 overflow-x-auto pb-1 pt-1">
+                <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-0.5 pt-0.5">
                   {product.galleryImages.map((img, idx) => (
                     <button
                       key={idx}
@@ -146,7 +146,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                         setSelectedColor(undefined);
                         setActiveImageIndex(idx);
                       }}
-                      className={`relative w-16 h-20 rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${
+                      className={`relative w-12 h-16 sm:w-16 sm:h-20 rounded-lg sm:rounded-xl overflow-hidden border-2 transition flex-shrink-0 ${
                         activeImageIndex === idx && !selectedColor
                           ? 'border-brand-charcoal scale-105 shadow-sm'
                           : 'border-brand-nude/20 opacity-70 hover:opacity-100'
@@ -160,43 +160,43 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             </div>
 
             {/* Right Column: Product Specs & Actions */}
-            <div className="flex flex-col justify-between space-y-5 pr-2">
-              <div className="space-y-4">
+            <div className="flex flex-col justify-between space-y-3 sm:space-y-5 pr-1 sm:pr-2">
+              <div className="space-y-3 sm:space-y-4">
                 
                 {/* Header Tag & Wishlist */}
                 <div className="flex items-center justify-between pr-8">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-3 py-1 bg-brand-nude/20 text-brand-charcoal text-xs font-semibold rounded-full uppercase tracking-widest">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                    <span className="px-2.5 py-0.5 sm:py-1 bg-brand-nude/20 text-brand-charcoal text-[10px] sm:text-xs font-semibold rounded-full uppercase tracking-wider">
                       {product.fabric}
                     </span>
-                    <span className="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-medium rounded-full uppercase tracking-wider">
+                    <span className="px-2 py-0.5 sm:py-1 bg-stone-100 text-stone-700 text-[10px] sm:text-xs font-medium rounded-full uppercase tracking-wider">
                       {product.stitchType.includes('Unstitched') ? 'Unstitched' : 'Stitched'}
                     </span>
-                    <span className="font-mono font-bold text-xs bg-brand-charcoal text-amber-200 px-2.5 py-1 rounded-full shadow-xs">
+                    <span className="font-mono font-bold text-[10px] sm:text-xs bg-brand-charcoal text-amber-200 px-2 py-0.5 sm:py-1 rounded-full shadow-xs">
                       Article: {getProductArticleCode(product, selectedColor)}
                     </span>
                   </div>
                   <button
                     onClick={() => toggleWishlist(product.id)}
-                    className="p-2 text-brand-charcoal hover:text-rose-600 transition"
+                    className="p-1.5 text-brand-charcoal hover:text-rose-600 transition"
                     aria-label="Toggle Wishlist"
                   >
-                    <Heart className={`w-5 h-5 ${isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
+                    <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${isFavorite ? 'fill-rose-600 text-rose-600' : ''}`} />
                   </button>
                 </div>
 
                 {/* Title & Price */}
                 <div>
-                  <h2 className="text-2xl sm:text-3xl font-serif font-bold text-brand-charcoal leading-snug">
+                  <h2 className="text-lg sm:text-2xl font-serif font-bold text-brand-charcoal leading-snug">
                     {product.title}
                   </h2>
-                  <p className="text-xs text-brand-gray mt-1 font-light">{product.subtitle}</p>
-                  <div className="mt-3 flex items-baseline gap-3">
-                    <span className="text-2xl font-serif font-bold text-brand-charcoal">
+                  <p className="text-[11px] sm:text-xs text-brand-gray mt-0.5 font-light">{product.subtitle}</p>
+                  <div className="mt-2 flex items-baseline gap-2.5">
+                    <span className="text-xl sm:text-2xl font-serif font-bold text-brand-charcoal">
                       {formatPrice(product.price)}
                     </span>
                     {product.originalPrice && product.originalPrice > product.price && (
-                      <span className="text-sm text-brand-gray line-through">
+                      <span className="text-xs sm:text-sm text-brand-gray line-through">
                         {formatPrice(product.originalPrice)}
                       </span>
                     )}
@@ -205,23 +205,23 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
                 {/* Color Swatch Picker */}
                 {product.colorSwatches && product.colorSwatches.length > 0 && (
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold text-brand-charcoal uppercase tracking-wider">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] sm:text-xs font-semibold text-brand-charcoal uppercase tracking-wider">
                       Color Swatch: <span className="text-brand-nude font-bold">{selectedColor?.name}</span>
                     </label>
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 flex-wrap">
                       {product.colorSwatches.map((swatch, idx) => (
                         <button
                           key={idx}
                           onClick={() => setSelectedColor(swatch)}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs transition ${
+                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg sm:rounded-xl border text-[11px] sm:text-xs transition ${
                             selectedColor?.name === swatch.name
                               ? 'bg-brand-charcoal text-white border-brand-charcoal shadow-xs'
                               : 'bg-white text-brand-charcoal border-brand-nude/40 hover:border-brand-nude'
                           }`}
                         >
                           <span
-                            className="w-3.5 h-3.5 rounded-full border border-white"
+                            className="w-3 h-3 rounded-full border border-white"
                             style={{ backgroundColor: swatch.hex }}
                           />
                           <span>{swatch.name}</span>
@@ -232,29 +232,29 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 )}
 
                 {/* Description */}
-                <p className="text-xs text-brand-gray leading-relaxed font-light">{product.description}</p>
+                <p className="text-[11px] sm:text-xs text-brand-gray leading-relaxed font-light line-clamp-2 sm:line-clamp-3">{product.description}</p>
 
                 {/* Size Selector & Size Guide */}
                 {product.availableSizes && product.availableSizes.length > 0 && (
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="text-xs font-semibold text-brand-charcoal uppercase tracking-wider">
+                      <label className="text-[11px] sm:text-xs font-semibold text-brand-charcoal uppercase tracking-wider">
                         Select Size:
                       </label>
                       <button
                         onClick={onOpenSizeChart}
-                        className="text-xs text-brand-nude hover:underline flex items-center gap-1 font-medium"
+                        className="text-[11px] sm:text-xs text-brand-nude hover:underline flex items-center gap-1 font-medium"
                       >
-                        <Ruler className="w-3.5 h-3.5" />
+                        <Ruler className="w-3 h-3" />
                         Size Guide
                       </button>
                     </div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {product.availableSizes.map((size) => (
                         <button
                           key={size}
                           onClick={() => setSelectedSize(size)}
-                          className={`px-4 py-2 text-xs font-semibold rounded-xl border transition ${
+                          className={`px-3 py-1.5 text-[11px] sm:text-xs font-semibold rounded-lg sm:rounded-xl border transition ${
                             selectedSize === size
                               ? 'bg-brand-charcoal text-white border-brand-charcoal shadow-xs'
                               : 'bg-white text-brand-charcoal border-brand-nude/50 hover:border-brand-nude'
@@ -268,21 +268,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 )}
 
                 {/* Quantity */}
-                <div className="flex items-center gap-4 pt-1">
-                  <span className="text-xs font-semibold text-brand-charcoal uppercase tracking-wider">
+                <div className="flex items-center gap-3 pt-0.5">
+                  <span className="text-[11px] sm:text-xs font-semibold text-brand-charcoal uppercase tracking-wider">
                     Quantity:
                   </span>
-                  <div className="flex items-center border border-brand-nude/50 rounded-xl overflow-hidden bg-white">
+                  <div className="flex items-center border border-brand-nude/50 rounded-lg sm:rounded-xl overflow-hidden bg-white">
                     <button
                       onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                      className="px-3 py-1 text-brand-charcoal hover:bg-brand-cream font-bold"
+                      className="px-2.5 py-0.5 sm:py-1 text-brand-charcoal hover:bg-brand-cream font-bold text-xs"
                     >
                       -
                     </button>
-                    <span className="px-4 py-1 text-xs font-semibold text-brand-charcoal">{quantity}</span>
+                    <span className="px-3 py-0.5 sm:py-1 text-xs font-semibold text-brand-charcoal">{quantity}</span>
                     <button
                       onClick={() => setQuantity((q) => q + 1)}
-                      className="px-3 py-1 text-brand-charcoal hover:bg-brand-cream font-bold"
+                      className="px-2.5 py-0.5 sm:py-1 text-brand-charcoal hover:bg-brand-cream font-bold text-xs"
                     >
                       +
                     </button>
@@ -291,33 +291,33 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 
               </div>
 
-              {/* Action Buttons */}
-              <div className="space-y-3 pt-4 border-t border-brand-nude/30">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Action Buttons: 2 Equal Columns on Mobile & Desktop for Perfect Symmetry */}
+              <div className="space-y-2.5 pt-3 border-t border-brand-nude/30">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   <button
                     onClick={handleAddToCart}
-                    className="py-3.5 px-4 bg-brand-charcoal text-brand-cream font-semibold text-xs rounded-xl hover:bg-brand-nude hover:text-brand-charcoal transition flex items-center justify-center gap-2 shadow-xs"
+                    className="py-2.5 sm:py-3.5 px-2 sm:px-4 bg-brand-charcoal text-brand-cream font-semibold text-[11px] sm:text-xs rounded-xl hover:bg-brand-nude hover:text-brand-charcoal transition flex items-center justify-center gap-1.5 shadow-xs"
                   >
-                    <ShoppingBag className="w-4 h-4" />
+                    <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     <span>Add to Bag</span>
                   </button>
 
                   <button
                     onClick={handleDirectOrder}
-                    className="py-3.5 px-4 bg-[#B57C53] hover:bg-[#9B1C3C] text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-xs cursor-pointer uppercase tracking-wider"
+                    className="py-2.5 sm:py-3.5 px-2 sm:px-4 bg-[#B57C53] hover:bg-[#9B1C3C] text-white font-bold text-[11px] sm:text-xs rounded-xl transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer uppercase tracking-wider"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-white" />
+                    <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                     <span>Direct Order</span>
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-brand-gray pt-2 border-t border-dashed border-brand-nude/40">
+                <div className="flex items-center justify-between text-[10px] sm:text-[11px] text-brand-gray pt-1.5 border-t border-dashed border-brand-nude/40">
                   <span className="flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-brand-nude" />
-                    100% Original Fabric Guarantee
+                    <ShieldCheck className="w-3 h-3 text-brand-nude" />
+                    100% Original Fabric
                   </span>
                   <button onClick={onOpenCareGuide} className="text-brand-nude hover:underline">
-                    Fabric Wash Guide
+                    Care Guide
                   </button>
                 </div>
               </div>
