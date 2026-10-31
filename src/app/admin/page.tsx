@@ -1599,17 +1599,18 @@ export default function AdminPortalPage() {
                 <p className="text-[11px] text-gray-400">Order: {selectedOrderForSlip.orderNumber}</p>
               </div>
               <button
+                type="button"
                 onClick={() => setIsSlipModalOpen(false)}
-                className="flex items-center gap-1 px-3 py-1.5 bg-rose-950/70 hover:bg-rose-900 text-rose-300 border border-rose-700/60 rounded-lg text-xs font-bold transition"
+                className="flex items-center gap-1 px-3 py-1.5 bg-[#252a36] hover:bg-[#343b4c] text-gray-300 hover:text-white border border-[#374151] rounded-lg text-xs font-bold transition"
                 title="Close Slip"
               >
                 <X className="w-4 h-4" />
-                <span>Close (Wapas)</span>
+                <span>Close</span>
               </button>
             </div>
 
-            {/* Action Bar with 4 Buttons including CANCEL */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+            {/* Action Bar */}
+            <div className="grid grid-cols-3 gap-2 mb-4">
               <button
                 onClick={handleDownloadSlipImage}
                 className="py-2.5 px-2 bg-gradient-to-r from-[#d4af37] to-[#aa8222] text-black font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5 transition shadow-xs"
@@ -1630,13 +1631,6 @@ export default function AdminPortalPage() {
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print</span>
-              </button>
-              <button
-                onClick={() => setIsSlipModalOpen(false)}
-                className="py-2.5 px-2 bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/60 font-bold text-xs uppercase rounded-lg flex items-center justify-center gap-1.5 transition"
-              >
-                <X className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>Cancel</span>
               </button>
             </div>
 
@@ -1731,17 +1725,6 @@ export default function AdminPortalPage() {
                 </div>
 
               </div>
-            </div>
-
-            {/* Bottom Close Button */}
-            <div className="mt-4 pt-3 border-t border-[#2e3444]">
-              <button
-                onClick={() => setIsSlipModalOpen(false)}
-                className="w-full py-2.5 bg-[#252b38] hover:bg-[#31394a] text-gray-300 hover:text-white font-bold text-xs uppercase tracking-wider rounded-xl transition border border-[#394254] flex items-center justify-center gap-2"
-              >
-                <X className="w-4 h-4 stroke-[2.5]" />
-                <span>Close Slip &bull; Wapas Dashboard</span>
-              </button>
             </div>
 
           </div>
