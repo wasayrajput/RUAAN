@@ -1813,7 +1813,7 @@ function AddOrderModal({
   const [phone2, setPhone2] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [city, setCity] = useState<string>('');
-  const [deliveryFee, setDeliveryFee] = useState<number>(150);
+  const [deliveryFee, setDeliveryFee] = useState<number>(200);
   const [notes, setNotes] = useState<string>('');
 
   // Items list
