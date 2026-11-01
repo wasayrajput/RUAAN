@@ -281,7 +281,24 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// PATCH /api/orders - Update order status (e.g. from 'new' to 'pending')
+// PUT /api/orders - Bulk sync / save full updated orders list from Admin Panel
+export async function PUT(req: NextRequest) {
+  try {
+    const body = await req.json();
+    if (!body || !Array.isArray(body.orders)) {
+      return NextResponse.json({ success: false, error: 'orders array is required' }, { status: 400 });
+    }
+    await saveOrders(body.orders);
+    return NextResponse.json(
+      { success: true, count: body.orders.length, message: 'Orders synced to cloud database' },
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
+    );
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+// PATCH /api/orders - Update order status (e.g. from 'new' to 'pending', 'dispatched', etc.)
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
@@ -292,7 +309,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const currentOrders = await loadOrders();
-    const orderIndex = currentOrders.findIndex((o) => o.id === id);
+    const orderIndex = currentOrders.findIndex((o) => o.id === id || o.orderNumber === id);
 
     if (orderIndex === -1) {
       return NextResponse.json({ success: false, error: 'Order not found' }, { status: 404 });
@@ -312,6 +329,29 @@ export async function PATCH(req: NextRequest) {
           'Cache-Control': 'no-store, no-cache, must-revalidate',
         },
       }
+    );
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
+}
+
+// DELETE /api/orders?id=... - Delete an order from database
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'Order id parameter is required' }, { status: 400 });
+    }
+
+    const currentOrders = await loadOrders();
+    const updated = currentOrders.filter((o) => o.id !== id && o.orderNumber !== id);
+    await saveOrders(updated);
+
+    return NextResponse.json(
+      { success: true, message: 'Order removed from cloud database' },
+      { headers: { 'Cache-Control': 'no-store, no-cache, must-revalidate' } }
     );
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });

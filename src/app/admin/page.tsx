@@ -270,9 +270,18 @@ export default function AdminPortalPage() {
   };
 
   // Sync to local storage & server
-  const saveOrders = (updated: Order[]) => {
+  const saveOrders = async (updated: Order[]) => {
     setOrders(updated);
     localStorage.setItem('ruaan_admin_orders', JSON.stringify(updated));
+    try {
+      await fetch('/api/orders', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orders: updated }),
+      });
+    } catch (e) {
+      console.error('Failed to sync orders to server:', e);
+    }
   };
 
   const handleConfirmNewOrder = async (orderId: string) => {
@@ -411,9 +420,18 @@ export default function AdminPortalPage() {
       showToast(`📦 Order Reactivated: Deducted stock for ${orderToUpdate.items.length} item(s)`);
     }
 
-    // Update order status
+    // Update order status (instantly synced to local state & cloud Redis)
     const updatedOrders = orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o);
     saveOrders(updatedOrders);
+    showToast(`Status updated to ${newStatus.toUpperCase()}`);
+
+    try {
+      fetch('/api/orders', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: orderId, status: newStatus }),
+      }).catch(() => {});
+    } catch (e) {}
   };
 
   const handleDeleteOrder = (orderId: string) => {
@@ -437,6 +455,10 @@ export default function AdminPortalPage() {
     const updated = orders.filter(o => o.id !== orderId);
     saveOrders(updated);
     showToast('Order deleted successfully');
+
+    try {
+      fetch(`/api/orders?id=${orderId}`, { method: 'DELETE' }).catch(() => {});
+    } catch (e) {}
   };
 
   // --- FINANCIAL CALCULATIONS (REALTIME P&L) ---
