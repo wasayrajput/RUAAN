@@ -179,14 +179,43 @@ export default function AdminPortalPage() {
     } else {
       const initialOrders: Order[] = [
         {
+          id: 'ord-7352',
+          orderNumber: '#RN-7352',
+          date: '2026-10-28',
+          customerName: 'Rabia Rehman',
+          phone1: '03320533048',
+          phone2: '0345307961',
+          address: 'Iqra girls hostel street 64 , sector i_14/3 islamabad',
+          city: 'Islamabad',
+          source: 'Website',
+          paymentType: 'COD',
+          items: [
+            {
+              id: 'it-sl04',
+              code: 'SL04',
+              name: 'Silver Mist Stone Linen',
+              fabric: 'Stone Linen',
+              stitch: 'Stitched Ready-to-Wear',
+              size: 'Standard Size',
+              price: 2350,
+              qty: 1
+            }
+          ],
+          subtotal: 2350,
+          deliveryFee: 200,
+          total: 2550,
+          status: 'dispatched',
+          notes: ''
+        },
+        {
           id: 'ord-1048',
           orderNumber: '#RN-1048',
           date: '2026-10-20',
           customerName: 'Luqman Akram',
           phone1: '0347-4275521',
           phone2: '0308-4358336',
-          address: 'Gali no 6, House no 6, Mughal Bazar, Daok Rahmanpura',
-          city: 'Muridke',
+          address: 'House No. 6, Gali No. 6, Mughal Bazar, Daok Rahmanpura',
+          city: 'Muridke, Punjab',
           source: 'WhatsApp',
           paymentType: 'COD',
           items: [
