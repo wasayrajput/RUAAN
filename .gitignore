@@ -36,4 +36,5 @@ next-env.d.ts
 
 # scratch & media
 scratch/
+scripts/
 *.mp4
