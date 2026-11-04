@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product, CartItem, CustomerDetails, ColorSwatch, SizeOption, getProductArticleCode } from '@/types/product';
 import { BRAND_CONFIG } from '@/config/brand';
+import { calculateDeliveryRate } from '@/utils/delivery';
 import productsData from '@/data/products.json';
 
 export interface DirectOrderInfo {
@@ -201,12 +202,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       message += `   • Suit Photo: ${photoUrl}\n\n`;
     });
 
-    const isFreeShipping = subtotal >= BRAND_CONFIG.shippingThresholdFree;
-    const shippingCost = isFreeShipping ? 0 : BRAND_CONFIG.standardDeliveryFee;
+    const deliveryInfo = calculateDeliveryRate(customerDetails.city, subtotal);
+    const isFreeShipping = deliveryInfo.isFree;
+    const shippingCost = deliveryInfo.fee;
 
     message += `━━━━━━━━━━━━━━━━━━━━━\n`;
     message += `Subtotal: ${formatPrice(subtotal)}\n`;
-    message += `Delivery: ${isFreeShipping ? 'FREE Delivery' : formatPrice(shippingCost)}\n`;
+    message += `Delivery (${deliveryInfo.badgeText}): ${isFreeShipping ? 'FREE Delivery' : formatPrice(shippingCost)}\n`;
     message += `*Grand Total: ${formatPrice(subtotal + shippingCost)}*\n\n`;
     message += `Please confirm my order and share delivery timeline. Thank you!`;
 

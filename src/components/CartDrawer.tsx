@@ -7,6 +7,13 @@ import { X, Trash2, ShoppingBag, MessageCircle, Truck, ArrowRight, CheckCircle2 
 import { useCart } from '@/context/CartContext';
 import { BRAND_CONFIG } from '@/config/brand';
 import { CustomerDetails, getProductArticleCode } from '@/types/product';
+import {
+  calculateDeliveryRate,
+  detectDeliveryZone,
+  POPULAR_CITIES,
+  PROVINCE_ZONES,
+  DeliveryZone,
+} from '@/utils/delivery';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -35,6 +42,7 @@ export const CartDrawer: React.FC = () => {
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [placedOrderNumber, setPlacedOrderNumber] = useState('');
+  const [selectedZone, setSelectedZone] = useState<DeliveryZone | undefined>(undefined);
 
   React.useEffect(() => {
     try {
@@ -47,8 +55,9 @@ export const CartDrawer: React.FC = () => {
 
   if (!isCartOpen) return null;
 
-  const isFreeShipping = subtotal >= BRAND_CONFIG.shippingThresholdFree;
-  const shippingCost = isFreeShipping ? 0 : BRAND_CONFIG.standardDeliveryFee;
+  const deliveryInfo = calculateDeliveryRate(customerDetails.city, subtotal, selectedZone);
+  const isFreeShipping = deliveryInfo.isFree;
+  const shippingCost = deliveryInfo.fee;
   const grandTotal = subtotal + shippingCost;
   const freeShippingProgress = Math.min(100, (subtotal / BRAND_CONFIG.shippingThresholdFree) * 100);
 
@@ -353,18 +362,54 @@ export const CartDrawer: React.FC = () => {
                     />
                   </div>
 
-                  <div className="space-y-1">
-                    <label className="font-semibold text-brand-charcoal uppercase tracking-wider">
-                      City *
-                    </label>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <label className="font-semibold text-brand-charcoal uppercase tracking-wider text-[11px]">
+                        City *
+                      </label>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                        deliveryInfo.zone === 'lahore'
+                          ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                          : deliveryInfo.zone === 'punjab'
+                          ? 'bg-blue-50 text-blue-900 border border-blue-200'
+                          : 'bg-stone-100 text-stone-800 border border-stone-200'
+                      }`}>
+                        {deliveryInfo.badgeText} ({deliveryInfo.isFree ? 'FREE' : `Rs. ${deliveryInfo.originalFee}`})
+                      </span>
+                    </div>
                     <input
                       type="text"
                       required
-                      placeholder="Lahore / Karachi..."
+                      list="cart-popular-cities"
+                      placeholder="e.g. Lahore / Faisalabad / Karachi..."
                       value={customerDetails.city}
-                      onChange={(e) => setCustomerDetails({ ...customerDetails, city: e.target.value })}
-                      className="w-full p-3 bg-brand-cream/50 border border-brand-nude/40 rounded-xl focus:outline-none focus:border-brand-nude"
+                      onChange={(e) => {
+                        setCustomerDetails({ ...customerDetails, city: e.target.value });
+                        if (selectedZone) setSelectedZone(undefined);
+                      }}
+                      className="w-full p-2.5 sm:p-3 bg-brand-cream/50 border border-brand-nude/40 rounded-xl focus:outline-none focus:border-brand-nude"
                     />
+                    <datalist id="cart-popular-cities">
+                      {POPULAR_CITIES.map((c) => (
+                        <option key={c.name} value={c.name} />
+                      ))}
+                    </datalist>
+
+                    {/* Quick Zone Selector / Override */}
+                    <div className="flex items-center justify-between text-[10px] text-brand-gray pt-0.5 px-0.5">
+                      <span>Delivery Region:</span>
+                      <select
+                        value={deliveryInfo.zone}
+                        onChange={(e) => setSelectedZone(e.target.value as DeliveryZone)}
+                        className="bg-transparent text-brand-charcoal font-medium border-b border-dashed border-brand-nude/70 focus:outline-none cursor-pointer py-0.5 text-[10px]"
+                      >
+                        {PROVINCE_ZONES.map((pz) => (
+                          <option key={pz.id} value={pz.id}>
+                            {pz.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
                   <div className="space-y-1">
@@ -406,9 +451,23 @@ export const CartDrawer: React.FC = () => {
                     <span className="text-brand-gray">Subtotal</span>
                     <span>{formatPrice(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-brand-gray">Estimated Delivery</span>
-                    <span>{isFreeShipping ? 'FREE' : formatPrice(shippingCost)}</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-brand-gray flex items-center gap-1">
+                      <Truck className="w-3.5 h-3.5 text-brand-nude" />
+                      Estimated Delivery ({deliveryInfo.badgeText})
+                    </span>
+                    <div>
+                      {deliveryInfo.isFree ? (
+                        <span className="flex items-center gap-1.5">
+                          <span className="line-through text-stone-400 text-[11px]">Rs. {deliveryInfo.originalFee}</span>
+                          <span className="text-emerald-700 font-bold text-xs bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                            FREE
+                          </span>
+                        </span>
+                      ) : (
+                        <span className="font-semibold text-brand-charcoal">{formatPrice(shippingCost)}</span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex justify-between pt-2 border-t border-brand-nude/30 font-serif font-bold text-base">
                     <span>Grand Total</span>

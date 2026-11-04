@@ -18,7 +18,12 @@ export const BRAND_CONFIG = {
   whatsappFormatted: "+92 306 8972548",
   email: "ruaan.pk@gmail.com",
   currencySymbol: "Rs",
-  standardDeliveryFee: 200,
+  standardDeliveryFee: 350,
+  deliveryRates: {
+    lahore: 250,
+    punjab: 350,
+    other: 400,
+  },
   shippingThresholdFree: 5000,
   logoPng: "/logo.png",
   logoJpg: "/logo.jpg",

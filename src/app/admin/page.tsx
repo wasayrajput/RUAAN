@@ -40,6 +40,7 @@ import {
 } from 'lucide-react';
 import productsData from '@/data/products.json';
 import { BRAND_CONFIG } from '@/config/brand';
+import { calculateDeliveryRate, DELIVERY_RATES } from '@/utils/delivery';
 
 // --- TYPES ---
 export type OrderStatus = 'new' | 'pending' | 'dispatched' | 'delivered' | 'returned' | 'cancelled';
@@ -1813,7 +1814,7 @@ function AddOrderModal({
   const [phone2, setPhone2] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [city, setCity] = useState<string>('');
-  const [deliveryFee, setDeliveryFee] = useState<number>(200);
+  const [deliveryFee, setDeliveryFee] = useState<number>(350);
   const [notes, setNotes] = useState<string>('');
 
   // Items list
@@ -1995,8 +1996,13 @@ function AddOrderModal({
                 type="text"
                 required
                 value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="e.g. Muridke, Punjab"
+                onChange={(e) => {
+                  const newCity = e.target.value;
+                  setCity(newCity);
+                  const info = calculateDeliveryRate(newCity, subtotal);
+                  setDeliveryFee(info.fee);
+                }}
+                placeholder="e.g. Lahore / Faisalabad / Karachi"
                 className="w-full bg-[#0f1115] border border-[#2e333d] rounded-lg px-3 py-2 text-xs text-white"
               />
             </div>
@@ -2128,15 +2134,45 @@ function AddOrderModal({
 
         {/* Sticky Action Footer - Always 100% Visible */}
         <div className="p-4 sm:p-5 pt-3 border-t border-[#282d3b] bg-[#181b22] shrink-0">
-          <div className="flex justify-between items-center mb-3">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap justify-between items-center gap-2 mb-3">
+            <div className="flex flex-wrap items-center gap-2">
               <label className="text-xs text-gray-400">Shipping (Rs):</label>
               <input
                 type="number"
                 value={deliveryFee}
                 onChange={(e) => setDeliveryFee(parseInt(e.target.value) || 0)}
-                className="w-20 bg-[#0f1115] border border-[#2e333d] rounded px-2 py-1 text-xs text-white text-center"
+                className="w-16 bg-[#0f1115] border border-[#2e333d] rounded px-2 py-1 text-xs text-white text-center"
               />
+              <div className="flex gap-1 text-[10px]">
+                <button
+                  type="button"
+                  onClick={() => setDeliveryFee(250)}
+                  className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${deliveryFee === 250 ? 'bg-amber-500/20 text-amber-300 border-amber-500/50' : 'bg-[#0f1115] text-gray-400 border-[#2e333d]'}`}
+                >
+                  LHR 250
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeliveryFee(350)}
+                  className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${deliveryFee === 350 ? 'bg-blue-500/20 text-blue-300 border-blue-500/50' : 'bg-[#0f1115] text-gray-400 border-[#2e333d]'}`}
+                >
+                  Punjab 350
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeliveryFee(400)}
+                  className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${deliveryFee === 400 ? 'bg-purple-500/20 text-purple-300 border-purple-500/50' : 'bg-[#0f1115] text-gray-400 border-[#2e333d]'}`}
+                >
+                  Other 400
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeliveryFee(0)}
+                  className={`px-1.5 py-0.5 rounded border transition cursor-pointer ${deliveryFee === 0 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50' : 'bg-[#0f1115] text-gray-400 border-[#2e333d]'}`}
+                >
+                  Free 0
+                </button>
+              </div>
             </div>
             <div className="text-right">
               <span className="text-xs text-gray-400">Total: </span>

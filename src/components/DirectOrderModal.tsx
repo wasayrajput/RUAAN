@@ -7,6 +7,13 @@ import { X, MessageCircle, Truck, ShieldCheck, ShoppingBag, CheckCircle2 } from 
 import { useCart } from '@/context/CartContext';
 import { BRAND_CONFIG } from '@/config/brand';
 import { CustomerDetails, SizeOption, getProductArticleCode } from '@/types/product';
+import {
+  calculateDeliveryRate,
+  detectDeliveryZone,
+  POPULAR_CITIES,
+  PROVINCE_ZONES,
+  DeliveryZone,
+} from '@/utils/delivery';
 
 export const DirectOrderModal: React.FC = () => {
   const { directOrder, closeDirectOrder, formatPrice } = useCart();
@@ -24,6 +31,7 @@ export const DirectOrderModal: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [placedOrderNumber, setPlacedOrderNumber] = useState('');
+  const [selectedZone, setSelectedZone] = useState<DeliveryZone | undefined>(undefined);
 
   // Sync state whenever directOrder opens
   useEffect(() => {
@@ -44,8 +52,9 @@ export const DirectOrderModal: React.FC = () => {
   const { product, selectedColor } = directOrder;
   const articleCode = getProductArticleCode(product, selectedColor);
   const itemTotal = product.price * quantity;
-  const isFreeShipping = itemTotal >= BRAND_CONFIG.shippingThresholdFree;
-  const shippingCost = isFreeShipping ? 0 : BRAND_CONFIG.standardDeliveryFee;
+  const deliveryInfo = calculateDeliveryRate(customerDetails.city, itemTotal, selectedZone);
+  const isFreeShipping = deliveryInfo.isFree;
+  const shippingCost = deliveryInfo.fee;
   const grandTotal = itemTotal + shippingCost;
   const photoUrl = selectedColor?.image || product.mainImage;
 
@@ -286,17 +295,53 @@ export const DirectOrderModal: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-semibold text-brand-charcoal uppercase tracking-wider text-[11px]">
-                    City *
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label className="font-semibold text-brand-charcoal uppercase tracking-wider text-[11px]">
+                      City *
+                    </label>
+                    <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${
+                      deliveryInfo.zone === 'lahore'
+                        ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                        : deliveryInfo.zone === 'punjab'
+                        ? 'bg-blue-50 text-blue-900 border border-blue-200'
+                        : 'bg-stone-100 text-stone-800 border border-stone-200'
+                    }`}>
+                      {deliveryInfo.badgeText} ({deliveryInfo.isFree ? 'FREE' : `Rs. ${deliveryInfo.originalFee}`})
+                    </span>
+                  </div>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Lahore / Karachi"
+                    list="direct-popular-cities"
+                    placeholder="e.g. Lahore / Faisalabad / Karachi"
                     value={customerDetails.city}
-                    onChange={(e) => setCustomerDetails({ ...customerDetails, city: e.target.value })}
+                    onChange={(e) => {
+                      setCustomerDetails({ ...customerDetails, city: e.target.value });
+                      if (selectedZone) setSelectedZone(undefined);
+                    }}
                     className="w-full p-2.5 bg-brand-cream/40 border border-brand-nude/40 rounded-xl focus:outline-none focus:border-brand-nude"
                   />
+                  <datalist id="direct-popular-cities">
+                    {POPULAR_CITIES.map((c) => (
+                      <option key={c.name} value={c.name} />
+                    ))}
+                  </datalist>
+
+                  {/* Quick Region Selector */}
+                  <div className="flex items-center justify-between text-[10px] text-brand-gray pt-0.5">
+                    <span>Region:</span>
+                    <select
+                      value={deliveryInfo.zone}
+                      onChange={(e) => setSelectedZone(e.target.value as DeliveryZone)}
+                      className="bg-transparent text-brand-charcoal font-medium border-b border-dashed border-brand-nude/70 focus:outline-none cursor-pointer py-0.5 text-[10px]"
+                    >
+                      {PROVINCE_ZONES.map((pz) => (
+                        <option key={pz.id} value={pz.id}>
+                          {pz.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
 
@@ -342,11 +387,20 @@ export const DirectOrderModal: React.FC = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-brand-gray flex items-center gap-1">
                     <Truck className="w-3.5 h-3.5 text-brand-nude" />
-                    Delivery Charges
+                    Delivery ({deliveryInfo.badgeText})
                   </span>
-                  <span className={isFreeShipping ? 'text-emerald-700 font-semibold' : ''}>
-                    {isFreeShipping ? 'FREE Delivery' : formatPrice(shippingCost)}
-                  </span>
+                  <div>
+                    {deliveryInfo.isFree ? (
+                      <span className="flex items-center gap-1.5">
+                        <span className="line-through text-stone-400 text-[11px]">Rs. {deliveryInfo.originalFee}</span>
+                        <span className="text-emerald-700 font-bold text-xs bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                          FREE
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="font-semibold text-brand-charcoal">{formatPrice(shippingCost)}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex justify-between pt-1.5 border-t border-brand-nude/30 font-serif font-bold text-sm sm:text-base">
                   <span>Grand Total</span>
