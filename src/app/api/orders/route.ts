@@ -42,6 +42,34 @@ export interface Order {
 // In-memory fallback
 let memoryOrders: Order[] = [
   {
+    id: 'ord-3841',
+    orderNumber: '#RN-3841',
+    date: '2026-11-04',
+    customerName: 'Abdul Wasay',
+    phone1: '0308-4358336',
+    address: 'House No. 6, Gali No. 6, Mughal Bazar, Daok Rahmanpura',
+    city: 'Rawalpindi',
+    source: 'Website',
+    paymentType: 'COD',
+    items: [
+      {
+        id: 'it-sl03',
+        code: 'SL03',
+        name: 'Smoky Charcoal 3-Piece Stitched Doria Linen',
+        fabric: 'Doria Linen',
+        stitch: 'Stitched Ready-to-Wear',
+        size: 'Large',
+        price: 2700,
+        qty: 1,
+      },
+    ],
+    subtotal: 2700,
+    deliveryFee: 350,
+    total: 3050,
+    status: 'pending',
+    notes: 'Same as shown in picture',
+  },
+  {
     id: 'ord-7352',
     orderNumber: '#RN-7352',
     date: '2026-10-28',
@@ -96,7 +124,7 @@ let memoryOrders: Order[] = [
     subtotal: 3350,
     deliveryFee: 150,
     total: 3500,
-    status: 'dispatched',
+    status: 'delivered',
     notes: 'Customer said: Agr ye pasand agya to 2 suit or b select kiy hian',
   },
 ];
@@ -106,13 +134,10 @@ const getStoragePath = () => {
   return path.join(process.cwd(), 'src', 'data', 'orders-db.json');
 };
 
-// Permanent Upstash Redis credentials
-const DEFAULT_UPSTASH_URL = 'https://sound-hookworm-243908.upstash.io';
-const DEFAULT_UPSTASH_TOKEN = 'gQAAAAAAA7jEAQIgcDFhNjYzY2M4NGFkYzc0ODAwYjNmZjMyNWZiZjkzNWRkZA';
-
 const getUpstashCredentials = () => {
-  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL || DEFAULT_UPSTASH_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN || DEFAULT_UPSTASH_TOKEN;
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+  if (!url || !token) return null;
   return { url, token };
 };
 

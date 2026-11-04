@@ -169,86 +169,161 @@ export default function AdminPortalPage() {
       localStorage.setItem('ruaan_admin_inventory', JSON.stringify(initialInv));
     }
 
-    // 3. Load Orders (Seed with Luqman Akram's order if empty)
+    // 3. Baseline Orders (Abdul Wasay, Rabia Rehman, Luqman Akram)
+    const defaultInitialOrders: Order[] = [
+      {
+        id: 'ord-3841',
+        orderNumber: '#RN-3841',
+        date: '2026-11-04',
+        customerName: 'Abdul Wasay',
+        phone1: '0308-4358336',
+        address: 'House No. 6, Gali No. 6, Mughal Bazar, Daok Rahmanpura',
+        city: 'Rawalpindi',
+        source: 'Website',
+        paymentType: 'COD',
+        items: [
+          {
+            id: 'it-sl03',
+            code: 'SL03',
+            name: 'Smoky Charcoal 3-Piece Stitched Doria Linen',
+            fabric: 'Doria Linen',
+            stitch: 'Stitched Ready-to-Wear',
+            size: 'Large',
+            price: 2700,
+            qty: 1
+          }
+        ],
+        subtotal: 2700,
+        deliveryFee: 350,
+        total: 3050,
+        status: 'pending',
+        notes: 'Same as shown in picture'
+      },
+      {
+        id: 'ord-7352',
+        orderNumber: '#RN-7352',
+        date: '2026-10-28',
+        customerName: 'Rabia Rehman',
+        phone1: '03320533048',
+        phone2: '0345307961',
+        address: 'Iqra girls hostel street 64 , sector i_14/3 islamabad',
+        city: 'Islamabad',
+        source: 'Website',
+        paymentType: 'COD',
+        items: [
+          {
+            id: 'it-sl04',
+            code: 'SL04',
+            name: 'Silver Mist Stone Linen',
+            fabric: 'Stone Linen',
+            stitch: 'Stitched Ready-to-Wear',
+            size: 'Standard Size',
+            price: 2350,
+            qty: 1
+          }
+        ],
+        subtotal: 2350,
+        deliveryFee: 200,
+        total: 2550,
+        status: 'dispatched',
+        notes: ''
+      },
+      {
+        id: 'ord-1048',
+        orderNumber: '#RN-1048',
+        date: '2026-10-20',
+        customerName: 'Luqman Akram',
+        phone1: '0347-4275521',
+        phone2: '0308-4358336',
+        address: 'House No. 6, Gali No. 6, Mughal Bazar, Daok Rahmanpura',
+        city: 'Muridke, Punjab',
+        source: 'WhatsApp',
+        paymentType: 'COD',
+        items: [
+          {
+            id: 'it-1',
+            code: 'DV03',
+            name: 'Digital Viscose 3-Piece (Forest Teal / Emerald)',
+            fabric: 'Premium Digital Viscose',
+            stitch: 'Stitched Ready-to-Wear',
+            size: 'Large',
+            price: 3350,
+            qty: 1
+          }
+        ],
+        subtotal: 3350,
+        deliveryFee: 150,
+        total: 3500,
+        status: 'delivered',
+        notes: 'Customer said: Agr ye pasand agya to 2 suit or b select kiy hian'
+      }
+    ];
+
+    let baseOrders = defaultInitialOrders;
     const storedOrders = localStorage.getItem('ruaan_admin_orders');
     if (storedOrders) {
       try {
-        setOrders(JSON.parse(storedOrders));
+        const parsed = JSON.parse(storedOrders);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // If Luqman Akram was previously saved as 'dispatched' due to old poller, ensure it stays delivered
+          const cleaned = parsed.map((o: any) => {
+            if (o.orderNumber === '#RN-1048' && o.status === 'dispatched') {
+              return { ...o, status: 'delivered' as OrderStatus };
+            }
+            return o;
+          });
+          const existingIds = new Set(cleaned.map((o: any) => o.id));
+          const existingNums = new Set(cleaned.map((o: any) => o.orderNumber));
+          const missingDefaults = defaultInitialOrders.filter(d => !existingIds.has(d.id) && !existingNums.has(d.orderNumber));
+          baseOrders = [...missingDefaults, ...cleaned];
+        }
       } catch (e) {
         console.error(e);
       }
-    } else {
-      const initialOrders: Order[] = [
-        {
-          id: 'ord-7352',
-          orderNumber: '#RN-7352',
-          date: '2026-10-28',
-          customerName: 'Rabia Rehman',
-          phone1: '03320533048',
-          phone2: '0345307961',
-          address: 'Iqra girls hostel street 64 , sector i_14/3 islamabad',
-          city: 'Islamabad',
-          source: 'Website',
-          paymentType: 'COD',
-          items: [
-            {
-              id: 'it-sl04',
-              code: 'SL04',
-              name: 'Silver Mist Stone Linen',
-              fabric: 'Stone Linen',
-              stitch: 'Stitched Ready-to-Wear',
-              size: 'Standard Size',
-              price: 2350,
-              qty: 1
-            }
-          ],
-          subtotal: 2350,
-          deliveryFee: 200,
-          total: 2550,
-          status: 'dispatched',
-          notes: ''
-        },
-        {
-          id: 'ord-1048',
-          orderNumber: '#RN-1048',
-          date: '2026-10-20',
-          customerName: 'Luqman Akram',
-          phone1: '0347-4275521',
-          phone2: '0308-4358336',
-          address: 'House No. 6, Gali No. 6, Mughal Bazar, Daok Rahmanpura',
-          city: 'Muridke, Punjab',
-          source: 'WhatsApp',
-          paymentType: 'COD',
-          items: [
-            {
-              id: 'it-1',
-              code: 'DV03',
-              name: 'Digital Viscose 3-Piece (Forest Teal / Emerald)',
-              fabric: 'Premium Digital Viscose',
-              stitch: 'Stitched Ready-to-Wear',
-              size: 'Large',
-              price: 3350,
-              qty: 1
-            }
-          ],
-          subtotal: 3350,
-          deliveryFee: 150,
-          total: 3500,
-          status: 'dispatched',
-          notes: 'Customer said: Agr ye pasand agya to 2 suit or b select kiy hian'
-        }
-      ];
-      setOrders(initialOrders);
-      localStorage.setItem('ruaan_admin_orders', JSON.stringify(initialOrders));
     }
 
-    // 3. Fetch latest live orders from Central Server API
+    // Also check for any orders placed via website on this browser
+    try {
+      const placedRaw = localStorage.getItem('ruaan_placed_orders');
+      if (placedRaw) {
+        const placed = JSON.parse(placedRaw);
+        if (Array.isArray(placed)) {
+          const baseIds = new Set(baseOrders.map(o => o.id));
+          const baseNums = new Set(baseOrders.map(o => o.orderNumber));
+          for (const p of placed) {
+            const num = p.orderNumber || (p.orderId ? `#RN-${p.orderId.slice(-4)}` : '');
+            if (p.orderId && !baseIds.has(p.orderId) && !baseNums.has(num)) {
+              baseOrders.unshift({
+                id: p.orderId,
+                orderNumber: num || `#RN-${Math.floor(1000 + Math.random() * 9000)}`,
+                date: p.date ? p.date.split('T')[0] : new Date().toISOString().split('T')[0],
+                customerName: p.customer?.fullName || 'Website Customer',
+                phone1: p.customer?.phone || '',
+                address: p.customer?.address || '',
+                city: p.customer?.city || 'Pakistan',
+                source: 'Website',
+                paymentType: 'COD',
+                items: p.items || [],
+                subtotal: p.total || 0,
+                deliveryFee: p.deliveryFee || 0,
+                total: p.total || 0,
+                status: 'pending',
+                notes: p.customer?.notes || '',
+              });
+            }
+          }
+        }
+      }
+    } catch (e) {}
+
+    setOrders(baseOrders);
+    localStorage.setItem('ruaan_admin_orders', JSON.stringify(baseOrders));
+
+    // Fetch live orders once on mount (NO polling interval to prevent reverting admin changes)
     fetchOrdersFromApi();
-    const interval = setInterval(fetchOrdersFromApi, 15000);
-    return () => clearInterval(interval);
   }, []);
 
-  // Fetch from API
+  // Fetch from API with smart merge (NEVER overwrite admin's manual status changes)
   const fetchOrdersFromApi = async () => {
     try {
       setIsSyncing(true);
@@ -259,8 +334,27 @@ export default function AdminPortalPage() {
       if (res.ok) {
         const data = await res.json();
         if (data.orders && Array.isArray(data.orders)) {
-          setOrders(data.orders);
-          localStorage.setItem('ruaan_admin_orders', JSON.stringify(data.orders));
+          setOrders((currentLocalOrders) => {
+            const existingMap = new Map(currentLocalOrders.map(o => [o.id, o]));
+            const existingByNum = new Map(currentLocalOrders.map(o => [o.orderNumber, o]));
+            
+            // Check if server has any genuinely new orders
+            const newOrdersToAdd: Order[] = [];
+            for (const serverOrder of data.orders) {
+              const exists = existingMap.get(serverOrder.id) || existingByNum.get(serverOrder.orderNumber);
+              if (!exists) {
+                newOrdersToAdd.push(serverOrder);
+              }
+            }
+
+            if (newOrdersToAdd.length === 0) {
+              return currentLocalOrders;
+            }
+
+            const merged = [...newOrdersToAdd, ...currentLocalOrders];
+            localStorage.setItem('ruaan_admin_orders', JSON.stringify(merged));
+            return merged;
+          });
         }
       }
     } catch (e) {
@@ -539,7 +633,7 @@ export default function AdminPortalPage() {
         order.items.some(i => i.code.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchesStatus = statusFilter === 'all' 
-        ? order.status !== 'new'
+        ? true
         : order.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
@@ -1231,7 +1325,7 @@ export default function AdminPortalPage() {
                   Orders Management Pipeline
                 </h2>
                 <p className="text-xs text-gray-400">
-                  Total {orders.filter(o => o.status !== 'new').length} orders recorded across WhatsApp, Instagram, and Website
+                  Total {orders.length} orders recorded across WhatsApp, Instagram, and Website
                 </p>
               </div>
 

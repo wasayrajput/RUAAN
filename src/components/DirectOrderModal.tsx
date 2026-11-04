@@ -98,6 +98,12 @@ export const DirectOrderModal: React.FC = () => {
       const data = await res.json();
       if (data.success && data.order) {
         setPlacedOrderNumber(data.order.orderNumber);
+        try {
+          const raw = localStorage.getItem('ruaan_admin_orders');
+          const list = raw ? JSON.parse(raw) : [];
+          const updated = [data.order, ...list.filter((o: any) => o.id !== data.order.id && o.orderNumber !== data.order.orderNumber)];
+          localStorage.setItem('ruaan_admin_orders', JSON.stringify(updated));
+        } catch (e) {}
         setIsSubmitted(true);
       } else {
         alert(data.error || 'Failed to place order. Please try again.');
