@@ -9,10 +9,7 @@ import { BRAND_CONFIG } from '@/config/brand';
 import { CustomerDetails, SizeOption, getProductArticleCode } from '@/types/product';
 import {
   calculateDeliveryRate,
-  detectDeliveryZone,
   POPULAR_CITIES,
-  PROVINCE_ZONES,
-  DeliveryZone,
 } from '@/utils/delivery';
 
 export const DirectOrderModal: React.FC = () => {
@@ -31,7 +28,6 @@ export const DirectOrderModal: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [placedOrderNumber, setPlacedOrderNumber] = useState('');
-  const [selectedZone, setSelectedZone] = useState<DeliveryZone | undefined>(undefined);
 
   // Sync state whenever directOrder opens
   useEffect(() => {
@@ -52,7 +48,7 @@ export const DirectOrderModal: React.FC = () => {
   const { product, selectedColor } = directOrder;
   const articleCode = getProductArticleCode(product, selectedColor);
   const itemTotal = product.price * quantity;
-  const deliveryInfo = calculateDeliveryRate(customerDetails.city, itemTotal, selectedZone);
+  const deliveryInfo = calculateDeliveryRate(customerDetails.city, itemTotal);
   const isFreeShipping = deliveryInfo.isFree;
   const shippingCost = deliveryInfo.fee;
   const grandTotal = itemTotal + shippingCost;
@@ -315,10 +311,7 @@ export const DirectOrderModal: React.FC = () => {
                     list="direct-popular-cities"
                     placeholder="e.g. Lahore / Faisalabad / Karachi"
                     value={customerDetails.city}
-                    onChange={(e) => {
-                      setCustomerDetails({ ...customerDetails, city: e.target.value });
-                      if (selectedZone) setSelectedZone(undefined);
-                    }}
+                    onChange={(e) => setCustomerDetails({ ...customerDetails, city: e.target.value })}
                     className="w-full p-2.5 bg-brand-cream/40 border border-brand-nude/40 rounded-xl focus:outline-none focus:border-brand-nude"
                   />
                   <datalist id="direct-popular-cities">
@@ -326,22 +319,6 @@ export const DirectOrderModal: React.FC = () => {
                       <option key={c.name} value={c.name} />
                     ))}
                   </datalist>
-
-                  {/* Quick Region Selector */}
-                  <div className="flex items-center justify-between text-[10px] text-brand-gray pt-0.5">
-                    <span>Region:</span>
-                    <select
-                      value={deliveryInfo.zone}
-                      onChange={(e) => setSelectedZone(e.target.value as DeliveryZone)}
-                      className="bg-transparent text-brand-charcoal font-medium border-b border-dashed border-brand-nude/70 focus:outline-none cursor-pointer py-0.5 text-[10px]"
-                    >
-                      {PROVINCE_ZONES.map((pz) => (
-                        <option key={pz.id} value={pz.id}>
-                          {pz.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
                 </div>
               </div>
 

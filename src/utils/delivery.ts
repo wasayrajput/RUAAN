@@ -26,7 +26,7 @@ export const PROVINCE_ZONES = [
 // Comprehensive list of Punjab cities / areas
 const PUNJAB_CITIES: string[] = [
   'faisalabad', 'fsd',
-  'rawalpindi', 'rwp',
+  'rawalpindi', 'rwp', 'pindi',
   'multan', 'mux',
   'gujranwala', 'grw',
   'sialkot', 'skt',

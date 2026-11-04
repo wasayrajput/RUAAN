@@ -9,10 +9,7 @@ import { BRAND_CONFIG } from '@/config/brand';
 import { CustomerDetails, getProductArticleCode } from '@/types/product';
 import {
   calculateDeliveryRate,
-  detectDeliveryZone,
   POPULAR_CITIES,
-  PROVINCE_ZONES,
-  DeliveryZone,
 } from '@/utils/delivery';
 
 export const CartDrawer: React.FC = () => {
@@ -42,7 +39,6 @@ export const CartDrawer: React.FC = () => {
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [placedOrderNumber, setPlacedOrderNumber] = useState('');
-  const [selectedZone, setSelectedZone] = useState<DeliveryZone | undefined>(undefined);
 
   React.useEffect(() => {
     try {
@@ -55,7 +51,7 @@ export const CartDrawer: React.FC = () => {
 
   if (!isCartOpen) return null;
 
-  const deliveryInfo = calculateDeliveryRate(customerDetails.city, subtotal, selectedZone);
+  const deliveryInfo = calculateDeliveryRate(customerDetails.city, subtotal);
   const isFreeShipping = deliveryInfo.isFree;
   const shippingCost = deliveryInfo.fee;
   const grandTotal = subtotal + shippingCost;
@@ -383,10 +379,7 @@ export const CartDrawer: React.FC = () => {
                       list="cart-popular-cities"
                       placeholder="e.g. Lahore / Faisalabad / Karachi..."
                       value={customerDetails.city}
-                      onChange={(e) => {
-                        setCustomerDetails({ ...customerDetails, city: e.target.value });
-                        if (selectedZone) setSelectedZone(undefined);
-                      }}
+                      onChange={(e) => setCustomerDetails({ ...customerDetails, city: e.target.value })}
                       className="w-full p-2.5 sm:p-3 bg-brand-cream/50 border border-brand-nude/40 rounded-xl focus:outline-none focus:border-brand-nude"
                     />
                     <datalist id="cart-popular-cities">
@@ -394,22 +387,6 @@ export const CartDrawer: React.FC = () => {
                         <option key={c.name} value={c.name} />
                       ))}
                     </datalist>
-
-                    {/* Quick Zone Selector / Override */}
-                    <div className="flex items-center justify-between text-[10px] text-brand-gray pt-0.5 px-0.5">
-                      <span>Delivery Region:</span>
-                      <select
-                        value={deliveryInfo.zone}
-                        onChange={(e) => setSelectedZone(e.target.value as DeliveryZone)}
-                        className="bg-transparent text-brand-charcoal font-medium border-b border-dashed border-brand-nude/70 focus:outline-none cursor-pointer py-0.5 text-[10px]"
-                      >
-                        {PROVINCE_ZONES.map((pz) => (
-                          <option key={pz.id} value={pz.id}>
-                            {pz.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
                   </div>
 
                   <div className="space-y-1">
