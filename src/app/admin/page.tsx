@@ -137,19 +137,61 @@ export default function AdminPortalPage() {
       setSavedPin(localPin);
     }
 
-    // 2. Load Inventory (Seed from products.json if empty)
+    // 2. Load Inventory (Seed from products.json & sync updated retail prices)
     const storedInventory = localStorage.getItem('ruaan_admin_inventory');
+    const prodMap = new Map(productsData.map((p: any) => [(p.designCode || p.id).toUpperCase().replace(/\.(JPEG|JPG|PNG|WEBP)$/i, '').trim(), p]));
+
+    let activeInv: InventoryItem[] = [];
     if (storedInventory) {
       try {
-        setInventory(JSON.parse(storedInventory));
+        const parsed = JSON.parse(storedInventory);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          activeInv = parsed.map((item: InventoryItem) => {
+            const p = prodMap.get(item.code.toUpperCase());
+            if (p) {
+              const isStitched = p.stitchType.includes('Stitched');
+              return {
+                ...item,
+                title: p.title,
+                fabric: p.fabric,
+                collection: p.collection,
+                retailPrice: p.price,
+                isStitched: isStitched,
+                image: p.mainImage || item.image,
+              };
+            }
+            return item;
+          });
+
+          // Add any newly created products (e.g. KD03)
+          const existingCodes = new Set(activeInv.map(i => i.code.toUpperCase()));
+          productsData.forEach((p: any) => {
+            const code = (p.designCode || p.id).toUpperCase().replace(/\.(JPEG|JPG|PNG|WEBP)$/i, '').trim();
+            if (!existingCodes.has(code)) {
+              const isStitched = p.stitchType.includes('Stitched');
+              activeInv.push({
+                code: code,
+                title: p.title,
+                fabric: p.fabric,
+                collection: p.collection,
+                retailPrice: p.price,
+                costPrice: isStitched ? 1650 : 1400,
+                stock: 10,
+                soldCount: 0,
+                image: p.mainImage || '/products/DV01.jpg',
+                isStitched: isStitched,
+              });
+            }
+          });
+        }
       } catch (e) {
         console.error(e);
       }
-    } else {
-      // Seed from products.json
-      const initialInv: InventoryItem[] = productsData.map((p: any) => {
+    }
+
+    if (activeInv.length === 0) {
+      activeInv = productsData.map((p: any) => {
         const code = (p.designCode || p.id).toUpperCase().replace(/\.(JPEG|JPG|PNG|WEBP)$/i, '').trim();
-        // Estimated wholesale cost: unstitched ~1500, stitched ~1700
         const isStitched = p.stitchType.includes('Stitched');
         const defaultCost = isStitched ? 1650 : 1400;
         return {
@@ -159,15 +201,16 @@ export default function AdminPortalPage() {
           collection: p.collection,
           retailPrice: p.price,
           costPrice: defaultCost,
-          stock: code === 'DV03' ? 9 : (code === 'PL01' || code === 'SL02' ? 12 : 10), // DV03 1 already ordered
+          stock: code === 'DV03' ? 9 : (code === 'PL01' || code === 'SL02' ? 12 : 10),
           soldCount: code === 'DV03' ? 1 : 0,
           image: p.mainImage || '/products/DV01.jpg',
           isStitched: isStitched,
         };
       });
-      setInventory(initialInv);
-      localStorage.setItem('ruaan_admin_inventory', JSON.stringify(initialInv));
     }
+
+    setInventory(activeInv);
+    localStorage.setItem('ruaan_admin_inventory', JSON.stringify(activeInv));
 
     // 3. Baseline Orders (Rabia Rehman, Luqman Akram)
     const defaultInitialOrders: Order[] = [
