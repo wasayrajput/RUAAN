@@ -16,7 +16,7 @@ export const Lookbook: React.FC = () => {
     {
       title: "Stone Linen Stitched Edit",
       season: "Luxury Pret '26",
-      image: "/products/SL01.jpg",
+      image: "/products/SL02.jpg",
       span: "col-span-1",
       description: "Contemporary digital printed stone linen 2-piece stitched ensemble."
     },

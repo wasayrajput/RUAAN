@@ -30,7 +30,7 @@ export const EditorialSplit: React.FC<EditorialSplitProps> = ({ onShopCasual }) 
           {/* Left Full-Bleed Lifestyle Photo */}
           <div className="lg:col-span-6 relative min-h-[240px] sm:min-h-[420px] lg:min-h-[480px] bg-stone-100 overflow-hidden">
             <Image
-              src="/products/SL03.jpg"
+              src="/products/SL09.jpg"
               alt="Casual Looks For Everyday"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"

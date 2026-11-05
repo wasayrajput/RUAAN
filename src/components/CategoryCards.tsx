@@ -22,10 +22,10 @@ const CATEGORIES: CategoryItem[] = [
     bgColor: 'bg-[#FCECEE]', // Soft Rose Pink
   },
   {
-    id: 'sl03',
+    id: 'sl09',
     name: 'Everyday Stone Linen',
     fabric: 'Stone Linen',
-    image: '/products/SL03.jpg',
+    image: '/products/SL09.jpg',
     bgColor: 'bg-[#E3F2FD]', // Soft Powder Blue
   },
   {
