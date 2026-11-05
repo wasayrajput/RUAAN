@@ -57,10 +57,10 @@ const CATEGORIES: CategoryItem[] = [
     bgColor: 'bg-[#FDECE8]', // Soft Peach Blush
   },
   {
-    id: 'sl04',
-    name: 'Embroidered Chic',
+    id: 'sl07',
+    name: 'Denim Indigo Linen',
     fabric: 'Stone Linen',
-    image: '/products/SL04.jpg',
+    image: '/products/SL07.jpg',
     bgColor: 'bg-[#E8F5E9]', // Soft Mint Sage
   },
   {

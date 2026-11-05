@@ -353,47 +353,6 @@
     "designCode": "SL02"
   },
   {
-    "id": "ruaan-stone-04",
-    "title": "Silver Mist Stone Linen",
-    "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",
-    "price": 2599,
-    "originalPrice": 3100,
-    "fabric": "Stone Linen",
-    "collection": "Stone Linen Stitched",
-    "stitchType": "Stitched Ready-to-Wear",
-    "availableSizes": [
-      "M",
-      "L"
-    ],
-    "colorSwatches": [
-      {
-        "name": "Silver Mist",
-        "hex": "#8B8986",
-        "image": "/products/SL04.jpg"
-      }
-    ],
-    "mainImage": "/products/SL04.jpg",
-    "galleryImages": [
-      "/products/SL04.jpg"
-    ],
-    "description": "Premium ready-to-wear 2-piece stitched stone linen suit featuring intricate ethnic digital prints, modern silhouette, and comfortable all-day fabric feel.",
-    "details": {
-      "shirt": "Stitched Stone Linen Shirt (Medium & Large Available)",
-      "dupatta": "N/A (2-Piece Set)",
-      "trouser": "Stitched Stone Linen Matching Trouser"
-    },
-    "careInstructions": [
-      "Hand wash in cold water",
-      "Do not bleach",
-      "Warm iron"
-    ],
-    "isNewArrival": true,
-    "isBestseller": false,
-    "isFeatured": true,
-    "inStock": true,
-    "designCode": "SL04"
-  },
-  {
     "id": "ruaan-stone-05",
     "title": "Toffee Umber Stone Linen",
     "subtitle": "2-Piece Stitched Luxury Stone Linen Shirt & Trouser",

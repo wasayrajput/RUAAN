@@ -209,7 +209,7 @@ export default function AdminPortalPage() {
       });
     }
 
-    const deletedProductCodes = new Set(['SL01', 'SL03', 'SL11']);
+    const deletedProductCodes = new Set(['SL01', 'SL03', 'SL04', 'SL11']);
     activeInv = activeInv.filter(item => !deletedProductCodes.has(item.code.toUpperCase()));
 
     setInventory(activeInv);

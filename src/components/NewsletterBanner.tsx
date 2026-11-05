@@ -28,7 +28,7 @@ export const NewsletterBanner: React.FC = () => {
           {/* Left Model Photo (Portrait with flowers & hat) */}
           <div className="md:col-span-5 relative min-h-[260px] sm:min-h-[320px] bg-stone-100 overflow-hidden">
             <Image
-              src="/products/SL04.jpg"
+              src="/products/SL09.jpg"
               alt="Be the First to Know"
               fill
               sizes="(max-width: 768px) 100vw, 40vw"

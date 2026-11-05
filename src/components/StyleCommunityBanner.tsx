@@ -35,7 +35,7 @@ export const StyleCommunityBanner: React.FC = () => {
             <div className="md:col-span-4 flex justify-center md:justify-start">
               <div className="relative w-28 h-28 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden border-2 sm:border-4 border-white/20 shadow-xl bg-stone-800">
                 <Image
-                  src="/products/SL04.jpg"
+                  src="/products/SL09.jpg"
                   alt="Join Our Style Community"
                   fill
                   sizes="(max-width: 640px) 120px, 200px"
