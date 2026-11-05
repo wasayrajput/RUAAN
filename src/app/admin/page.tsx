@@ -169,36 +169,8 @@ export default function AdminPortalPage() {
       localStorage.setItem('ruaan_admin_inventory', JSON.stringify(initialInv));
     }
 
-    // 3. Baseline Orders (Abdul Wasay, Rabia Rehman, Luqman Akram)
+    // 3. Baseline Orders (Rabia Rehman, Luqman Akram)
     const defaultInitialOrders: Order[] = [
-      {
-        id: 'ord-3841',
-        orderNumber: '#RN-3841',
-        date: '2026-11-04',
-        customerName: 'Abdul Wasay',
-        phone1: '0308-4358336',
-        address: 'House No. 6, Gali No. 6, Mughal Bazar, Daok Rahmanpura',
-        city: 'Rawalpindi',
-        source: 'Website',
-        paymentType: 'COD',
-        items: [
-          {
-            id: 'it-sl03',
-            code: 'SL03',
-            name: 'Smoky Charcoal 3-Piece Stitched Doria Linen',
-            fabric: 'Doria Linen',
-            stitch: 'Stitched Ready-to-Wear',
-            size: 'Large',
-            price: 2700,
-            qty: 1
-          }
-        ],
-        subtotal: 2700,
-        deliveryFee: 350,
-        total: 3050,
-        status: 'pending',
-        notes: 'Same as shown in picture'
-      },
       {
         id: 'ord-7352',
         orderNumber: '#RN-7352',
@@ -225,7 +197,7 @@ export default function AdminPortalPage() {
         subtotal: 2350,
         deliveryFee: 200,
         total: 2550,
-        status: 'dispatched',
+        status: 'delivered',
         notes: ''
       },
       {
@@ -259,22 +231,39 @@ export default function AdminPortalPage() {
       }
     ];
 
-    let baseOrders = defaultInitialOrders;
+    // Read persistently deleted orders so deleted test orders never reappear
+    let deletedSet = new Set<string>();
+    try {
+      const rawDel = localStorage.getItem('ruaan_admin_deleted_orders');
+      if (rawDel) {
+        const parsedDel = JSON.parse(rawDel);
+        if (Array.isArray(parsedDel)) deletedSet = new Set(parsedDel);
+      }
+    } catch (e) {}
+
+    let baseOrders = defaultInitialOrders.filter(d => !deletedSet.has(d.id) && !deletedSet.has(d.orderNumber));
     const storedOrders = localStorage.getItem('ruaan_admin_orders');
     if (storedOrders) {
       try {
         const parsed = JSON.parse(storedOrders);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // If Luqman Akram was previously saved as 'dispatched' due to old poller, ensure it stays delivered
-          const cleaned = parsed.map((o: any) => {
-            if (o.orderNumber === '#RN-1048' && o.status === 'dispatched') {
-              return { ...o, status: 'delivered' as OrderStatus };
-            }
-            return o;
-          });
+          // Filter out any orders that admin has explicitly deleted
+          const cleaned = parsed
+            .filter((o: any) => !deletedSet.has(o.id) && !deletedSet.has(o.orderNumber))
+            .map((o: any) => {
+              if (o.orderNumber === '#RN-1048' && o.status === 'dispatched') {
+                return { ...o, status: 'delivered' as OrderStatus };
+              }
+              return o;
+            });
           const existingIds = new Set(cleaned.map((o: any) => o.id));
           const existingNums = new Set(cleaned.map((o: any) => o.orderNumber));
-          const missingDefaults = defaultInitialOrders.filter(d => !existingIds.has(d.id) && !existingNums.has(d.orderNumber));
+          const missingDefaults = defaultInitialOrders.filter(d => 
+            !deletedSet.has(d.id) && 
+            !deletedSet.has(d.orderNumber) && 
+            !existingIds.has(d.id) && 
+            !existingNums.has(d.orderNumber)
+          );
           baseOrders = [...missingDefaults, ...cleaned];
         }
       } catch (e) {
@@ -292,7 +281,7 @@ export default function AdminPortalPage() {
           const baseNums = new Set(baseOrders.map(o => o.orderNumber));
           for (const p of placed) {
             const num = p.orderNumber || (p.orderId ? `#RN-${p.orderId.slice(-4)}` : '');
-            if (p.orderId && !baseIds.has(p.orderId) && !baseNums.has(num)) {
+            if (p.orderId && !deletedSet.has(p.orderId) && !deletedSet.has(num) && !baseIds.has(p.orderId) && !baseNums.has(num)) {
               baseOrders.unshift({
                 id: p.orderId,
                 orderNumber: num || `#RN-${Math.floor(1000 + Math.random() * 9000)}`,
@@ -323,7 +312,7 @@ export default function AdminPortalPage() {
     fetchOrdersFromApi();
   }, []);
 
-  // Fetch from API with smart merge (NEVER overwrite admin's manual status changes)
+  // Fetch from API with smart merge (NEVER overwrite admin's manual status changes or deleted orders)
   const fetchOrdersFromApi = async () => {
     try {
       setIsSyncing(true);
@@ -334,13 +323,25 @@ export default function AdminPortalPage() {
       if (res.ok) {
         const data = await res.json();
         if (data.orders && Array.isArray(data.orders)) {
+          let deletedSet = new Set<string>();
+          try {
+            const rawDel = localStorage.getItem('ruaan_admin_deleted_orders');
+            if (rawDel) {
+              const parsedDel = JSON.parse(rawDel);
+              if (Array.isArray(parsedDel)) deletedSet = new Set(parsedDel);
+            }
+          } catch (e) {}
+
           setOrders((currentLocalOrders) => {
             const existingMap = new Map(currentLocalOrders.map(o => [o.id, o]));
             const existingByNum = new Map(currentLocalOrders.map(o => [o.orderNumber, o]));
             
-            // Check if server has any genuinely new orders
+            // Check if server has any genuinely new orders (skip any deleted orders)
             const newOrdersToAdd: Order[] = [];
             for (const serverOrder of data.orders) {
+              if (deletedSet.has(serverOrder.id) || deletedSet.has(serverOrder.orderNumber)) {
+                continue;
+              }
               const exists = existingMap.get(serverOrder.id) || existingByNum.get(serverOrder.orderNumber);
               if (!exists) {
                 newOrdersToAdd.push(serverOrder);
@@ -531,9 +532,41 @@ export default function AdminPortalPage() {
 
   const handleDeleteOrder = (orderId: string) => {
     if (!confirm('Are you sure you want to delete this order?')) return;
-    const order = orders.find(o => o.id === orderId);
+    const order = orders.find(o => o.id === orderId || o.orderNumber === orderId);
+
+    // 1. Record ID & orderNumber into persistent deleted set so it can NEVER resurrect
+    try {
+      const rawDel = localStorage.getItem('ruaan_admin_deleted_orders');
+      let delArr = rawDel ? JSON.parse(rawDel) : [];
+      if (!Array.isArray(delArr)) delArr = [];
+      const delSet = new Set(delArr);
+      if (orderId) delSet.add(orderId);
+      if (order?.id) delSet.add(order.id);
+      if (order?.orderNumber) delSet.add(order.orderNumber);
+      localStorage.setItem('ruaan_admin_deleted_orders', JSON.stringify(Array.from(delSet)));
+    } catch (e) {}
+
+    // 2. Remove from ruaan_placed_orders in browser localStorage
+    try {
+      const placedRaw = localStorage.getItem('ruaan_placed_orders');
+      if (placedRaw) {
+        const placed = JSON.parse(placedRaw);
+        if (Array.isArray(placed)) {
+          const filteredPlaced = placed.filter((p: any) => {
+            const num = p.orderNumber || (p.orderId ? `#RN-${p.orderId.slice(-4)}` : '');
+            return (
+              p.orderId !== orderId &&
+              num !== orderId &&
+              (!order || (p.orderId !== order.id && num !== order.orderNumber))
+            );
+          });
+          localStorage.setItem('ruaan_placed_orders', JSON.stringify(filteredPlaced));
+        }
+      }
+    } catch (e) {}
+
+    // 3. Prompt user whether to restock
     if (order && order.status !== 'returned' && order.status !== 'cancelled') {
-      // Prompt user whether to restock
       if (confirm('Do you want to RESTORE the stock of these items (+1 back to inventory)?')) {
         let invCopy = [...inventory];
         order.items.forEach(item => {
@@ -547,12 +580,20 @@ export default function AdminPortalPage() {
         saveInventory(invCopy);
       }
     }
-    const updated = orders.filter(o => o.id !== orderId);
+
+    // 4. Update orders state and save
+    const updated = orders.filter(
+      o => o.id !== orderId && o.orderNumber !== orderId && (!order || o.id !== order.id)
+    );
     saveOrders(updated);
     showToast('Order deleted successfully');
 
+    // 5. Delete on server API
     try {
-      fetch(`/api/orders?id=${orderId}`, { method: 'DELETE' }).catch(() => {});
+      fetch(`/api/orders?id=${encodeURIComponent(orderId)}`, { method: 'DELETE' }).catch(() => {});
+      if (order?.orderNumber && order.orderNumber !== orderId) {
+        fetch(`/api/orders?id=${encodeURIComponent(order.orderNumber)}`, { method: 'DELETE' }).catch(() => {});
+      }
     } catch (e) {}
   };
 
@@ -1291,16 +1332,32 @@ export default function AdminPortalPage() {
                           </select>
                         </td>
                         <td className="py-3 px-4 text-right">
-                          <button
-                            onClick={() => {
-                              setSelectedOrderForSlip(o);
-                              setIsSlipModalOpen(true);
-                            }}
-                            className="p-1.5 bg-[#252c3c] hover:bg-[#343e54] text-[#c5a059] rounded-md transition"
-                            title="Generate Slip"
-                          >
-                            <Printer className="w-3.5 h-3.5" />
-                          </button>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              onClick={() => {
+                                setSelectedOrderForSlip(o);
+                                setIsSlipModalOpen(true);
+                              }}
+                              className="p-1.5 bg-[#252c3c] hover:bg-[#343e54] text-[#c5a059] rounded-md transition"
+                              title="Generate Slip"
+                            >
+                              <Printer className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleCopyWhatsAppSlip(o)}
+                              className="p-1.5 bg-[#1b3323] hover:bg-[#254730] text-emerald-400 rounded-md transition"
+                              title="Copy WhatsApp Text"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteOrder(o.id)}
+                              className="p-1.5 bg-[#311c21] hover:bg-[#45272e] text-rose-400 rounded-md transition"
+                              title="Delete Order"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

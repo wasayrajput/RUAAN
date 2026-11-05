@@ -1,33 +1,5 @@
 [
   {
-    "id": "ord-3841",
-    "orderNumber": "#RN-3841",
-    "date": "2026-11-04",
-    "customerName": "Abdul Wasay",
-    "phone1": "0308-4358336",
-    "address": "House No. 6, Gali No. 6, Mughal Bazar, Daok Rahmanpura",
-    "city": "Rawalpindi",
-    "source": "Website",
-    "paymentType": "COD",
-    "items": [
-      {
-        "id": "it-sl03",
-        "code": "SL03",
-        "name": "Smoky Charcoal 3-Piece Stitched Doria Linen",
-        "fabric": "Doria Linen",
-        "stitch": "Stitched Ready-to-Wear",
-        "size": "Large",
-        "price": 2700,
-        "qty": 1
-      }
-    ],
-    "subtotal": 2700,
-    "deliveryFee": 350,
-    "total": 3050,
-    "status": "pending",
-    "notes": "Same as shown in picture"
-  },
-  {
     "id": "ord-7352",
     "orderNumber": "#RN-7352",
     "date": "2026-10-28",
@@ -53,7 +25,7 @@
     "subtotal": 2350,
     "deliveryFee": 200,
     "total": 2550,
-    "status": "dispatched",
+    "status": "delivered",
     "notes": ""
   },
   {
