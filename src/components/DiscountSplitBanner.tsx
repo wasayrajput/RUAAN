@@ -54,12 +54,13 @@ export const DiscountSplitBanner: React.FC<DiscountSplitBannerProps> = ({ onShop
           </div>
 
           {/* Right Aesthetic Clothes Rack / Wardrobe Photo */}
-          <div className="md:col-span-7 relative min-h-[260px] sm:min-h-[340px] bg-stone-100 overflow-hidden">
+          <div className="md:col-span-7 relative min-h-[320px] sm:min-h-[380px] lg:min-h-[420px] bg-[#CACFD4] overflow-hidden">
             <Image
-              src="/products/DL01.jpg"
+              src="/products/banner_sale_50.jpg"
               alt="Up To 50% OFF Sale Collection"
               fill
               sizes="(max-width: 768px) 100vw, 60vw"
+              priority
               className="object-cover object-center hover:scale-105 transition-transform duration-700"
             />
           </div>
