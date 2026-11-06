@@ -880,6 +880,13 @@ export default function AdminPortalPage() {
     };
   }, [adTransactions]);
 
+  const formatAdAmount = (val: number) => {
+    return val.toLocaleString(undefined, {
+      minimumFractionDigits: Number.isInteger(val) ? 0 : 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   // --- FILTERED AD TRANSACTIONS ---
   const filteredAdTransactions = useMemo(() => {
     return adTransactions.filter((t) => {
@@ -1182,7 +1189,7 @@ export default function AdminPortalPage() {
                 ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
                 : 'bg-rose-500/20 text-rose-300 border-rose-500/30'
             }`}>
-              Rs. {adStats.remainingBalance.toLocaleString()}
+              Rs. {formatAdAmount(adStats.remainingBalance)}
             </span>
           </button>
 
@@ -1476,18 +1483,18 @@ export default function AdminPortalPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div className="bg-[#101217] p-3.5 rounded-lg border border-[#232733]">
                   <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">1. Sent By Owner</span>
-                  <div className="text-xl font-bold text-emerald-400 mt-1">Rs. {adStats.totalReceived.toLocaleString()}</div>
+                  <div className="text-xl font-bold text-emerald-400 mt-1">Rs. {formatAdAmount(adStats.totalReceived)}</div>
                   <span className="text-[10px] text-gray-500">{adStats.receivedCount} Deposits</span>
                 </div>
                 <div className="bg-[#101217] p-3.5 rounded-lg border border-[#232733]">
                   <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">2. Ad Spend Deducted</span>
-                  <div className="text-xl font-bold text-rose-400 mt-1">Rs. {adStats.totalDeducted.toLocaleString()}</div>
+                  <div className="text-xl font-bold text-rose-400 mt-1">Rs. {formatAdAmount(adStats.totalDeducted)}</div>
                   <span className="text-[10px] text-gray-500">{adStats.deductionsCount} Deductions</span>
                 </div>
                 <div className="bg-[#101217] p-3.5 rounded-lg border border-[#232733]">
                   <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">3. Remaining Balance</span>
                   <div className={`text-xl font-bold mt-1 ${adStats.remainingBalance >= 0 ? 'text-[#c5a059]' : 'text-rose-400'}`}>
-                    Rs. {adStats.remainingBalance.toLocaleString()}
+                    Rs. {formatAdAmount(adStats.remainingBalance)}
                   </div>
                   <span className="text-[10px] text-gray-500">Available to spend</span>
                 </div>
@@ -2023,7 +2030,7 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold text-emerald-400 mb-1 font-mono">
-                  Rs. {adStats.totalReceived.toLocaleString()}
+                  Rs. {formatAdAmount(adStats.totalReceived)}
                 </div>
                 <div className="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-[#232836]">
                   <span>{adStats.receivedCount} Total Deposits</span>
@@ -2051,7 +2058,7 @@ export default function AdminPortalPage() {
                   </div>
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold text-rose-400 mb-1 font-mono">
-                  Rs. {adStats.totalDeducted.toLocaleString()}
+                  Rs. {formatAdAmount(adStats.totalDeducted)}
                 </div>
                 <div className="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-[#232836]">
                   <span>{adStats.deductionsCount} Campaign Deductions</span>
@@ -2103,7 +2110,7 @@ export default function AdminPortalPage() {
                     ? 'text-amber-400' 
                     : 'text-rose-400'
                 }`}>
-                  Rs. {adStats.remainingBalance.toLocaleString()}
+                  Rs. {formatAdAmount(adStats.remainingBalance)}
                 </div>
                 <div className="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-[#232836]">
                   <span className={`font-semibold ${
@@ -2243,11 +2250,11 @@ export default function AdminPortalPage() {
                           <td className="py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap">
                             {tx.type === 'RECEIVED' ? (
                               <span className="text-emerald-400 text-sm">
-                                + Rs. {tx.amount.toLocaleString()}
+                                + Rs. {formatAdAmount(tx.amount)}
                               </span>
                             ) : (
                               <span className="text-rose-400 text-sm">
-                                - Rs. {tx.amount.toLocaleString()}
+                                - Rs. {formatAdAmount(tx.amount)}
                               </span>
                             )}
                           </td>
@@ -3012,11 +3019,12 @@ function AddDepositModal({
             </label>
             <input
               type="number"
+              step="any"
+              min="0.01"
               required
-              min="1"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="e.g. 25000"
+              placeholder="e.g. 25000 or 595.86"
               autoFocus
               className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-emerald-400 focus:outline-none focus:border-emerald-500"
             />
@@ -3152,11 +3160,12 @@ function AddDeductionModal({
             </label>
             <input
               type="number"
+              step="any"
+              min="0.01"
               required
-              min="1"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="e.g. 3500"
+              placeholder="e.g. 595.86"
               autoFocus
               className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-rose-400 focus:outline-none focus:border-rose-500"
             />
