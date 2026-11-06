@@ -386,6 +386,7 @@ export default function AdminPortalPage() {
       if (storedAdTx) {
         const parsed = JSON.parse(storedAdTx);
         if (Array.isArray(parsed)) {
+          parsed.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime() || new Date(b.addedAt || 0).getTime() - new Date(a.addedAt || 0).getTime());
           setAdTransactions(parsed);
         }
       }
@@ -519,7 +520,12 @@ export default function AdminPortalPage() {
       addedAt: new Date().toISOString(),
     };
 
-    const updated = [newTx, ...adTransactions];
+    const updated = [newTx, ...adTransactions].sort((a, b) => {
+      const timeA = new Date(a.date).getTime();
+      const timeB = new Date(b.date).getTime();
+      if (timeB !== timeA) return timeB - timeA;
+      return new Date(b.addedAt || 0).getTime() - new Date(a.addedAt || 0).getTime();
+    });
     await saveAdTransactions(updated);
     setIsAddDepositOpen(false);
     showToast(`✅ Received Rs. ${data.amount.toLocaleString()} from ${data.sender} recorded!`);
@@ -537,7 +543,12 @@ export default function AdminPortalPage() {
       addedAt: new Date().toISOString(),
     };
 
-    const updated = [newTx, ...adTransactions];
+    const updated = [newTx, ...adTransactions].sort((a, b) => {
+      const timeA = new Date(a.date).getTime();
+      const timeB = new Date(b.date).getTime();
+      if (timeB !== timeA) return timeB - timeA;
+      return new Date(b.addedAt || 0).getTime() - new Date(a.addedAt || 0).getTime();
+    });
     await saveAdTransactions(updated);
     setIsAddDeductionOpen(false);
     showToast(`✅ Ad deduction of Rs. ${data.amount.toLocaleString()} recorded!`);
@@ -887,18 +898,28 @@ export default function AdminPortalPage() {
     });
   };
 
-  // --- FILTERED AD TRANSACTIONS ---
+  // --- FILTERED & SORTED AD TRANSACTIONS (Strict Date Sort: Newest First) ---
   const filteredAdTransactions = useMemo(() => {
-    return adTransactions.filter((t) => {
-      const matchesFilter = adFilter === 'all' ? true : t.type === adFilter;
-      const matchesSearch =
-        adSearchQuery === '' ||
-        (t.sourceOrPlatform && t.sourceOrPlatform.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
-        (t.campaignName && t.campaignName.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
-        (t.notes && t.notes.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
-        t.amount.toString().includes(adSearchQuery);
-      return matchesFilter && matchesSearch;
-    });
+    return [...adTransactions]
+      .filter((t) => {
+        const matchesFilter = adFilter === 'all' ? true : t.type === adFilter;
+        const matchesSearch =
+          adSearchQuery === '' ||
+          (t.sourceOrPlatform && t.sourceOrPlatform.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
+          (t.campaignName && t.campaignName.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
+          (t.notes && t.notes.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
+          t.amount.toString().includes(adSearchQuery);
+        return matchesFilter && matchesSearch;
+      })
+      .sort((a, b) => {
+        // Sort chronologically descending (newest date at the top)
+        const timeA = new Date(a.date).getTime();
+        const timeB = new Date(b.date).getTime();
+        if (timeB !== timeA) {
+          return timeB - timeA;
+        }
+        return new Date(b.addedAt || 0).getTime() - new Date(a.addedAt || 0).getTime();
+      });
   }, [adTransactions, adFilter, adSearchQuery]);
 
   // --- SLIP IMAGE GENERATION (HTML2CANVAS) ---
@@ -2209,7 +2230,7 @@ export default function AdminPortalPage() {
                   <table className="w-full text-left border-collapse text-xs">
                     <thead>
                       <tr className="border-b border-[#262b38] text-gray-400 uppercase text-[10px] tracking-wider bg-[#0f1115]">
-                        <th className="py-3 px-4">Date</th>
+                        <th className="py-3 px-4">Date <span className="text-[#c5a059] font-normal lowercase">(latest first)</span></th>
                         <th className="py-3 px-4">Type</th>
                         <th className="py-3 px-4">Source / Platform</th>
                         <th className="py-3 px-4">Campaign / Note</th>
