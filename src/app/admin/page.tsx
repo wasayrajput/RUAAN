@@ -23,6 +23,7 @@ import {
   LogOut, 
   ChevronRight, 
   ArrowUpRight, 
+  ArrowRight,
   Filter, 
   Phone, 
   MapPin, 
@@ -36,13 +37,31 @@ import {
   Settings,
   X,
   Bell,
-  RefreshCw
+  RefreshCw,
+  Megaphone,
+  Wallet,
+  CreditCard,
+  ArrowDownRight,
+  Receipt
 } from 'lucide-react';
 import productsData from '@/data/products.json';
 import { BRAND_CONFIG } from '@/config/brand';
 import { calculateDeliveryRate, DELIVERY_RATES } from '@/utils/delivery';
 
 // --- TYPES ---
+export type AdTransactionType = 'RECEIVED' | 'DEDUCTION';
+
+export interface AdTransaction {
+  id: string;
+  date: string;
+  type: AdTransactionType;
+  amount: number;
+  sourceOrPlatform: string;
+  campaignName?: string;
+  notes?: string;
+  addedAt: string;
+}
+
 export type OrderStatus = 'new' | 'pending' | 'dispatched' | 'delivered' | 'returned' | 'cancelled';
 export type PaymentType = 'COD' | 'PAID' | 'PARTIAL' | 'DUAL';
 export type OrderSource = 'WhatsApp' | 'Instagram' | 'Website' | 'Phone Call';
@@ -98,12 +117,19 @@ export default function AdminPortalPage() {
   const [savedPin, setSavedPin] = useState<string>('2026');
 
   // --- NAVIGATION STATE ---
-  const [activeTab, setActiveTab] = useState<'new-orders' | 'overview' | 'orders' | 'inventory' | 'settings'>('new-orders');
+  const [activeTab, setActiveTab] = useState<'new-orders' | 'overview' | 'orders' | 'inventory' | 'ads' | 'settings'>('new-orders');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   // --- CORE DATA STATES ---
   const [orders, setOrders] = useState<Order[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
+  const [adTransactions, setAdTransactions] = useState<AdTransaction[]>([]);
+
+  // --- AD TRACKER UI STATES ---
+  const [adFilter, setAdFilter] = useState<'all' | 'RECEIVED' | 'DEDUCTION'>('all');
+  const [adSearchQuery, setAdSearchQuery] = useState<string>('');
+  const [isAddDepositOpen, setIsAddDepositOpen] = useState<boolean>(false);
+  const [isAddDeductionOpen, setIsAddDeductionOpen] = useState<boolean>(false);
 
   const newOrdersCount = orders.filter(o => o.status === 'new').length;
 
@@ -354,8 +380,20 @@ export default function AdminPortalPage() {
     setOrders(baseOrders);
     localStorage.setItem('ruaan_admin_orders', JSON.stringify(baseOrders));
 
-    // Fetch live orders once on mount (NO polling interval to prevent reverting admin changes)
+    // 4. Load Ad Budget Transactions from localStorage
+    try {
+      const storedAdTx = localStorage.getItem('ruaan_admin_ad_transactions');
+      if (storedAdTx) {
+        const parsed = JSON.parse(storedAdTx);
+        if (Array.isArray(parsed)) {
+          setAdTransactions(parsed);
+        }
+      }
+    } catch (e) {}
+
+    // Fetch live orders & ad budget once on mount
     fetchOrdersFromApi();
+    fetchAdBudgetFromApi();
   }, []);
 
   // Fetch from API with smart merge (NEVER overwrite admin's manual status changes or deleted orders)
@@ -424,6 +462,95 @@ export default function AdminPortalPage() {
     } catch (e) {
       console.error('Failed to sync orders to server:', e);
     }
+  };
+
+  // --- AD BUDGET API & STORAGE SYNC ---
+  const fetchAdBudgetFromApi = async () => {
+    try {
+      const res = await fetch(`/api/ad-budget?t=${Date.now()}`, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.transactions && Array.isArray(data.transactions)) {
+          setAdTransactions((localTx) => {
+            const localMap = new Map(localTx.map(t => [t.id, t]));
+            let hasNew = false;
+            const merged = [...localTx];
+            data.transactions.forEach((serverTx: AdTransaction) => {
+              if (!localMap.has(serverTx.id)) {
+                merged.push(serverTx);
+                hasNew = true;
+              }
+            });
+            if (hasNew) {
+              localStorage.setItem('ruaan_admin_ad_transactions', JSON.stringify(merged));
+              return merged;
+            }
+            return localTx;
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Failed to fetch ad budget from API:', e);
+    }
+  };
+
+  const saveAdTransactions = async (updated: AdTransaction[]) => {
+    setAdTransactions(updated);
+    localStorage.setItem('ruaan_admin_ad_transactions', JSON.stringify(updated));
+    try {
+      await fetch('/api/ad-budget', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transactions: updated }),
+      });
+    } catch (e) {
+      console.error('Failed to sync ad transactions to server:', e);
+    }
+  };
+
+  const handleAddDeposit = async (data: { amount: number; date: string; sender: string; method: string; notes: string }) => {
+    const newTx: AdTransaction = {
+      id: `ad-dep-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      date: data.date,
+      type: 'RECEIVED',
+      amount: data.amount,
+      sourceOrPlatform: `${data.sender} (${data.method})`,
+      notes: data.notes,
+      addedAt: new Date().toISOString(),
+    };
+
+    const updated = [newTx, ...adTransactions];
+    await saveAdTransactions(updated);
+    setIsAddDepositOpen(false);
+    showToast(`✅ Received Rs. ${data.amount.toLocaleString()} from ${data.sender} recorded!`);
+  };
+
+  const handleAddDeduction = async (data: { amount: number; date: string; platform: string; campaign: string; notes: string }) => {
+    const newTx: AdTransaction = {
+      id: `ad-ded-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      date: data.date,
+      type: 'DEDUCTION',
+      amount: data.amount,
+      sourceOrPlatform: data.platform,
+      campaignName: data.campaign,
+      notes: data.notes,
+      addedAt: new Date().toISOString(),
+    };
+
+    const updated = [newTx, ...adTransactions];
+    await saveAdTransactions(updated);
+    setIsAddDeductionOpen(false);
+    showToast(`✅ Ad deduction of Rs. ${data.amount.toLocaleString()} recorded!`);
+  };
+
+  const handleDeleteAdTransaction = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this ad transaction entry?')) return;
+    const updated = adTransactions.filter(t => t.id !== id);
+    await saveAdTransactions(updated);
+    try {
+      fetch(`/api/ad-budget?id=${encodeURIComponent(id)}`, { method: 'DELETE' }).catch(() => {});
+    } catch (e) {}
+    showToast('Transaction deleted successfully');
   };
 
   const handleConfirmNewOrder = async (orderId: string) => {
@@ -726,6 +853,47 @@ export default function AdminPortalPage() {
     });
   }, [orders, searchQuery, statusFilter]);
 
+  // --- AD BUDGET & SPEND STATISTICS ---
+  const adStats = useMemo(() => {
+    let totalReceived = 0;
+    let totalDeducted = 0;
+
+    adTransactions.forEach((t) => {
+      if (t.type === 'RECEIVED') {
+        totalReceived += t.amount;
+      } else {
+        totalDeducted += t.amount;
+      }
+    });
+
+    const remainingBalance = totalReceived - totalDeducted;
+    const burnPercent = totalReceived > 0 ? ((totalDeducted / totalReceived) * 100).toFixed(1) : '0';
+
+    return {
+      totalReceived,
+      totalDeducted,
+      remainingBalance,
+      burnPercent,
+      receivedCount: adTransactions.filter((t) => t.type === 'RECEIVED').length,
+      deductionsCount: adTransactions.filter((t) => t.type === 'DEDUCTION').length,
+      totalCount: adTransactions.length,
+    };
+  }, [adTransactions]);
+
+  // --- FILTERED AD TRANSACTIONS ---
+  const filteredAdTransactions = useMemo(() => {
+    return adTransactions.filter((t) => {
+      const matchesFilter = adFilter === 'all' ? true : t.type === adFilter;
+      const matchesSearch =
+        adSearchQuery === '' ||
+        (t.sourceOrPlatform && t.sourceOrPlatform.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
+        (t.campaignName && t.campaignName.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
+        (t.notes && t.notes.toLowerCase().includes(adSearchQuery.toLowerCase())) ||
+        t.amount.toString().includes(adSearchQuery);
+      return matchesFilter && matchesSearch;
+    });
+  }, [adTransactions, adFilter, adSearchQuery]);
+
   // --- SLIP IMAGE GENERATION (HTML2CANVAS) ---
   const handleDownloadSlipImage = async () => {
     if (!slipPrintRef.current) return;
@@ -1000,6 +1168,25 @@ export default function AdminPortalPage() {
           </button>
 
           <button
+            onClick={() => setActiveTab('ads')}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition shrink-0 ${
+              activeTab === 'ads'
+                ? 'bg-[#c5a059]/15 text-[#c5a059] border border-[#c5a059]/30'
+                : 'text-gray-400 hover:text-white hover:bg-[#1a1e28]'
+            }`}
+          >
+            <Megaphone className="w-4 h-4" />
+            <span>Ad Spend & Budget</span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border font-mono ${
+              adStats.remainingBalance >= 0
+                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                : 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+            }`}>
+              Rs. {adStats.remainingBalance.toLocaleString()}
+            </span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('settings')}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition shrink-0 ${
               activeTab === 'settings'
@@ -1261,6 +1448,50 @@ export default function AdminPortalPage() {
                 </p>
               </div>
 
+            </div>
+
+            {/* Meta Ads Working Capital Overview */}
+            <div className="bg-[#151821] border border-[#262b38] rounded-xl p-5 shadow-md">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Megaphone className="w-4 h-4 text-[#c5a059]" />
+                    <h3 className="font-serif font-bold text-base text-white uppercase tracking-wider">
+                      Meta Ads Budget & Working Capital
+                    </h3>
+                  </div>
+                  <p className="text-xs text-gray-400">
+                    Owner deposits vs. live ad spend deductions
+                  </p>
+                </div>
+                <button
+                  onClick={() => setActiveTab('ads')}
+                  className="px-3.5 py-1.5 bg-[#c5a059]/15 hover:bg-[#c5a059]/25 text-[#c5a059] border border-[#c5a059]/30 rounded-lg text-xs font-bold uppercase tracking-wider transition flex items-center gap-1.5"
+                >
+                  <span>Open Ad Tracker</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="bg-[#101217] p-3.5 rounded-lg border border-[#232733]">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">1. Sent By Owner</span>
+                  <div className="text-xl font-bold text-emerald-400 mt-1">Rs. {adStats.totalReceived.toLocaleString()}</div>
+                  <span className="text-[10px] text-gray-500">{adStats.receivedCount} Deposits</span>
+                </div>
+                <div className="bg-[#101217] p-3.5 rounded-lg border border-[#232733]">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">2. Ad Spend Deducted</span>
+                  <div className="text-xl font-bold text-rose-400 mt-1">Rs. {adStats.totalDeducted.toLocaleString()}</div>
+                  <span className="text-[10px] text-gray-500">{adStats.deductionsCount} Deductions</span>
+                </div>
+                <div className="bg-[#101217] p-3.5 rounded-lg border border-[#232733]">
+                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">3. Remaining Balance</span>
+                  <div className={`text-xl font-bold mt-1 ${adStats.remainingBalance >= 0 ? 'text-[#c5a059]' : 'text-rose-400'}`}>
+                    Rs. {adStats.remainingBalance.toLocaleString()}
+                  </div>
+                  <span className="text-[10px] text-gray-500">Available to spend</span>
+                </div>
+              </div>
             </div>
 
             {/* Pipeline Stage Funnel */}
@@ -1731,6 +1962,317 @@ export default function AdminPortalPage() {
         )}
 
         {/* =========================================================================
+            TAB 5: META ADS BUDGET & SPEND TRACKER
+           ========================================================================= */}
+        {activeTab === 'ads' && (
+          <div className="space-y-6">
+            
+            {/* Header & Quick Action Buttons */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#151821] border border-[#262b38] rounded-xl p-5 shadow-md">
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 bg-[#c5a059]/15 text-[#c5a059] rounded-lg border border-[#c5a059]/30">
+                    <Megaphone className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-serif font-bold text-white uppercase tracking-wider">
+                      Meta Ads Budget & Spend Tracker
+                    </h2>
+                    <p className="text-xs text-gray-400">
+                      Owner deposits, daily Meta/FB ad spend deductions, and real-time remaining balance
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                <button
+                  onClick={() => setIsAddDepositOpen(true)}
+                  className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-md shadow-emerald-900/30 cursor-pointer"
+                >
+                  <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />
+                  <span>+ Receive from Owner</span>
+                </button>
+
+                <button
+                  onClick={() => setIsAddDeductionOpen(true)}
+                  className="flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition shadow-md shadow-rose-900/30 cursor-pointer"
+                >
+                  <ArrowDownRight className="w-4 h-4 stroke-[2.5]" />
+                  <span>- Log Ad Deduction</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Top 3 Core Metrics (The 3 things requested) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              {/* 1. Total Sent by Owner */}
+              <div className="bg-[#171a22] border border-[#2a2f3d] rounded-xl p-5 shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-500"></div>
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block">
+                      1. Owner Budget Sent
+                    </span>
+                    <span className="text-[11px] text-gray-500">Total Capital Received</span>
+                  </div>
+                  <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+                    <Wallet className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="text-2xl sm:text-3xl font-bold text-emerald-400 mb-1 font-mono">
+                  Rs. {adStats.totalReceived.toLocaleString()}
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-[#232836]">
+                  <span>{adStats.receivedCount} Total Deposits</span>
+                  <button
+                    onClick={() => setIsAddDepositOpen(true)}
+                    className="text-emerald-400 hover:underline font-semibold cursor-pointer"
+                  >
+                    + Add New &rarr;
+                  </button>
+                </div>
+              </div>
+
+              {/* 2. Total Ad Spend Deducted */}
+              <div className="bg-[#171a22] border border-[#2a2f3d] rounded-xl p-5 shadow-lg relative overflow-hidden group">
+                <div className="absolute top-0 left-0 right-0 h-1 bg-rose-500"></div>
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block">
+                      2. Ad Spend Deductions
+                    </span>
+                    <span className="text-[11px] text-gray-500">Total Deducted on Ads</span>
+                  </div>
+                  <div className="p-2.5 bg-rose-500/10 text-rose-400 rounded-xl border border-rose-500/20">
+                    <CreditCard className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className="text-2xl sm:text-3xl font-bold text-rose-400 mb-1 font-mono">
+                  Rs. {adStats.totalDeducted.toLocaleString()}
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-[#232836]">
+                  <span>{adStats.deductionsCount} Campaign Deductions</span>
+                  <button
+                    onClick={() => setIsAddDeductionOpen(true)}
+                    className="text-rose-400 hover:underline font-semibold cursor-pointer"
+                  >
+                    - Deduct &rarr;
+                  </button>
+                </div>
+              </div>
+
+              {/* 3. Remaining Ad Balance */}
+              <div className={`bg-[#171a22] border rounded-xl p-5 shadow-lg relative overflow-hidden ${
+                adStats.remainingBalance >= 5000 
+                  ? 'border-emerald-500/40' 
+                  : adStats.remainingBalance > 0 
+                  ? 'border-amber-500/40' 
+                  : 'border-rose-500/40'
+              }`}>
+                <div className={`absolute top-0 left-0 right-0 h-1 ${
+                  adStats.remainingBalance >= 5000 
+                    ? 'bg-gradient-to-r from-emerald-500 to-[#c5a059]' 
+                    : adStats.remainingBalance > 0 
+                    ? 'bg-amber-500' 
+                    : 'bg-rose-600'
+                }`}></div>
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400 block">
+                      3. Remaining Ad Balance
+                    </span>
+                    <span className="text-[11px] text-gray-500">Available to Run Ads</span>
+                  </div>
+                  <div className={`p-2.5 rounded-xl border ${
+                    adStats.remainingBalance >= 5000 
+                      ? 'bg-[#c5a059]/10 text-[#c5a059] border-[#c5a059]/30' 
+                      : adStats.remainingBalance > 0 
+                      ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' 
+                      : 'bg-rose-500/10 text-rose-400 border-rose-500/30'
+                  }`}>
+                    <Receipt className="w-5 h-5" />
+                  </div>
+                </div>
+                <div className={`text-2xl sm:text-3xl font-bold mb-1 font-mono ${
+                  adStats.remainingBalance >= 5000 
+                    ? 'text-[#c5a059]' 
+                    : adStats.remainingBalance > 0 
+                    ? 'text-amber-400' 
+                    : 'text-rose-400'
+                }`}>
+                  Rs. {adStats.remainingBalance.toLocaleString()}
+                </div>
+                <div className="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-[#232836]">
+                  <span className={`font-semibold ${
+                    adStats.remainingBalance >= 5000 ? 'text-emerald-400' : adStats.remainingBalance > 0 ? 'text-amber-400' : 'text-rose-400'
+                  }`}>
+                    {adStats.remainingBalance >= 5000 ? '● Active Working Balance' : adStats.remainingBalance > 0 ? '⚠️ Low Budget Alert' : '⛔ Balance Exhausted'}
+                  </span>
+                  <span className="text-[11px] text-gray-500">{adStats.burnPercent}% spent</span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Transactions Ledger Table */}
+            <div className="bg-[#151821] border border-[#262b38] rounded-xl p-6 shadow-md space-y-4">
+              
+              {/* Filter Tabs & Search Controls */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div className="flex items-center gap-1.5 bg-[#0f1115] p-1 rounded-xl border border-[#262b38]">
+                  <button
+                    onClick={() => setAdFilter('all')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+                      adFilter === 'all'
+                        ? 'bg-[#262b38] text-white shadow-xs'
+                        : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    All ({adStats.totalCount})
+                  </button>
+                  <button
+                    onClick={() => setAdFilter('RECEIVED')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                      adFilter === 'RECEIVED'
+                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-700/50'
+                        : 'text-gray-400 hover:text-emerald-300'
+                    }`}
+                  >
+                    <span>+ Owner Sent</span>
+                    <span className="text-[10px] px-1.5 py-0.2 bg-emerald-900/60 rounded-full font-mono">{adStats.receivedCount}</span>
+                  </button>
+                  <button
+                    onClick={() => setAdFilter('DEDUCTION')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                      adFilter === 'DEDUCTION'
+                        ? 'bg-rose-950 text-rose-300 border border-rose-700/50'
+                        : 'text-gray-400 hover:text-rose-300'
+                    }`}
+                  >
+                    <span>- Ad Deductions</span>
+                    <span className="text-[10px] px-1.5 py-0.2 bg-rose-900/60 rounded-full font-mono">{adStats.deductionsCount}</span>
+                  </button>
+                </div>
+
+                {/* Search Bar */}
+                <div className="relative w-full sm:w-64">
+                  <Search className="w-3.5 h-3.5 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={adSearchQuery}
+                    onChange={(e) => setAdSearchQuery(e.target.value)}
+                    placeholder="Search campaign, notes..."
+                    className="w-full pl-8 pr-3 py-1.5 bg-[#0f1115] border border-[#262b38] rounded-lg text-xs text-white focus:outline-none focus:border-[#c5a059]"
+                  />
+                  {adSearchQuery && (
+                    <button
+                      onClick={() => setAdSearchQuery('')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Table */}
+              <div className="overflow-x-auto">
+                {filteredAdTransactions.length === 0 ? (
+                  <div className="text-center py-12 bg-[#101217] rounded-xl border border-[#232733] p-6 space-y-3">
+                    <div className="w-12 h-12 rounded-full bg-[#1b1f2b] flex items-center justify-center mx-auto text-[#c5a059]">
+                      <Megaphone className="w-6 h-6" />
+                    </div>
+                    <div className="text-white font-bold text-sm">No Ad Transactions Recorded Yet</div>
+                    <p className="text-xs text-gray-400 max-w-sm mx-auto">
+                      Click &quot;+ Receive from Owner&quot; when the brand owner transfers ad budget, or &quot;- Log Ad Deduction&quot; when Meta/FB charges your card.
+                    </p>
+                    <div className="flex justify-center gap-3 pt-2">
+                      <button
+                        onClick={() => setIsAddDepositOpen(true)}
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition cursor-pointer"
+                      >
+                        + Add First Deposit
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="border-b border-[#262b38] text-gray-400 uppercase text-[10px] tracking-wider bg-[#0f1115]">
+                        <th className="py-3 px-4">Date</th>
+                        <th className="py-3 px-4">Type</th>
+                        <th className="py-3 px-4">Source / Platform</th>
+                        <th className="py-3 px-4">Campaign / Note</th>
+                        <th className="py-3 px-4 text-right">Amount (PKR)</th>
+                        <th className="py-3 px-4 text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#1e222d]">
+                      {filteredAdTransactions.map((tx) => (
+                        <tr key={tx.id} className="hover:bg-[#1c202b] transition">
+                          <td className="py-3.5 px-4 font-mono text-gray-300 whitespace-nowrap">
+                            {tx.date}
+                          </td>
+                          <td className="py-3.5 px-4 whitespace-nowrap">
+                            {tx.type === 'RECEIVED' ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-700/50">
+                                <ArrowUpRight className="w-3 h-3 stroke-[2.5]" />
+                                <span>Owner Sent (+)</span>
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-950 text-rose-300 border border-rose-700/50">
+                                <ArrowDownRight className="w-3 h-3 stroke-[2.5]" />
+                                <span>Ad Deduction (-)</span>
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 font-bold text-white whitespace-nowrap">
+                            {tx.sourceOrPlatform}
+                          </td>
+                          <td className="py-3.5 px-4 text-gray-300">
+                            {tx.campaignName && (
+                              <span className="inline-block bg-[#222838] border border-[#333b50] px-2 py-0.5 rounded text-[11px] font-semibold text-white mr-1.5">
+                                {tx.campaignName}
+                              </span>
+                            )}
+                            <span className="text-gray-400">{tx.notes || '—'}</span>
+                          </td>
+                          <td className="py-3.5 px-4 text-right font-mono font-bold whitespace-nowrap">
+                            {tx.type === 'RECEIVED' ? (
+                              <span className="text-emerald-400 text-sm">
+                                + Rs. {tx.amount.toLocaleString()}
+                              </span>
+                            ) : (
+                              <span className="text-rose-400 text-sm">
+                                - Rs. {tx.amount.toLocaleString()}
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                            <button
+                              onClick={() => handleDeleteAdTransaction(tx.id)}
+                              className="p-1.5 bg-[#311c21] hover:bg-[#45272e] text-rose-400 rounded-md transition cursor-pointer"
+                              title="Delete Transaction"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+
+            </div>
+
+          </div>
+        )}
+
+        {/* =========================================================================
             TAB 4: SETTINGS
            ========================================================================= */}
         {activeTab === 'settings' && (
@@ -1978,6 +2520,23 @@ export default function AdminPortalPage() {
 
           </div>
         </div>
+      )}
+
+      {/* =========================================================================
+          MODALS: AD BUDGET & SPEND TRACKER (DEPOSIT & DEDUCTION)
+         ========================================================================= */}
+      {isAddDepositOpen && (
+        <AddDepositModal
+          onClose={() => setIsAddDepositOpen(false)}
+          onAddDeposit={handleAddDeposit}
+        />
+      )}
+
+      {isAddDeductionOpen && (
+        <AddDeductionModal
+          onClose={() => setIsAddDeductionOpen(false)}
+          onAddDeduction={handleAddDeduction}
+        />
       )}
 
       {/* --- FLOATING TOAST NOTIFICATION --- */}
@@ -2395,6 +2954,285 @@ function AddOrderModal({
           </div>
         </div>
 
+      </div>
+    </div>
+  );
+}
+
+// =========================================================================
+// SUBCOMPONENT: ADD OWNER AD DEPOSIT MODAL
+// =========================================================================
+function AddDepositModal({
+  onClose,
+  onAddDeposit,
+}: {
+  onClose: () => void;
+  onAddDeposit: (data: { amount: number; date: string; sender: string; method: string; notes: string }) => void;
+}) {
+  const [amount, setAmount] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [sender, setSender] = useState('Ali Bhai (Owner)');
+  const [method, setMethod] = useState('Bank Transfer (Meezan/HBL)');
+  const [notes, setNotes] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const num = parseFloat(amount);
+    if (isNaN(num) || num <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+    onAddDeposit({ amount: num, date, sender, method, notes });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+      <div className="bg-[#151821] border border-[#262b38] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div className="flex justify-between items-center border-b border-[#262b38] pb-3">
+          <div className="flex items-center gap-2">
+            <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg">
+              <ArrowUpRight className="w-5 h-5 stroke-[2.5]" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-base text-white uppercase tracking-wider">
+                Receive Ad Funds From Owner
+              </h3>
+              <p className="text-[11px] text-gray-400">Record incoming money sent for running ads</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+          <div>
+            <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+              Amount Received (PKR) *
+            </label>
+            <input
+              type="number"
+              required
+              min="1"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="e.g. 25000"
+              autoFocus
+              className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-emerald-400 focus:outline-none focus:border-emerald-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+                Date Received
+              </label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+                Payment Channel
+              </label>
+              <select
+                value={method}
+                onChange={(e) => setMethod(e.target.value)}
+                className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+              >
+                <option value="Bank Transfer (Meezan/HBL)">Bank Transfer</option>
+                <option value="JazzCash">JazzCash</option>
+                <option value="EasyPaisa">EasyPaisa</option>
+                <option value="SadaPay / NayaPay">SadaPay / NayaPay</option>
+                <option value="Cash in Hand">Cash in Hand</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+              Sender Name / Title
+            </label>
+            <input
+              type="text"
+              value={sender}
+              onChange={(e) => setSender(e.target.value)}
+              placeholder="e.g. Ali Bhai (Owner)"
+              className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+              Notes / Memo (Optional)
+            </label>
+            <input
+              type="text"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="e.g. November 1st tranche for FL01 campaign"
+              className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+            />
+          </div>
+
+          <div className="pt-2 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-[#202532] text-gray-400 hover:text-white rounded-xl cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-md transition cursor-pointer"
+            >
+              Record Deposit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// =========================================================================
+// SUBCOMPONENT: LOG AD SPEND DEDUCTION MODAL
+// =========================================================================
+function AddDeductionModal({
+  onClose,
+  onAddDeduction,
+}: {
+  onClose: () => void;
+  onAddDeduction: (data: { amount: number; date: string; platform: string; campaign: string; notes: string }) => void;
+}) {
+  const [amount, setAmount] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [platform, setPlatform] = useState('Meta Ads Manager (FB/IG)');
+  const [campaign, setCampaign] = useState('');
+  const [notes, setNotes] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const num = parseFloat(amount);
+    if (isNaN(num) || num <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+    onAddDeduction({ amount: num, date, platform, campaign, notes });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+      <div className="bg-[#151821] border border-[#262b38] rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+        <div className="flex justify-between items-center border-b border-[#262b38] pb-3">
+          <div className="flex items-center gap-2">
+            <div className="p-2 bg-rose-500/10 text-rose-400 rounded-lg">
+              <ArrowDownRight className="w-5 h-5 stroke-[2.5]" />
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-base text-white uppercase tracking-wider">
+                Log Ad Spend / Deduction
+              </h3>
+              <p className="text-[11px] text-gray-400">Record money deducted for running ads</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-white cursor-pointer">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+          <div>
+            <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+              Amount Deducted (PKR) *
+            </label>
+            <input
+              type="number"
+              required
+              min="1"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="e.g. 3500"
+              autoFocus
+              className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-rose-400 focus:outline-none focus:border-rose-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+                Date Deducted
+              </label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+                Ad Platform
+              </label>
+              <select
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value)}
+                className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+              >
+                <option value="Meta Ads Manager (FB/IG)">Meta Ads Manager (FB/IG)</option>
+                <option value="Instagram Boost">Instagram Boost</option>
+                <option value="TikTok Ads">TikTok Ads</option>
+                <option value="Google Ads">Google Ads</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+              Campaign Name / Target Suit
+            </label>
+            <input
+              type="text"
+              value={campaign}
+              onChange={(e) => setCampaign(e.target.value)}
+              placeholder="e.g. FL01 & SL09 Video Ad Campaign"
+              className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-300 font-bold mb-1 uppercase tracking-wider text-[10px]">
+              Notes / Receipt Memo (Optional)
+            </label>
+            <input
+              type="text"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="e.g. Automated daily card charge, 14 orders generated"
+              className="w-full bg-[#0f1115] border border-[#2e333d] rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#c5a059]"
+            />
+          </div>
+
+          <div className="pt-2 flex justify-end gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 bg-[#202532] text-gray-400 hover:text-white rounded-xl cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl shadow-md transition cursor-pointer"
+            >
+              Record Deduction
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
