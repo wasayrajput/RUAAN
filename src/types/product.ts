@@ -1,6 +1,6 @@
-export type FabricType = 'Doria Linen' | 'Stone Linen' | 'Viscose' | 'Khaddar' | 'Dhanak' | 'Karandi' | 'Viscose Linen' | 'Plain Linen';
+export type FabricType = 'Fine Linen' | 'Doria Linen' | 'Stone Linen' | 'Viscose' | 'Khaddar' | 'Dhanak' | 'Karandi' | 'Viscose Linen' | 'Plain Linen';
 
-export type CollectionType = 'Doria Linen Stitched' | 'Stone Linen Stitched' | 'Doria Linen 3-Piece Stitched' | 'Digital Viscose Vol 1' | 'Khaddar Winter Vol 1' | 'Dhanak Allover' | 'Karandi Allover' | 'Viscose Linen Allover' | 'Plain Linen Stitched';
+export type CollectionType = 'Embroidered Fine Linen' | 'Doria Linen Stitched' | 'Stone Linen Stitched' | 'Doria Linen 3-Piece Stitched' | 'Digital Viscose Vol 1' | 'Khaddar Winter Vol 1' | 'Dhanak Allover' | 'Karandi Allover' | 'Viscose Linen Allover' | 'Plain Linen Stitched';
 
 export type StitchType = 'Unstitched 3-Piece' | 'Unstitched 2-Piece' | 'Stitched Ready-to-Wear' | 'Stitched 2-Piece' | 'Stitched 3-Piece';
 

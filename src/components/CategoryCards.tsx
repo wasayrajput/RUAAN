@@ -15,6 +15,13 @@ interface CategoryItem {
 // 10 distinct luxury suits & fabric categories with reference-style pastel backgrounds
 const CATEGORIES: CategoryItem[] = [
   {
+    id: 'fl05',
+    name: 'Embroidered Fine Linen',
+    fabric: 'Fine Linen',
+    image: '/products/FL05.jpg',
+    bgColor: 'bg-[#F3E5F5]', // Soft Muted Plum/Lavender
+  },
+  {
     id: 'dl05',
     name: 'Festive Pret 3-Pc',
     fabric: 'Doria Linen',

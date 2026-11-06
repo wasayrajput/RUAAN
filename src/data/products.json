@@ -1,5 +1,205 @@
 [
   {
+    "id": "ruaan-fine-linen-01",
+    "designCode": "FL01",
+    "title": "Olive Sage Embroidered Fine Linen",
+    "subtitle": "3-Piece Unstitched Fine Linen with Embroidered Neckline & Printed Linen Dupatta",
+    "price": 3000,
+    "originalPrice": 4500,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Olive Sage",
+        "hex": "#708238",
+        "image": "/products/FL01.jpg"
+      }
+    ],
+    "mainImage": "/products/FL01.jpg",
+    "galleryImages": [
+      "/products/FL01.jpg"
+    ],
+    "description": "Exquisite 3-piece unstitched fine linen suit featuring intricate thread embroidery on the neckline, delicate floral digital print, matching printed linen dupatta and printed trousers.",
+    "details": {
+      "shirt": "2.5m Fine Linen Shirt with Embroidered Neckline & Border Work",
+      "dupatta": "2.5m Printed Fine Linen Dupatta",
+      "trouser": "2.25m Printed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or gentle cold hand wash",
+      "Iron on medium setting",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true
+  },
+  {
+    "id": "ruaan-fine-linen-02",
+    "designCode": "FL02",
+    "title": "Crimson Rose Embroidered Fine Linen",
+    "subtitle": "3-Piece Unstitched Fine Linen with Embroidered Neckline & Printed Linen Dupatta",
+    "price": 3000,
+    "originalPrice": 4500,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Crimson Rose",
+        "hex": "#8B263E",
+        "image": "/products/FL02.jpg"
+      }
+    ],
+    "mainImage": "/products/FL02.jpg",
+    "galleryImages": [
+      "/products/FL02.jpg"
+    ],
+    "description": "Regal 3-piece unstitched fine linen ensemble with rich crimson garden roses, heavy thread embroidery on gala, matching printed linen dupatta and dyed trousers.",
+    "details": {
+      "shirt": "2.5m Fine Linen Shirt with Heavy Embroidered Neckline",
+      "dupatta": "2.5m Printed Fine Linen Dupatta",
+      "trouser": "2.25m Dyed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or gentle cold hand wash",
+      "Iron on medium setting",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true
+  },
+  {
+    "id": "ruaan-fine-linen-03",
+    "designCode": "FL03",
+    "title": "Vintage Sand Teal Embroidered Fine Linen",
+    "subtitle": "3-Piece Unstitched Fine Linen with Embroidered Neckline & Printed Linen Dupatta",
+    "price": 3000,
+    "originalPrice": 4500,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Sand Teal",
+        "hex": "#B8977E",
+        "image": "/products/FL03.jpg"
+      }
+    ],
+    "mainImage": "/products/FL03.jpg",
+    "galleryImages": [
+      "/products/FL03.jpg"
+    ],
+    "description": "Classic sand beige fine linen 3-piece unstitched suit accented with vintage teal and rust roses, embroidered neckline, and all-over matching printed dupatta and trousers.",
+    "details": {
+      "shirt": "2.5m Fine Linen Shirt with Embroidered Gala",
+      "dupatta": "2.5m Printed Fine Linen Dupatta",
+      "trouser": "2.25m Printed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or gentle cold hand wash",
+      "Iron on medium setting",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true
+  },
+  {
+    "id": "ruaan-fine-linen-04",
+    "designCode": "FL04",
+    "title": "Mint Ivory Embroidered Fine Linen",
+    "subtitle": "3-Piece Unstitched Fine Linen with Embroidered Neckline & Printed Linen Dupatta",
+    "price": 3000,
+    "originalPrice": 4500,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Mint Ivory",
+        "hex": "#D1E2D3",
+        "image": "/products/FL04.jpg"
+      }
+    ],
+    "mainImage": "/products/FL04.jpg",
+    "galleryImages": [
+      "/products/FL04.jpg"
+    ],
+    "description": "Serene off-white and mint floral fine linen suit featuring an embroidered V-collar neckline, printed linen dupatta and dyed trousers.",
+    "details": {
+      "shirt": "2.5m Fine Linen Shirt with Embroidered Neckline",
+      "dupatta": "2.5m Printed Fine Linen Dupatta",
+      "trouser": "2.25m Dyed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or gentle cold hand wash",
+      "Iron on medium setting",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true
+  },
+  {
+    "id": "ruaan-fine-linen-05",
+    "designCode": "FL05",
+    "title": "Midnight Plum Embroidered Fine Linen",
+    "subtitle": "3-Piece Unstitched Fine Linen with Embroidered Neckline & Printed Linen Dupatta",
+    "price": 3000,
+    "originalPrice": 4500,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Midnight Plum",
+        "hex": "#3A1F45",
+        "image": "/products/FL05.jpg"
+      }
+    ],
+    "mainImage": "/products/FL05.jpg",
+    "galleryImages": [
+      "/products/FL05.jpg"
+    ],
+    "description": "Statement royal midnight purple fine linen 3-piece unstitched suit adorned with vibrant floral sprays, delicate embroidered gala, matching printed trousers and contrast white floral printed dupatta.",
+    "details": {
+      "shirt": "2.5m Fine Linen Shirt with Embroidered Neckline",
+      "dupatta": "2.5m Contrast Printed Fine Linen Dupatta",
+      "trouser": "2.25m Printed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or gentle cold hand wash",
+      "Iron on medium setting",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true
+  },
+  {
     "id": "ruaan-dhanak-01",
     "title": "Almond Taupe Allover Dhanak",
     "subtitle": "2-Piece Allover Unstitched Printed Dhanak Shirt & Trouser",

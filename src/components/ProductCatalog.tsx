@@ -33,6 +33,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
 
   const fabrics: (FabricType | 'All')[] = [
     'All',
+    'Fine Linen',
     'Doria Linen',
     'Stone Linen',
     'Plain Linen',
