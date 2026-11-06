@@ -10,10 +10,45 @@ interface BestSellersProps {
 }
 
 export const BestSellers: React.FC<BestSellersProps> = ({ onQuickView }) => {
-  // 4 Standout Best Sellers
-  const bestsellers = (productsData as Product[])
-    .filter((p) => p.isBestseller || p.isFeatured)
-    .slice(0, 4);
+  // Diverse, curated mix of 4 best sellers across distinct fabric collections
+  // (e.g. Fine Linen, Digital Viscose, Doria Linen, Khaddar)
+  const bestsellers = React.useMemo(() => {
+    const all = productsData as Product[];
+
+    // Curated priority mix representing 4 distinct fabrics & luxury looks
+    const preferredCodes = ['FL02', 'DV01', 'DL01', 'KD01'];
+    const curated = preferredCodes
+      .map((code) => all.find((p) => (p.designCode || p.id).toUpperCase() === code))
+      .filter((p): p is Product => Boolean(p));
+
+    if (curated.length === 4) {
+      return curated;
+    }
+
+    // Dynamic fallback: select 1 best seller per unique fabric type to always maintain a balanced mix
+    const seenFabrics = new Set<string>();
+    const mix: Product[] = [];
+
+    for (const p of all) {
+      if ((p.isBestseller || p.isFeatured) && !seenFabrics.has(p.fabric)) {
+        seenFabrics.add(p.fabric);
+        mix.push(p);
+        if (mix.length === 4) break;
+      }
+    }
+
+    if (mix.length < 4) {
+      for (const p of all) {
+        if (!mix.some((m) => m.id === p.id) && !seenFabrics.has(p.fabric)) {
+          seenFabrics.add(p.fabric);
+          mix.push(p);
+          if (mix.length === 4) break;
+        }
+      }
+    }
+
+    return mix.length === 4 ? mix : all.slice(0, 4);
+  }, []);
 
   return (
     <section className="py-10 sm:py-16 bg-white border-b border-stone-200/80 overflow-hidden">

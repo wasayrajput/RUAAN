@@ -35,7 +35,7 @@
       "Dry in shade"
     ],
     "isNewArrival": true,
-    "isBestseller": true,
+    "isBestseller": false,
     "isFeatured": true,
     "inStock": true
   },
@@ -155,7 +155,7 @@
       "Dry in shade"
     ],
     "isNewArrival": true,
-    "isBestseller": true,
+    "isBestseller": false,
     "isFeatured": true,
     "inStock": true
   },
@@ -195,7 +195,7 @@
       "Dry in shade"
     ],
     "isNewArrival": true,
-    "isBestseller": true,
+    "isBestseller": false,
     "isFeatured": true,
     "inStock": true
   },
