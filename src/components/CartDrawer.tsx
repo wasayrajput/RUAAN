@@ -39,7 +39,6 @@ export const CartDrawer: React.FC = () => {
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [placedOrderNumber, setPlacedOrderNumber] = useState('');
-  const [whatsappUrl, setWhatsappUrl] = useState('');
 
   React.useEffect(() => {
     try {
@@ -98,68 +97,22 @@ export const CartDrawer: React.FC = () => {
       });
 
       const data = await res.json();
-      const orderNum = (data.success && data.order?.orderNumber)
-        ? data.order.orderNumber
-        : `#RN-${Math.floor(1000 + Math.random() * 9000)}`;
-      setPlacedOrderNumber(orderNum);
-
-      // Prepare instant WhatsApp order confirmation message
-      const brandWaNumber = BRAND_CONFIG.whatsappNumber.replace(/[^0-9]/g, '');
-      let waMessage = `✦ *NEW WEBSITE ORDER - ${BRAND_CONFIG.name}*\n`;
-      waMessage += `Order ID: *${orderNum}*\n\n`;
-      waMessage += `*Customer Details:*\n`;
-      waMessage += `• Name: ${customerDetails.fullName}\n`;
-      waMessage += `• Phone: ${customerDetails.phone}\n`;
-      waMessage += `• City: ${customerDetails.city || 'Pakistan'}\n`;
-      waMessage += `• Delivery Address: ${customerDetails.address}\n`;
-      if (customerDetails.notes) {
-        waMessage += `• Special Notes: ${customerDetails.notes}\n`;
-      }
-      waMessage += `\n*Suits Ordered (${cart.length} items):*\n`;
-      cart.forEach((it, idx) => {
-        const code = getProductArticleCode(it.product, it.selectedColor);
-        const color = it.selectedColor ? ` | ${it.selectedColor.name}` : '';
-        waMessage += `${idx + 1}. ${it.product.title} (*${code}*)\n`;
-        waMessage += `   • Size: ${it.selectedSize}${color} | Qty: ${it.quantity} x Rs. ${it.product.price.toLocaleString()}\n`;
-      });
-      waMessage += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
-      waMessage += `Subtotal: Rs. ${subtotal.toLocaleString()}\n`;
-      waMessage += `Delivery Charges: ${isFreeShipping ? 'FREE Delivery' : `Rs. ${shippingCost}`}\n`;
-      waMessage += `*Grand Total: Rs. ${grandTotal.toLocaleString()} (Cash on Delivery)*\n\n`;
-      waMessage += `Please confirm my order and share parcel dispatch timeline. Thank you!`;
-
-      const generatedWaUrl = `https://wa.me/${brandWaNumber}?text=${encodeURIComponent(waMessage)}`;
-      setWhatsappUrl(generatedWaUrl);
-
-      // Save locally as fallback
       if (data.success && data.order) {
+        setPlacedOrderNumber(data.order.orderNumber);
         try {
           const raw = localStorage.getItem('ruaan_admin_orders');
           const list = raw ? JSON.parse(raw) : [];
           const updated = [data.order, ...list.filter((o: any) => o.id !== data.order.id && o.orderNumber !== data.order.orderNumber)];
           localStorage.setItem('ruaan_admin_orders', JSON.stringify(updated));
         } catch (e) {}
+        clearCart();
+        setIsOrderPlaced(true);
+      } else {
+        alert(data.error || 'Failed to submit order. Please try again.');
       }
-
-      // Automatically open WhatsApp in a new tab/app
-      try {
-        if (typeof window !== 'undefined') {
-          window.open(generatedWaUrl, '_blank');
-        }
-      } catch (err) {}
-
-      clearCart();
-      setIsOrderPlaced(true);
     } catch (err) {
       console.error('Order submission error:', err);
-      // Even if network fails, still give customer the WhatsApp confirmation link!
-      const fallbackNum = `#RN-${Math.floor(1000 + Math.random() * 9000)}`;
-      setPlacedOrderNumber(fallbackNum);
-      const brandWaNumber = BRAND_CONFIG.whatsappNumber.replace(/[^0-9]/g, '');
-      const emergencyWa = `https://wa.me/${brandWaNumber}?text=${encodeURIComponent(`✦ *NEW WEBSITE ORDER - ${BRAND_CONFIG.name}*\nOrder ID: *${fallbackNum}*\nName: ${customerDetails.fullName}\nPhone: ${customerDetails.phone}\nAddress: ${customerDetails.address}, ${customerDetails.city}\nTotal: Rs. ${grandTotal.toLocaleString()} COD`)}`;
-      setWhatsappUrl(emergencyWa);
-      clearCart();
-      setIsOrderPlaced(true);
+      alert('Order could not be sent. Please check your internet connection.');
     } finally {
       setIsSubmitting(false);
     }
@@ -228,7 +181,7 @@ export const CartDrawer: React.FC = () => {
             {/* Body */}
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
               {isOrderPlaced ? (
-                <div className="py-6 text-center space-y-4">
+                <div className="py-12 text-center space-y-4">
                   <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
                     <CheckCircle2 className="w-10 h-10" />
                   </div>
@@ -237,36 +190,14 @@ export const CartDrawer: React.FC = () => {
                       Order Placed Successfully!
                     </h4>
                     {placedOrderNumber && (
-                      <div className="inline-block mt-2 bg-brand-cream border border-brand-nude/40 rounded-full px-4 py-1 text-xs font-mono font-bold text-brand-charcoal">
+                      <div className="inline-block mt-2 bg-brand-cream border border-brand-nude/40 rounded-full px-4 py-1.5 text-xs font-mono font-bold text-brand-charcoal">
                         Order ID: {placedOrderNumber}
                       </div>
                     )}
                   </div>
 
-                  {/* Instant WhatsApp Confirmation Card */}
-                  <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-left space-y-2.5">
-                    <div className="flex items-center gap-2 text-emerald-900 font-bold text-xs">
-                      <MessageCircle className="w-4 h-4 fill-emerald-600 text-white shrink-0" />
-                      <span>WhatsApp Order Confirmation</span>
-                    </div>
-                    <p className="text-[11px] text-emerald-900/80 leading-relaxed">
-                      Aapka order record ho gaya hai! Super-fast parcel dispatch aur tracking ke liye button par click karke WhatsApp par receipt send karein:
-                    </p>
-                    {whatsappUrl && (
-                      <a
-                        href={whatsappUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition active:scale-[0.98]"
-                      >
-                        <MessageCircle className="w-4 h-4 fill-white" />
-                        <span>Confirm on WhatsApp (Official)</span>
-                      </a>
-                    )}
-                  </div>
-
-                  <p className="text-[11px] text-brand-gray leading-relaxed max-w-xs mx-auto">
-                    Thank you <strong>{customerDetails.fullName}</strong>! Our customer care team will also call on <strong>{customerDetails.phone}</strong> before dispatching your COD parcel.
+                  <p className="text-xs text-brand-gray leading-relaxed max-w-xs mx-auto">
+                    Thank you <strong>{customerDetails.fullName}</strong>! Your order has been placed directly. Our customer care team will call on <strong>{customerDetails.phone}</strong> to confirm before dispatch.
                   </p>
 
                   <button
@@ -274,7 +205,7 @@ export const CartDrawer: React.FC = () => {
                       clearCart();
                       handleClose();
                     }}
-                    className="w-full py-2.5 bg-brand-cream hover:bg-brand-nude/20 text-brand-charcoal text-xs font-semibold rounded-xl border border-brand-nude/30 transition cursor-pointer"
+                    className="px-6 py-3 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-brand-nude hover:text-brand-charcoal transition cursor-pointer shadow-sm"
                   >
                     Continue Shopping
                   </button>
