@@ -129,9 +129,9 @@ async function loadOrders(): Promise<Order[]> {
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.result) {
+        if (data && data.result !== undefined && data.result !== null) {
           const parsed = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
-          if (Array.isArray(parsed) && parsed.length > 0) {
+          if (Array.isArray(parsed)) {
             memoryOrders = parsed;
             return memoryOrders;
           }
@@ -148,7 +148,7 @@ async function loadOrders(): Promise<Order[]> {
     if (fs.existsSync(filePath)) {
       const content = fs.readFileSync(filePath, 'utf-8');
       const parsed = JSON.parse(content);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         memoryOrders = parsed;
         return memoryOrders;
       }
@@ -256,6 +256,15 @@ export async function POST(req: NextRequest) {
       status: 'new', // Web orders land in 'new'
       notes: notes ? notes.trim() : '',
     };
+
+    // Loud persistent logging in Vercel Functions Runtime logs
+    console.log('====================================================');
+    console.log(`🚨 [NEW WEBSITE ORDER] ${orderNumber} - Rs. ${newOrder.total}`);
+    console.log(`Customer: ${newOrder.customerName} | Phone: ${newOrder.phone1}`);
+    console.log(`Address: ${newOrder.address}, ${newOrder.city}`);
+    console.log(`Items: ${newOrder.items.map((i: any) => `${i.name} [${i.code}] (${i.size}) x${i.qty}`).join(', ')}`);
+    console.log('FULL_ORDER_PAYLOAD:', JSON.stringify(newOrder));
+    console.log('====================================================');
 
     const updatedOrders = [newOrder, ...currentOrders];
     await saveOrders(updatedOrders);

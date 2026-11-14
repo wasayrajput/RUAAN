@@ -28,6 +28,7 @@ export const DirectOrderModal: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [placedOrderNumber, setPlacedOrderNumber] = useState('');
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
   // Sync state whenever directOrder opens
   useEffect(() => {
@@ -96,21 +97,64 @@ export const DirectOrderModal: React.FC = () => {
       });
 
       const data = await res.json();
+      const orderNum = (data.success && data.order?.orderNumber) 
+        ? data.order.orderNumber 
+        : `#RN-${Math.floor(1000 + Math.random() * 9000)}`;
+      setPlacedOrderNumber(orderNum);
+
+      // Prepare instant WhatsApp order confirmation message
+      const brandWaNumber = BRAND_CONFIG.whatsappNumber.replace(/[^0-9]/g, '');
+      let waMessage = `✦ *NEW WEBSITE ORDER - ${BRAND_CONFIG.name}*\n`;
+      waMessage += `Order ID: *${orderNum}*\n\n`;
+      waMessage += `*Customer Details:*\n`;
+      waMessage += `• Name: ${customerDetails.fullName}\n`;
+      waMessage += `• Phone: ${customerDetails.phone}\n`;
+      waMessage += `• City: ${customerDetails.city || 'Pakistan'}\n`;
+      waMessage += `• Delivery Address: ${customerDetails.address}\n`;
+      if (customerDetails.notes) {
+        waMessage += `• Special Notes: ${customerDetails.notes}\n`;
+      }
+      waMessage += `\n*Suit Ordered:*\n`;
+      waMessage += `• Design: ${product.title} (*${articleCode}*)\n`;
+      waMessage += `• Fabric: ${product.fabric} (${product.stitchType})\n`;
+      waMessage += `• Size: ${selectedSize}${selectedColor ? ` | Color: ${selectedColor.name}` : ''}\n`;
+      waMessage += `• Quantity: ${quantity} x Rs. ${product.price.toLocaleString()}\n`;
+      waMessage += `\n━━━━━━━━━━━━━━━━━━━━━\n`;
+      waMessage += `Subtotal: Rs. ${itemTotal.toLocaleString()}\n`;
+      waMessage += `Delivery Charges: ${isFreeShipping ? 'FREE Delivery' : `Rs. ${shippingCost}`}\n`;
+      waMessage += `*Grand Total: Rs. ${grandTotal.toLocaleString()} (Cash on Delivery)*\n\n`;
+      waMessage += `Please confirm my order and share parcel dispatch timeline. Thank you!`;
+
+      const generatedWaUrl = `https://wa.me/${brandWaNumber}?text=${encodeURIComponent(waMessage)}`;
+      setWhatsappUrl(generatedWaUrl);
+
+      // Save locally as fallback
       if (data.success && data.order) {
-        setPlacedOrderNumber(data.order.orderNumber);
         try {
           const raw = localStorage.getItem('ruaan_admin_orders');
           const list = raw ? JSON.parse(raw) : [];
           const updated = [data.order, ...list.filter((o: any) => o.id !== data.order.id && o.orderNumber !== data.order.orderNumber)];
           localStorage.setItem('ruaan_admin_orders', JSON.stringify(updated));
         } catch (e) {}
-        setIsSubmitted(true);
-      } else {
-        alert(data.error || 'Failed to place order. Please try again.');
       }
+
+      // Automatically open WhatsApp in a new tab/app
+      try {
+        if (typeof window !== 'undefined') {
+          window.open(generatedWaUrl, '_blank');
+        }
+      } catch (err) {}
+
+      setIsSubmitted(true);
     } catch (err) {
       console.error('Direct order submission error:', err);
-      alert('Order could not be sent. Please check your internet connection.');
+      // Even if network fails, still give customer the WhatsApp link!
+      const fallbackNum = `#RN-${Math.floor(1000 + Math.random() * 9000)}`;
+      setPlacedOrderNumber(fallbackNum);
+      const brandWaNumber = BRAND_CONFIG.whatsappNumber.replace(/[^0-9]/g, '');
+      const emergencyWa = `https://wa.me/${brandWaNumber}?text=${encodeURIComponent(`✦ *NEW WEBSITE ORDER - ${BRAND_CONFIG.name}*\nOrder ID: *${fallbackNum}*\nName: ${customerDetails.fullName}\nPhone: ${customerDetails.phone}\nAddress: ${customerDetails.address}, ${customerDetails.city}\nSuit: ${product.title} (${articleCode}) - ${selectedSize} x ${quantity}\nTotal: Rs. ${grandTotal.toLocaleString()} COD`)}`;
+      setWhatsappUrl(emergencyWa);
+      setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -154,27 +198,53 @@ export const DirectOrderModal: React.FC = () => {
           {/* Body */}
           <div className="p-4 sm:p-6 overflow-y-auto space-y-4 no-scrollbar">
             {isSubmitted ? (
-              <div className="py-8 text-center space-y-4">
-                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+              <div className="py-6 text-center space-y-4">
+                <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h4 className="text-xl font-serif font-bold text-brand-charcoal">
-                  Order Booked Successfully!
-                </h4>
-                {placedOrderNumber && (
-                  <div className="inline-block bg-brand-cream border border-brand-nude/40 rounded-full px-4 py-1.5 text-xs font-mono font-bold text-brand-charcoal">
-                    Order ID: {placedOrderNumber}
+                <div>
+                  <h4 className="text-xl font-serif font-bold text-brand-charcoal">
+                    Order Booked Successfully!
+                  </h4>
+                  {placedOrderNumber && (
+                    <div className="inline-block mt-2 bg-brand-cream border border-brand-nude/40 rounded-full px-4 py-1 text-xs font-mono font-bold text-brand-charcoal">
+                      Order ID: {placedOrderNumber}
+                    </div>
+                  )}
+                </div>
+
+                {/* Instant WhatsApp Confirmation Card */}
+                <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-left space-y-2.5">
+                  <div className="flex items-center gap-2 text-emerald-900 font-bold text-xs">
+                    <MessageCircle className="w-4 h-4 fill-emerald-600 text-white shrink-0" />
+                    <span>WhatsApp Order Confirmation</span>
                   </div>
-                )}
-                <p className="text-xs text-brand-gray leading-relaxed max-w-xs mx-auto">
-                  Thank you {customerDetails.fullName}! Your order has been placed directly. Our customer care team will call you to confirm your address before dispatch.
+                  <p className="text-[11px] text-emerald-900/80 leading-relaxed">
+                    Aapka order record ho gaya hai! Super-fast parcel dispatch aur tracking ke liye button par click karke WhatsApp par receipt send karein:
+                  </p>
+                  {whatsappUrl && (
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition active:scale-[0.98]"
+                    >
+                      <MessageCircle className="w-4 h-4 fill-white" />
+                      <span>Confirm on WhatsApp (Official)</span>
+                    </a>
+                  )}
+                </div>
+
+                <p className="text-[11px] text-brand-gray leading-relaxed max-w-xs mx-auto">
+                  Thank you <strong>{customerDetails.fullName}</strong>! Our customer care representative will also call on <strong>{customerDetails.phone}</strong> before dispatching your COD parcel.
                 </p>
+
                 <button
                   type="button"
                   onClick={closeDirectOrder}
-                  className="px-6 py-3 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-brand-nude transition cursor-pointer uppercase tracking-wider"
+                  className="w-full py-2.5 bg-brand-cream hover:bg-brand-nude/20 text-brand-charcoal text-xs font-semibold rounded-xl border border-brand-nude/30 transition cursor-pointer"
                 >
-                  Done & Continue Shopping
+                  Done &amp; Continue Shopping
                 </button>
               </div>
             ) : (
