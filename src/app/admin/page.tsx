@@ -47,6 +47,7 @@ import {
 import productsData from '@/data/products.json';
 import { BRAND_CONFIG } from '@/config/brand';
 import { calculateDeliveryRate, DELIVERY_RATES } from '@/utils/delivery';
+import { ImageTextExtractorCard } from '@/components/ImageTextExtractorCard';
 
 // --- TYPES ---
 export type AdTransactionType = 'RECEIVED' | 'DEDUCTION';
@@ -117,7 +118,7 @@ export default function AdminPortalPage() {
   const [savedPin, setSavedPin] = useState<string>('2026');
 
   // --- NAVIGATION STATE ---
-  const [activeTab, setActiveTab] = useState<'new-orders' | 'overview' | 'orders' | 'inventory' | 'ads' | 'settings'>('new-orders');
+  const [activeTab, setActiveTab] = useState<'new-orders' | 'overview' | 'orders' | 'inventory' | 'ads' | 'ocr' | 'settings'>('new-orders');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   // --- CORE DATA STATES ---
@@ -1212,6 +1213,18 @@ export default function AdminPortalPage() {
             }`}>
               Rs. {formatAdAmount(adStats.remainingBalance)}
             </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('ocr')}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition shrink-0 ${
+              activeTab === 'ocr'
+                ? 'bg-[#c5a059]/15 text-[#c5a059] border border-[#c5a059]/30'
+                : 'text-gray-400 hover:text-white hover:bg-[#1a1e28]'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-[#c5a059]" />
+            <span>Image Text Extractor</span>
           </button>
 
           <button
@@ -2364,6 +2377,13 @@ export default function AdminPortalPage() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* =========================================================================
+            TAB 6: AI / OCR PICTURE TEXT EXTRACTOR
+           ========================================================================= */}
+        {activeTab === 'ocr' && (
+          <ImageTextExtractorCard showToast={showToast} />
         )}
 
       </main>
