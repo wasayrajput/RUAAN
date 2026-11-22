@@ -434,45 +434,6 @@
     "designCode": "KR04"
   },
   {
-    "id": "ruaan-viscose-linen-01",
-    "title": "Cocoa Slate Allover Viscose Linen",
-    "subtitle": "2-Piece Allover Unstitched Viscose Linen Shirt & Trouser",
-    "price": 2150,
-    "originalPrice": 2600,
-    "fabric": "Viscose Linen",
-    "collection": "Viscose Linen Allover",
-    "stitchType": "Unstitched 2-Piece",
-    "availableSizes": [
-      "Unstitched"
-    ],
-    "colorSwatches": [
-      {
-        "name": "Cocoa Slate",
-        "hex": "#605351",
-        "image": "/products/VL01.png"
-      }
-    ],
-    "mainImage": "/products/VL01.png",
-    "galleryImages": [
-      "/products/VL01.png"
-    ],
-    "description": "Premium breathable viscose linen 2-piece unstitched suit with allover elegant design. Soft and fluid hand-feel suitable for all-season styling.",
-    "details": {
-      "shirt": "2.5m Printed Viscose Linen Shirt",
-      "dupatta": "N/A (2-Piece Set)",
-      "trouser": "2.25m Printed Viscose Linen Trouser"
-    },
-    "careInstructions": [
-      "Hand wash in cold water",
-      "Iron on reverse"
-    ],
-    "isNewArrival": true,
-    "isBestseller": false,
-    "isFeatured": true,
-    "inStock": true,
-    "designCode": "VL01"
-  },
-  {
     "id": "ruaan-doria-01",
     "title": "Mustard Amber Allover Doria Linen",
     "subtitle": "2-Piece Stitched Allover Printed Doria Linen Shirt & Trouser",
@@ -1347,5 +1308,356 @@
     "isFeatured": true,
     "inStock": true,
     "designCode": "KD03"
+  },
+  {
+    "id": "ruaan-karandi-05",
+    "title": "Lilac Whisper Printed Karandi",
+    "subtitle": "3-Piece Unstitched Printed Karandi Shirt with Bamber Dupatta & Plain Trouser",
+    "price": 3250,
+    "originalPrice": 3850,
+    "fabric": "Karandi",
+    "collection": "Karandi Allover",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Lilac Mauve",
+        "hex": "#9D84B7",
+        "image": "/products/KR05.jpg"
+      }
+    ],
+    "mainImage": "/products/KR05.jpg",
+    "galleryImages": [
+      "/products/KR05.jpg"
+    ],
+    "description": "Exquisite winter Karandi 3-piece unstitched ensemble featuring a soft lilac printed shirt, luxurious printed bamber dupatta, and matching dyed plain Karandi trouser.",
+    "details": {
+      "shirt": "2.5m Printed Karandi Shirt",
+      "dupatta": "2.5m Printed Bamber Dupatta",
+      "trouser": "2.25m Dyed Plain Karandi Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or cold gentle hand wash",
+      "Iron on low-medium setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "KR05"
+  },
+  {
+    "id": "ruaan-fine-linen-06",
+    "title": "Midnight Grid Allover Fine Linen",
+    "subtitle": "2-Piece Allover Unstitched Premium Fine Linen Shirt & Trouser",
+    "price": 2499,
+    "originalPrice": 2999,
+    "fabric": "Fine Linen",
+    "collection": "Fine Linen Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Midnight Navy",
+        "hex": "#1C2434",
+        "image": "/products/FL06.jpg"
+      }
+    ],
+    "mainImage": "/products/FL06.jpg",
+    "galleryImages": [
+      "/products/FL06.jpg"
+    ],
+    "description": "Sophisticated 2-piece allover unstitched fine linen suit in deep midnight navy with contemporary linear geometric grid and delicate micro floral motifs.",
+    "details": {
+      "shirt": "2.5m Printed Fine Linen Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Hand wash or gentle machine wash",
+      "Iron on medium heat"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "FL06"
+  },
+  {
+    "id": "ruaan-fine-linen-07",
+    "title": "Slate Indigo Paisley Allover Fine Linen",
+    "subtitle": "2-Piece Allover Unstitched Premium Fine Linen Shirt & Trouser",
+    "price": 2499,
+    "originalPrice": 2999,
+    "fabric": "Fine Linen",
+    "collection": "Fine Linen Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Slate Indigo",
+        "hex": "#3E4C68",
+        "image": "/products/FL07.jpg"
+      }
+    ],
+    "mainImage": "/products/FL07.jpg",
+    "galleryImages": [
+      "/products/FL07.jpg"
+    ],
+    "description": "Timeless 2-piece allover fine linen ensemble adorned with heritage paisley and traditional ethnic jaal prints in slate indigo and deep crimson tones.",
+    "details": {
+      "shirt": "2.5m Printed Fine Linen Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water",
+      "Iron on reverse"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "FL07"
+  },
+  {
+    "id": "ruaan-fine-linen-08",
+    "title": "Dusty Teal Bloom Allover Fine Linen",
+    "subtitle": "2-Piece Allover Unstitched Premium Fine Linen Shirt & Trouser",
+    "price": 2499,
+    "originalPrice": 2999,
+    "fabric": "Fine Linen",
+    "collection": "Fine Linen Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Dusty Teal",
+        "hex": "#4C5E64",
+        "image": "/products/FL08.jpg"
+      }
+    ],
+    "mainImage": "/products/FL08.jpg",
+    "galleryImages": [
+      "/products/FL08.jpg"
+    ],
+    "description": "Chic 2-piece allover fine linen suit featuring allover botanical star blossoms and leaf vines on an elegant muted dusty teal base.",
+    "details": {
+      "shirt": "2.5m Printed Fine Linen Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Gentle cold hand wash",
+      "Medium iron while slightly damp"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "FL08"
+  },
+  {
+    "id": "ruaan-fine-linen-09",
+    "title": "Peach Coral Floral Allover Fine Linen",
+    "subtitle": "2-Piece Allover Unstitched Premium Fine Linen Shirt & Trouser",
+    "price": 2499,
+    "originalPrice": 2999,
+    "fabric": "Fine Linen",
+    "collection": "Fine Linen Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Peach Coral",
+        "hex": "#D88B7B",
+        "image": "/products/FL09.jpg"
+      }
+    ],
+    "mainImage": "/products/FL09.jpg",
+    "galleryImages": [
+      "/products/FL09.jpg"
+    ],
+    "description": "Vibrant and cheerful 2-piece allover fine linen ensemble styled with delicate vertical pin-stripes and lush warm marigold floral trail motifs.",
+    "details": {
+      "shirt": "2.5m Printed Fine Linen Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Hand wash or gentle cycle",
+      "Dry in shade"
+    ],
+    "isNewArrival": true,
+    "isBestseller": false,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "FL09"
+  },
+  {
+    "id": "ruaan-fine-linen-10",
+    "title": "Sage Bloom Embroidered Fine Linen",
+    "subtitle": "3-Piece Unstitched Embroidered Fine Linen Suit with Printed Dupatta",
+    "price": 3000,
+    "originalPrice": 3500,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Sage Green",
+        "hex": "#7E9A86",
+        "image": "/products/FL10.jpg"
+      }
+    ],
+    "mainImage": "/products/FL10.jpg",
+    "galleryImages": [
+      "/products/FL10.jpg"
+    ],
+    "description": "Graceful 3-piece fine linen ensemble featuring fine neckline thread embroidery on an ombre sage green canvas, matched with an artfully printed floral dupatta and dyed trouser.",
+    "details": {
+      "shirt": "2.5m Embroidered Fine Linen Shirt",
+      "dupatta": "2.5m Printed Fine Linen Dupatta",
+      "trouser": "2.25m Dyed Plain Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water with mild detergent",
+      "Iron on reverse over embroidery"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "FL10"
+  },
+  {
+    "id": "ruaan-fine-linen-11",
+    "title": "Silver Mist Embroidered Fine Linen",
+    "subtitle": "3-Piece Unstitched Embroidered Fine Linen Suit with Check Border Dupatta",
+    "price": 3000,
+    "originalPrice": 3500,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Silver Mist Grey",
+        "hex": "#9AA5AC",
+        "image": "/products/FL11.jpg"
+      }
+    ],
+    "mainImage": "/products/FL11.jpg",
+    "galleryImages": [
+      "/products/FL11.jpg"
+    ],
+    "description": "Refined 3-piece fine linen suit in silver mist grey adorned with intricate botanical neckline embroidery, paired with a statement cobalt-check and lime border dupatta and dyed trouser.",
+    "details": {
+      "shirt": "2.5m Embroidered Fine Linen Shirt",
+      "dupatta": "2.5m Printed Fine Linen Dupatta",
+      "trouser": "2.25m Dyed Plain Fine Linen Trouser"
+    },
+    "careInstructions": [
+      "Hand wash in cold water with mild detergent",
+      "Iron on reverse over embroidery"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "FL11"
+  },
+  {
+    "id": "ruaan-linen-01",
+    "title": "Porcelain Blue Embroidered Linen",
+    "subtitle": "3-Piece Unstitched Embroidered Luxury Linen Suit with Printed Dupatta",
+    "price": 3650,
+    "originalPrice": 4250,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Porcelain Cream",
+        "hex": "#D5D1C6",
+        "image": "/products/LN01.jpg"
+      }
+    ],
+    "mainImage": "/products/LN01.jpg",
+    "galleryImages": [
+      "/products/LN01.jpg"
+    ],
+    "description": "Luxury 3-piece unstitched embroidered linen ensemble in delicate porcelain ivory cream, showcasing ornate royal blue neckline embroidery, matching floral shirt, printed dupatta, and shalwar/trouser.",
+    "details": {
+      "shirt": "2.5m Embroidered Linen Shirt",
+      "dupatta": "2.5m Printed Linen Dupatta",
+      "trouser": "2.25m Printed Linen Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or cold delicate wash",
+      "Iron on low-medium setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "LN01"
+  },
+  {
+    "id": "ruaan-linen-02",
+    "title": "Copper Emerald Embroidered Linen",
+    "subtitle": "3-Piece Unstitched Embroidered Luxury Linen Suit with Printed Dupatta",
+    "price": 3650,
+    "originalPrice": 4250,
+    "fabric": "Fine Linen",
+    "collection": "Embroidered Fine Linen",
+    "stitchType": "Unstitched 3-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Camel Ochre",
+        "hex": "#C29B78",
+        "image": "/products/LN02.jpg"
+      }
+    ],
+    "mainImage": "/products/LN02.jpg",
+    "galleryImages": [
+      "/products/LN02.jpg"
+    ],
+    "description": "Opulent 3-piece unstitched embroidered linen suit in rich camel ochre with contrasting emerald green and copper floral bouquets, detailed thread embroidered neckline, and printed dupatta.",
+    "details": {
+      "shirt": "2.5m Embroidered Linen Shirt",
+      "dupatta": "2.5m Printed Linen Dupatta",
+      "trouser": "2.25m Printed Linen Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or cold delicate wash",
+      "Iron on low-medium setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "LN02"
   }
 ]

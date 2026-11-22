@@ -21,7 +21,7 @@ export const FabricCareGuide: React.FC<FabricCareGuideProps> = ({ isOpen, onClos
       iron: "Medium heat iron while slightly damp for crisp finish."
     },
     {
-      fabric: "Digital Viscose & Viscose Linen",
+      fabric: "Digital Viscose",
       icon: "✨",
       wash: "Soft dip hand-wash only; do not wring or scrub vigorously.",
       dry: "Flat drip dry in shade to preserve soft fabric fall.",

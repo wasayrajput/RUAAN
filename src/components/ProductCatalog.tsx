@@ -40,8 +40,7 @@ export const ProductCatalog: React.FC<ProductCatalogProps> = ({
     'Viscose',
     'Khaddar',
     'Dhanak',
-    'Karandi',
-    'Viscose Linen'
+    'Karandi'
   ];
 
   const filteredProducts = useMemo(() => {
