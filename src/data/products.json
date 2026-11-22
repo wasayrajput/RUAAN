@@ -317,6 +317,123 @@
     "designCode": "KR01"
   },
   {
+    "id": "ruaan-karandi-02",
+    "title": "Midnight Indigo Allover Karandi",
+    "subtitle": "2-Piece Allover Unstitched Premium Karandi Shirt & Trouser",
+    "price": 2550,
+    "originalPrice": 3050,
+    "fabric": "Karandi",
+    "collection": "Karandi Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Midnight Indigo",
+        "hex": "#1E2D4A",
+        "image": "/products/KR02.jpg"
+      }
+    ],
+    "mainImage": "/products/KR02.jpg",
+    "galleryImages": [
+      "/products/KR02.jpg"
+    ],
+    "description": "Premium winter Karandi 2-piece unstitched suit featuring dynamic multi-colored brushstroke botanical prints on a rich midnight navy base with matching printed trouser.",
+    "details": {
+      "shirt": "2.5m Printed Karandi Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Karandi Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or cold hand wash",
+      "Iron on low setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "KR02"
+  },
+  {
+    "id": "ruaan-karandi-03",
+    "title": "Ivory Tribal Ikat Karandi",
+    "subtitle": "2-Piece Allover Unstitched Premium Karandi Shirt & Trouser",
+    "price": 2550,
+    "originalPrice": 3050,
+    "fabric": "Karandi",
+    "collection": "Karandi Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Ivory Mosaic",
+        "hex": "#E3DAC9",
+        "image": "/products/KR03.jpg"
+      }
+    ],
+    "mainImage": "/products/KR03.jpg",
+    "galleryImages": [
+      "/products/KR03.jpg"
+    ],
+    "description": "Sophisticated 2-piece winter Karandi unstitched suit on an ethereal ivory cream canvas, enriched with vibrant geometric ikat mosaics in lilac, terracotta, and soft mint.",
+    "details": {
+      "shirt": "2.5m Printed Karandi Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Karandi Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or cold hand wash",
+      "Iron on low setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "KR03"
+  },
+  {
+    "id": "ruaan-karandi-04",
+    "title": "Apricot Blossom Allover Karandi",
+    "subtitle": "2-Piece Allover Unstitched Premium Karandi Shirt & Trouser",
+    "price": 2550,
+    "originalPrice": 3050,
+    "fabric": "Karandi",
+    "collection": "Karandi Allover",
+    "stitchType": "Unstitched 2-Piece",
+    "availableSizes": [
+      "Unstitched"
+    ],
+    "colorSwatches": [
+      {
+        "name": "Apricot Blossom",
+        "hex": "#E8A588",
+        "image": "/products/KR04.jpg"
+      }
+    ],
+    "mainImage": "/products/KR04.jpg",
+    "galleryImages": [
+      "/products/KR04.jpg"
+    ],
+    "description": "Chic warm apricot peach 2-piece winter Karandi unstitched suit adorned with graceful floral booti and sunburst mandalas with elegant contrast borders.",
+    "details": {
+      "shirt": "2.5m Printed Karandi Shirt",
+      "dupatta": "N/A (2-Piece Set)",
+      "trouser": "2.25m Printed Karandi Trouser"
+    },
+    "careInstructions": [
+      "Dry clean or cold hand wash",
+      "Iron on low setting"
+    ],
+    "isNewArrival": true,
+    "isBestseller": true,
+    "isFeatured": true,
+    "inStock": true,
+    "designCode": "KR04"
+  },
+  {
     "id": "ruaan-viscose-linen-01",
     "title": "Cocoa Slate Allover Viscose Linen",
     "subtitle": "2-Piece Allover Unstitched Viscose Linen Shirt & Trouser",
