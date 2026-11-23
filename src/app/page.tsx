@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { MarqueeBanner } from '@/components/MarqueeBanner';
 import { HeroBanner } from '@/components/HeroBanner';
@@ -35,6 +35,14 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFabric, setSelectedFabric] = useState<string>('All');
 
+  useEffect(() => {
+    const handleOpenOrders = () => {
+      setIsOrdersLogOpen(true);
+    };
+    window.addEventListener('ruaan_open_orders', handleOpenOrders);
+    return () => window.removeEventListener('ruaan_open_orders', handleOpenOrders);
+  }, []);
+
   const handleSelectCategory = (fabric: string) => {
     setSelectedFabric(fabric);
   };
@@ -47,6 +55,7 @@ export default function Home() {
         onSearchChange={setSearchQuery}
         onOpenCareGuide={() => setIsCareGuideOpen(true)}
         onOpenWishlist={() => setIsWishlistOpen(true)}
+        onOpenOrders={() => setIsOrdersLogOpen(true)}
       />
 
       {/* 2. Hero Section (Reference: Left Headline & Badges, Right Model Cutout with Script Tag) */}
@@ -130,7 +139,10 @@ export default function Home() {
       />
 
       {/* Modern App-Like Sticky Mobile Bottom Navigation Bar */}
-      <MobileBottomNav onOpenWishlist={() => setIsWishlistOpen(true)} />
+      <MobileBottomNav
+        onOpenWishlist={() => setIsWishlistOpen(true)}
+        onOpenOrders={() => setIsOrdersLogOpen(true)}
+      />
     </main>
   );
 }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, MessageCircle, Truck, ShieldCheck, ShoppingBag, CheckCircle2 } from 'lucide-react';
+import { X, MessageCircle, Truck, ShieldCheck, ShoppingBag, CheckCircle2, PackageCheck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { BRAND_CONFIG } from '@/config/brand';
 import { CustomerDetails, SizeOption, getProductArticleCode } from '@/types/product';
@@ -83,6 +83,8 @@ export const DirectOrderModal: React.FC = () => {
             fabric: product.fabric,
             stitch: product.stitchType,
             size: selectedSize,
+            color: selectedColor?.name || '',
+            image: photoUrl,
             price: product.price,
             qty: quantity,
           },
@@ -99,10 +101,12 @@ export const DirectOrderModal: React.FC = () => {
       if (data.success && data.order) {
         setPlacedOrderNumber(data.order.orderNumber);
         try {
-          const raw = localStorage.getItem('ruaan_admin_orders');
+          const raw = localStorage.getItem('ruaan_customer_orders');
           const list = raw ? JSON.parse(raw) : [];
           const updated = [data.order, ...list.filter((o: any) => o.id !== data.order.id && o.orderNumber !== data.order.orderNumber)];
-          localStorage.setItem('ruaan_admin_orders', JSON.stringify(updated));
+          localStorage.setItem('ruaan_customer_orders', JSON.stringify(updated));
+          localStorage.setItem('ruaan_placed_orders', JSON.stringify(updated));
+          window.dispatchEvent(new Event('ruaan_orders_updated'));
         } catch (e) {}
         setIsSubmitted(true);
       } else {
@@ -173,13 +177,26 @@ export const DirectOrderModal: React.FC = () => {
                   Thank you <strong>{customerDetails.fullName}</strong>! Your order has been placed directly. Our customer care team will call on <strong>{customerDetails.phone}</strong> to confirm your address before dispatch.
                 </p>
 
-                <button
-                  type="button"
-                  onClick={closeDirectOrder}
-                  className="px-6 py-3 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-brand-nude hover:text-brand-charcoal transition cursor-pointer uppercase tracking-wider shadow-sm"
-                >
-                  Done &amp; Continue Shopping
-                </button>
+                <div className="flex flex-col gap-2 pt-2 max-w-xs mx-auto">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      closeDirectOrder();
+                      window.dispatchEvent(new CustomEvent('ruaan_open_orders'));
+                    }}
+                    className="w-full px-5 py-2.5 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-stone-800 transition cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                  >
+                    <PackageCheck className="w-4 h-4 text-emerald-400" />
+                    <span>View Order Slip &amp; Tracking</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={closeDirectOrder}
+                    className="w-full px-5 py-2.5 bg-stone-100 text-brand-charcoal text-xs font-semibold rounded-full hover:bg-stone-200 transition cursor-pointer"
+                  >
+                    Done &amp; Continue Shopping
+                  </button>
+                </div>
               </div>
             ) : (
               <>

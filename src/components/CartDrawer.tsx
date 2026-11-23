@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Trash2, ShoppingBag, MessageCircle, Truck, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { X, Trash2, ShoppingBag, MessageCircle, Truck, ArrowRight, CheckCircle2, PackageCheck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { BRAND_CONFIG } from '@/config/brand';
 import { CustomerDetails, getProductArticleCode } from '@/types/product';
@@ -85,6 +85,8 @@ export const CartDrawer: React.FC = () => {
           fabric: item.product.fabric,
           stitch: item.product.stitchType,
           size: item.selectedSize,
+          color: item.selectedColor?.name || '',
+          image: item.selectedColor?.image || item.product.mainImage,
           price: item.product.price,
           qty: item.quantity,
         })),
@@ -100,10 +102,12 @@ export const CartDrawer: React.FC = () => {
       if (data.success && data.order) {
         setPlacedOrderNumber(data.order.orderNumber);
         try {
-          const raw = localStorage.getItem('ruaan_admin_orders');
+          const raw = localStorage.getItem('ruaan_customer_orders');
           const list = raw ? JSON.parse(raw) : [];
           const updated = [data.order, ...list.filter((o: any) => o.id !== data.order.id && o.orderNumber !== data.order.orderNumber)];
-          localStorage.setItem('ruaan_admin_orders', JSON.stringify(updated));
+          localStorage.setItem('ruaan_customer_orders', JSON.stringify(updated));
+          localStorage.setItem('ruaan_placed_orders', JSON.stringify(updated));
+          window.dispatchEvent(new Event('ruaan_orders_updated'));
         } catch (e) {}
         clearCart();
         setIsOrderPlaced(true);
@@ -129,13 +133,13 @@ export const CartDrawer: React.FC = () => {
       <div className="fixed inset-0 z-50 overflow-hidden bg-black/60 backdrop-blur-xs">
         <div className="absolute inset-0" onClick={handleClose} />
 
-        <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+        <div className="fixed inset-y-0 right-0 max-w-full flex justify-end w-full">
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-            className="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-brand-nude/40"
+            className="w-full max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-brand-nude/40 h-full overflow-hidden"
           >
             {/* Header */}
             <div className="p-6 bg-brand-cream border-b border-brand-nude/30 flex items-center justify-between">
@@ -200,15 +204,28 @@ export const CartDrawer: React.FC = () => {
                     Thank you <strong>{customerDetails.fullName}</strong>! Your order has been placed directly. Our customer care team will call on <strong>{customerDetails.phone}</strong> to confirm before dispatch.
                   </p>
 
-                  <button
-                    onClick={() => {
-                      clearCart();
-                      handleClose();
-                    }}
-                    className="px-6 py-3 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-brand-nude hover:text-brand-charcoal transition cursor-pointer shadow-sm"
-                  >
-                    Continue Shopping
-                  </button>
+                  <div className="flex flex-col gap-2 pt-2 max-w-xs mx-auto">
+                    <button
+                      onClick={() => {
+                        clearCart();
+                        handleClose();
+                        window.dispatchEvent(new CustomEvent('ruaan_open_orders'));
+                      }}
+                      className="w-full px-5 py-2.5 bg-brand-charcoal text-white text-xs font-semibold rounded-full hover:bg-stone-800 transition cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                    >
+                      <PackageCheck className="w-4 h-4 text-emerald-400" />
+                      <span>View Order Slip & Tracking</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        clearCart();
+                        handleClose();
+                      }}
+                      className="w-full px-5 py-2.5 bg-stone-100 text-brand-charcoal text-xs font-semibold rounded-full hover:bg-stone-200 transition cursor-pointer"
+                    >
+                      Continue Shopping
+                    </button>
+                  </div>
                 </div>
               ) : cart.length === 0 ? (
                 <div className="py-20 text-center space-y-4">

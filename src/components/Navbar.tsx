@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Heart, Search, Menu, X, User, MessageCircle } from 'lucide-react';
+import { ShoppingBag, Heart, Search, Menu, X, User, MessageCircle, PackageCheck } from 'lucide-react';
 import { BRAND_CONFIG } from '@/config/brand';
 import { useCart } from '@/context/CartContext';
 
@@ -13,6 +13,7 @@ interface NavbarProps {
   searchQuery?: string;
   onOpenCareGuide: () => void;
   onOpenWishlist: () => void;
+  onOpenOrders?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -20,6 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   searchQuery = '',
   onOpenCareGuide,
   onOpenWishlist,
+  onOpenOrders,
 }) => {
   const { totalItems, setIsCartOpen, wishlist } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -180,6 +182,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
+          {/* Track Orders / My Orders Button */}
+          {onOpenOrders && (
+            <button
+              onClick={onOpenOrders}
+              className="p-2 sm:p-2.5 text-brand-charcoal hover:text-[#9B1C3C] transition rounded-full hover:bg-stone-50 cursor-pointer flex items-center gap-1.5"
+              aria-label="Track My Orders"
+              title="Track My Orders"
+            >
+              <PackageCheck className="w-5 h-5 stroke-[1.75] text-stone-800" />
+              <span className="hidden xl:inline text-xs font-semibold text-stone-800">Track Order</span>
+            </button>
+          )}
+
           {/* 2. User / WhatsApp Concierge */}
           <a
             href={BRAND_CONFIG.socials.whatsapp}
@@ -320,6 +335,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               About / Fabric Care
             </button>
+            {onOpenOrders && (
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onOpenOrders();
+                }}
+                className="flex items-center gap-2 text-sm font-semibold text-stone-900 uppercase hover:text-[#9B1C3C] text-left w-full py-0.5"
+              >
+                <PackageCheck className="w-4 h-4 text-[#B57C53]" />
+                <span>My Orders &amp; Tracking</span>
+              </button>
+            )}
             <a
               href={BRAND_CONFIG.socials.whatsapp}
               target="_blank"

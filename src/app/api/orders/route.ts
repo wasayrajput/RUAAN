@@ -13,6 +13,8 @@ export interface OrderItem {
   fabric: string;
   stitch: string;
   size: string;
+  color?: string;
+  image?: string;
   price: number;
   qty: number;
 }
@@ -204,10 +206,46 @@ async function saveOrders(orders: Order[]): Promise<void> {
   }
 }
 
-// GET /api/orders - Fetch all orders in real time
-export async function GET() {
+// GET /api/orders - Fetch all orders or filter by phone / orderNumber
+export async function GET(req: NextRequest) {
   try {
     const orders = await loadOrders();
+    const url = new URL(req.url);
+    const phone = url.searchParams.get('phone');
+    const orderNumber = url.searchParams.get('orderNumber');
+
+    if (phone) {
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      const filtered = orders.filter(o => {
+        const p1 = (o.phone1 || '').replace(/[^0-9]/g, '');
+        const p2 = (o.phone2 || '').replace(/[^0-9]/g, '');
+        return cleanPhone.length >= 7 && (p1.includes(cleanPhone) || p2.includes(cleanPhone) || cleanPhone.includes(p1));
+      });
+      return NextResponse.json(
+        { success: true, count: filtered.length, orders: filtered },
+        {
+          status: 200,
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          },
+        }
+      );
+    }
+
+    if (orderNumber) {
+      const cleanNum = orderNumber.trim().toUpperCase().replace('#', '');
+      const filtered = orders.filter(o => o.orderNumber.toUpperCase().replace('#', '').includes(cleanNum));
+      return NextResponse.json(
+        { success: true, count: filtered.length, orders: filtered },
+        {
+          status: 200,
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          },
+        }
+      );
+    }
+
     return NextResponse.json(
       { success: true, count: orders.length, orders },
       {
@@ -259,6 +297,8 @@ export async function POST(req: NextRequest) {
         fabric: it.fabric || 'Pure Fabric',
         stitch: it.stitch || 'Standard',
         size: it.size || 'Standard Size',
+        color: it.color || '',
+        image: it.image || '',
         price: Number(it.price) || 0,
         qty: Number(it.qty) || 1,
       })),

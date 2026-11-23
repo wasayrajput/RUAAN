@@ -1,16 +1,33 @@
 'use client';
 
-import React from 'react';
-import { Home, Layers, Heart, ShoppingBag, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Home, Layers, Heart, ShoppingBag, PackageCheck } from 'lucide-react';
 import { BRAND_CONFIG } from '@/config/brand';
 import { useCart } from '@/context/CartContext';
 
 interface MobileBottomNavProps {
   onOpenWishlist: () => void;
+  onOpenOrders?: () => void;
 }
 
-export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenWishlist }) => {
+export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenWishlist, onOpenOrders }) => {
   const { totalItems, setIsCartOpen, wishlist } = useCart();
+  const [orderCount, setOrderCount] = useState(0);
+
+  useEffect(() => {
+    const updateCount = () => {
+      try {
+        const raw = localStorage.getItem('ruaan_customer_orders');
+        if (raw) {
+          const list = JSON.parse(raw);
+          setOrderCount(Array.isArray(list) ? list.length : 0);
+        }
+      } catch (e) {}
+    };
+    updateCount();
+    window.addEventListener('ruaan_orders_updated', updateCount);
+    return () => window.removeEventListener('ruaan_orders_updated', updateCount);
+  }, []);
 
   const scrollToCatalog = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -52,17 +69,22 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenWishlist
           <span className="text-[10px] font-medium tracking-tight">Suits</span>
         </button>
 
-        {/* 3. Center Action: Quick Order / Shop */}
+        {/* 3. Center Action: Track Orders / My Orders */}
         <button
-          onClick={scrollToCatalog}
+          onClick={onOpenOrders}
           type="button"
           className="flex flex-col items-center justify-center -mt-3.5 group active:scale-95 transition"
-          aria-label="Shop Suits"
+          aria-label="My Orders & Tracking"
         >
-          <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#9B1C3C] to-[#B57C53] text-white flex items-center justify-center shadow-md shadow-[#9B1C3C]/30 group-hover:scale-105 transition ring-3 ring-white">
-            <ShoppingBag className="w-5 h-5 text-white" />
+          <div className="relative w-11 h-11 rounded-full bg-gradient-to-tr from-[#9B1C3C] to-[#B57C53] text-white flex items-center justify-center shadow-md shadow-[#9B1C3C]/30 group-hover:scale-105 transition ring-3 ring-white">
+            <PackageCheck className="w-5 h-5 text-white" />
+            {orderCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 bg-amber-400 text-stone-900 text-[9px] font-bold rounded-full flex items-center justify-center ring-1 ring-white">
+                {orderCount}
+              </span>
+            )}
           </div>
-          <span className="text-[10px] font-semibold text-[#9B1C3C] tracking-tight mt-0.5">Order</span>
+          <span className="text-[10px] font-semibold text-[#9B1C3C] tracking-tight mt-0.5">Orders</span>
         </button>
 
         {/* 4. Wishlist */}

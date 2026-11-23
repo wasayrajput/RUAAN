@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import { Heart, Eye, Star } from 'lucide-react';
 import { Product } from '@/types/product';
 import { useCart } from '@/context/CartContext';
@@ -13,59 +12,9 @@ interface ProductCardProps {
   onQuickView: (product: Product) => void;
 }
 
-const cardVariants = {
-  hidden: ({ index, isDesktop }: { index: number; isDesktop: boolean }) => {
-    let initialX = 0;
-    if (isDesktop) {
-      // 4-column layout on laptop/desktop:
-      // Cards 0 and 1 slide in from LEFT (-40px, -20px)
-      // Cards 2 and 3 slide in from RIGHT (+20px, +40px)
-      const pos = index % 4;
-      initialX = pos < 2 ? (pos === 0 ? -40 : -20) : (pos === 2 ? 20 : 40);
-    } else {
-      // 2-column layout on mobile:
-      // Left card (0) from LEFT (-20px), Right card (1) from RIGHT (+20px)
-      // Clean, visible slide that never triggers mobile horizontal scroll
-      const pos = index % 2;
-      initialX = pos === 0 ? -20 : 20;
-    }
-    return {
-      opacity: 0,
-      x: initialX,
-      y: 10,
-      scale: 0.96,
-    };
-  },
-  visible: ({ index, isDesktop }: { index: number; isDesktop: boolean }) => {
-    // Soft staggered delay based on position in row
-    const stagger = isDesktop ? (index % 4) * 0.07 : (index % 2) * 0.07;
-    return {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.55,
-        delay: stagger,
-        ease: [0.22, 1, 0.36, 1], // Luxury buttery-smooth momentum ease-out
-      },
-    };
-  },
-};
-
-export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0, onQuickView }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickView }) => {
   const { toggleWishlist, isInWishlist, formatPrice } = useCart();
   const [isHovered, setIsHovered] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-    checkScreen();
-    window.addEventListener('resize', checkScreen);
-    return () => window.removeEventListener('resize', checkScreen);
-  }, []);
 
   const isFavorite = isInWishlist(product.id);
   const activeImage = isHovered && product.galleryImages[1] ? product.galleryImages[1] : product.mainImage;
@@ -75,14 +24,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0, on
     : null;
 
   return (
-    <motion.div
-      custom={{ index, isDesktop }}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.12 }}
+    <div
       onClick={() => onQuickView(product)}
-      className="group bg-white rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col h-full relative cursor-pointer border border-stone-100 will-change-transform"
+      className="group bg-white rounded-2xl overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col h-full relative cursor-pointer border border-stone-100"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -162,6 +106,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0, on
           <span className="text-stone-400 text-[10px]">(120)</span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
