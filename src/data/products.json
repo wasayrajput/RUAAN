@@ -1290,7 +1290,10 @@
     ],
     "mainImage": "/products/KD03.png",
     "galleryImages": [
-      "/products/KD03.png"
+      "/products/KD03.png",
+      "/products/KD03_1.jpg",
+      "/products/KD03_2.jpg",
+      "/products/KD03_3.jpg"
     ],
     "description": "Premium 2-piece winter khaddar suit crafted with intricate geometric motifs on warm, breathable winter khaddar fabric.",
     "details": {

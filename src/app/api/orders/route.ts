@@ -356,14 +356,14 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-// PATCH /api/orders - Update order status (e.g. from 'new' to 'pending', 'dispatched', etc.)
+// PATCH /api/orders - Update order status and tracking info
 export async function PATCH(req: NextRequest) {
   try {
     const body = await req.json();
-    const { id, status } = body;
+    const { id, status, trackingNumber, courierName } = body;
 
-    if (!id || !status) {
-      return NextResponse.json({ success: false, error: 'Order id and status are required' }, { status: 400 });
+    if (!id) {
+      return NextResponse.json({ success: false, error: 'Order id is required' }, { status: 400 });
     }
 
     const currentOrders = await loadOrders();
@@ -373,13 +373,22 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Order not found' }, { status: 404 });
     }
 
-    currentOrders[orderIndex].status = status;
+    if (status) {
+      currentOrders[orderIndex].status = status;
+    }
+    if (trackingNumber !== undefined) {
+      currentOrders[orderIndex].trackingNumber = trackingNumber;
+    }
+    if (courierName !== undefined) {
+      currentOrders[orderIndex].courierName = courierName;
+    }
+
     await saveOrders(currentOrders);
 
     return NextResponse.json(
       {
         success: true,
-        message: `Order status updated to ${status}`,
+        message: `Order updated successfully`,
         order: currentOrders[orderIndex],
       },
       {

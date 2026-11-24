@@ -44,6 +44,8 @@ interface SavedOrder {
   deliveryFee?: number;
   status?: string;
   paymentType?: string;
+  trackingNumber?: string;
+  courierName?: string;
 }
 
 interface OrdersModalProps {
@@ -369,6 +371,30 @@ export const OrdersModal: React.FC<OrdersModalProps> = ({ isOpen, onClose }) => 
                       })}
                     </div>
                   </div>
+
+                  {/* Leopards Courier Live Tracking Link if Dispatched */}
+                  {order.trackingNumber && (
+                    <div className="bg-amber-50 p-2.5 sm:p-3 rounded-xl border border-amber-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <Truck className="w-4 h-4 text-amber-700 shrink-0" />
+                        <div>
+                          <p className="font-bold text-amber-950">Dispatched via Leopards Courier</p>
+                          <p className="font-mono text-[11px] text-amber-900 font-semibold">
+                            CN / Tracking: {order.trackingNumber}
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href={`https://track.leopardscourier.com/tracking?track_numbers=${order.trackingNumber.trim()}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full sm:w-auto px-3.5 py-1.5 bg-[#9B1C3C] hover:bg-[#801430] text-white font-bold rounded-lg text-xs flex items-center justify-center gap-1.5 shadow-xs transition"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>Track Live on Leopards Website</span>
+                      </a>
+                    </div>
+                  )}
 
                   {/* Delivery & Total Summary */}
                   <div className="bg-[#FAF8F5] p-3 rounded-xl border border-stone-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
